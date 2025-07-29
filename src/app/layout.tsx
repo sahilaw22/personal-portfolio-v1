@@ -1,6 +1,12 @@
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
+import Header from '@/components/sections/Header';
+import Footer from '@/components/sections/Footer';
+import PasswordDialog from '@/components/admin/PasswordDialog';
+import AdminPanel from '@/components/admin/AdminPanel';
+import AppStateProvider from '@/components/AppStateProvider';
+
 
 export const metadata: Metadata = {
   title: 'Nerdfolio - Sahil A',
@@ -20,8 +26,16 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        {children}
-        <Toaster />
+        <AppStateProvider>
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
+          <Toaster />
+        </AppStateProvider>
       </body>
     </html>
   );

@@ -1,11 +1,10 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import { Github, Linkedin, Cog } from 'lucide-react';
+import { useAppState } from '@/components/AppStateProvider';
 
-type FooterProps = {
-  onAdminClick: () => void;
-};
-
-export default function Footer({ onAdminClick }: FooterProps) {
+export default function Footer() {
+  const { setIsPasswordDialogOpen } = useAppState();
   const personalInfo = {
     name: 'Sahil A',
     email: 'sahilaw22@gmail.com',
@@ -30,7 +29,7 @@ export default function Footer({ onAdminClick }: FooterProps) {
               <Linkedin className="h-5 w-5 transition-colors hover:text-primary hover:glow-primary" />
             </a>
           </Button>
-          <Button variant="ghost" size="icon" onClick={onAdminClick} aria-label="Admin Panel">
+          <Button variant="ghost" size="icon" onClick={() => setIsPasswordDialogOpen(true)} aria-label="Admin Panel">
             <Cog className="h-5 w-5 transition-colors hover:text-accent hover:glow-accent" />
           </Button>
         </div>

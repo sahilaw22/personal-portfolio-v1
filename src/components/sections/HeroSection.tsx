@@ -1,14 +1,12 @@
+'use client';
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
+import { Download, Send } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HeroSection() {
-  const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <section id="hero" className="container grid min-h-[calc(100vh-56px)] items-center justify-center gap-6 pb-8 pt-6 md:py-10">
-      <div id="about" className="mx-auto max-w-4xl text-center">
+    <section id="hero" className="container grid min-h-[calc(80vh)] items-center justify-center gap-6 py-10">
+      <div className="mx-auto max-w-4xl text-center">
         <h1 className="font-headline text-3xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
           Sahil A
         </h1>
@@ -19,8 +17,11 @@ export default function HeroSection() {
           I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a strong focus on clean code and scalable architecture.
         </p>
         <div className="mt-8 flex justify-center gap-4">
-          <Button onClick={scrollToContact} size="lg">
-            Get In Touch
+          <Button size="lg" asChild>
+            <Link href="/contact">
+              <Send className="mr-2 h-5 w-5" />
+              Get In Touch
+            </Link>
           </Button>
           <Button variant="secondary" size="lg" asChild>
             <a href="/resume.pdf" download="Sahil_A_Resume.pdf">
