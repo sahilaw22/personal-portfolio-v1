@@ -12,7 +12,7 @@ export default function HeroSection() {
         <h1 className="font-headline text-3xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
           Sahil A
         </h1>
-        <p className="mt-4 text-2xl text-primary glow-primary">
+        <p className="mt-4 text-2xl text-gradient-primary-accent font-semibold">
           Full-Stack Developer &amp; Tech Enthusiast
         </p>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">

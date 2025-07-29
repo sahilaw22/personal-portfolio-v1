@@ -9,7 +9,7 @@ const skills = {
 };
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-3xl font-bold tracking-tight text-primary glow-primary">{children}</h2>
+  <h2 className="text-3xl font-bold tracking-tight text-gradient-primary-accent">{children}</h2>
 );
 
 export default function SkillsSection() {
@@ -26,7 +26,7 @@ export default function SkillsSection() {
         </div>
         <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
           {Object.entries(skills).map(([category, skillList]) => (
-            <div key={category} className="grid gap-4 rounded-lg border p-4 transition-all hover:shadow-lg hover:shadow-primary/10">
+            <div key={category} className="grid gap-4 rounded-lg p-4 transition-all hover:shadow-lg hover:shadow-primary/10 gradient-border">
               <SectionTitle>{category}</SectionTitle>
               <div className="flex flex-wrap gap-2">
                 {skillList.map((skill) => (
