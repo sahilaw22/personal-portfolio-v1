@@ -65,45 +65,45 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
               } as React.CSSProperties;
 
               return (
-                <Card 
-                  key={project.id} 
-                  className="group/card overflow-hidden transition-all hover:-translate-y-1 relative focus-within:ring-0 focus-within:ring-offset-0 bg-card border-border"
-                  style={cardStyle}
-                >
-                  <div className="relative z-10 flex h-full flex-col rounded-[calc(var(--radius)-2px)] bg-card">
-                    <CardHeader className="p-0">
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        width={600}
-                        height={400}
-                        className="rounded-t-lg object-cover"
-                        data-ai-hint={project.aiHint}
-                      />
-                    </CardHeader>
-                    <CardContent className="flex-1 p-6">
-                      <CardTitle className="mb-2 text-2xl text-primary">{project.title}</CardTitle>
-                      <CardDescription>{project.description}</CardDescription>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary">{tag}</Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-end gap-2 p-6 pt-0">
-                      <Button variant="ghost" size="icon" asChild>
-                        <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
-                          <Github className="h-5 w-5 hover:text-primary transition-colors" />
-                        </a>
-                      </Button>
-                      <Button variant="ghost" size="icon" asChild>
-                        <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label="Live demo">
-                          <ExternalLink className="h-5 w-5 hover:text-primary transition-colors" />
-                        </a>
-                      </Button>
-                    </CardFooter>
+                <div key={project.id} className="group/card" style={cardStyle}>
+                  <div className="gradient-border">
+                     <Card 
+                      className="group/card overflow-hidden transition-all hover:-translate-y-1 relative focus-within:ring-0 focus-within:ring-offset-0 bg-card border-transparent h-full flex flex-col"
+                    >
+                      <CardHeader className="p-0">
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          width={600}
+                          height={400}
+                          className="rounded-t-lg object-cover"
+                          data-ai-hint={project.aiHint}
+                        />
+                      </CardHeader>
+                      <CardContent className="flex-1 p-6">
+                        <CardTitle className="mb-2 text-2xl text-primary">{project.title}</CardTitle>
+                        <CardDescription>{project.description}</CardDescription>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {project.tags.map((tag) => (
+                            <Badge key={tag} variant="secondary">{tag}</Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                      <CardFooter className="flex justify-end gap-2 p-6 pt-0">
+                        <Button variant="ghost" size="icon" asChild>
+                          <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+                            <Github className="h-5 w-5 hover:text-primary transition-colors" />
+                          </a>
+                        </Button>
+                        <Button variant="ghost" size="icon" asChild>
+                          <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label="Live demo">
+                            <ExternalLink className="h-5 w-5 hover:text-primary transition-colors" />
+                          </a>
+                        </Button>
+                      </CardFooter>
+                    </Card>
                   </div>
-                </Card>
+                </div>
               )
             })}
           </div>

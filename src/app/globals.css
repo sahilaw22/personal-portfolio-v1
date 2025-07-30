@@ -4,11 +4,11 @@
 
 @layer base {
   :root {
-    --background: 220 10% 7%;
+    --background: 222 84% 5%;
     --foreground: 210 40% 98%;
-    --card: 220 10% 10%;
+    --card: 222 84% 8%;
     --card-foreground: 210 40% 98%;
-    --popover: 220 10% 7%;
+    --popover: 222 84% 5%;
     --popover-foreground: 210 40% 98%;
     --primary: 24 95% 58%;
     --primary-foreground: 210 40% 98%;
@@ -32,11 +32,11 @@
   }
  
   .dark {
-    --background: 220 10% 7%;
+    --background: 222 84% 5%;
     --foreground: 210 40% 98%;
-    --card: 220 10% 10%;
+    --card: 222 84% 8%;
     --card-foreground: 210 40% 98%;
-    --popover: 220 10% 7%;
+    --popover: 222 84% 5%;
     --popover-foreground: 210 40% 98%;
     --primary: 24 95% 58%;
     --primary-foreground: 210 40% 98%;
@@ -73,17 +73,30 @@
 }
 
 .gradient-border {
-  border: 2px solid transparent;
-  background-clip: padding-box;
   position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .gradient-border::before {
   content: '';
   position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  z-index: -1;
-  margin: -2px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   border-radius: inherit;
-  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+  padding: 2px;
+  background: linear-gradient(to right, var(--project-color-from), var(--project-color-to));
+  -webkit-mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.group-hover\/card:hover .gradient-border::before {
+  opacity: 1;
 }

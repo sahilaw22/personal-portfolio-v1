@@ -67,7 +67,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
             aria-label="Tap five times to open admin panel"
             className="inline-block cursor-pointer"
           >
-            <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter">
+            <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold tracking-tighter">
               {content.name}
             </h1>
           </div>
