@@ -10,6 +10,7 @@ import ExperienceEditor from '@/components/admin/ExperienceEditor';
 import ProjectsEditor from '@/components/admin/ProjectsEditor';
 import SkillsEditor from '@/components/admin/SkillsEditor';
 import { useAppState } from '@/components/AppStateProvider';
+import UploadPage from "./upload/page";
 
 export default function AdminPage() {
   const { contactSubmissions } = useAppState();
@@ -18,7 +19,7 @@ export default function AdminPage() {
     <div className="flex flex-col">
       <h1 className="text-3xl font-bold tracking-tight text-gradient-primary-accent mb-6">Portfolio Customization</h1>
       <Tabs defaultValue="content" className="flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-7">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-8">
             <TabsTrigger value="content">Content</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="experience">Experience</TabsTrigger>
@@ -26,6 +27,7 @@ export default function AdminPage() {
             <TabsTrigger value="skills-editor">Skills</TabsTrigger>
             <TabsTrigger value="ai-tools">AI Tools</TabsTrigger>
             <TabsTrigger value="messages">Messages</TabsTrigger>
+            <TabsTrigger value="uploads">Uploads</TabsTrigger>
           </TabsList>
           <div className="mt-6">
             <TabsContent value="content">
@@ -51,6 +53,9 @@ export default function AdminPage() {
             </TabsContent>
             <TabsContent value="messages">
                 <ContactSubmissions submissions={contactSubmissions} />
+            </TabsContent>
+             <TabsContent value="uploads">
+                <UploadPage />
             </TabsContent>
         </div>
       </Tabs>
