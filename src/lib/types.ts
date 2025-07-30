@@ -10,6 +10,7 @@ export type HeroContent = {
   name: string;
   title: string;
   bio: string;
+  image: string;
 };
 
 export type Service = {
@@ -29,6 +30,7 @@ export type AboutContent = {
   bio: string;
   services: Service[];
   stats: Stat[];
+  image: string;
 }
 
 export type Skill = {

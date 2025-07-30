@@ -112,7 +112,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
         <div className="relative flex justify-center items-center order-1 md:order-2">
            <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10">
             <Image
-              src="/profile.jpg"
+              src={content.image}
               alt={content.name}
               width={400}
               height={400}

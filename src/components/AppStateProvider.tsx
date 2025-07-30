@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent } from '@/lib/types';
+import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 
 
@@ -12,7 +12,7 @@ interface AppState {
   login: (password: string) => boolean;
   logout: () => void;
   handleAddSubmission: (submission: Omit<ContactSubmission, 'submittedAt'>) => void;
-  updatePortfolioData: (data: PortfolioData) => void;
+  updateHeroContent: (hero: HeroContent) => void;
   updateAboutContent: (about: AboutContent) => void;
   addExperience: (experience: Omit<Experience, 'id'>) => void;
   updateExperience: (experience: Experience) => void;
@@ -67,11 +67,11 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const handleAddSubmission = (submission: Omit<ContactSubmission, 'submittedAt'>) => {
     setContactSubmissions(prev => [...prev, { ...submission, submittedAt: new Date() }]);
   };
-
-  const updatePortfolioData = (data: PortfolioData) => {
-    setPortfolioData(data);
-  };
   
+  const updateHeroContent = (hero: HeroContent) => {
+    setPortfolioData(prev => ({ ...prev, hero }));
+  }
+
   const updateAboutContent = (about: AboutContent) => {
     setPortfolioData(prev => ({ ...prev, about }));
   };
@@ -130,7 +130,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     login,
     logout,
     handleAddSubmission,
-    updatePortfolioData,
+    updateHeroContent,
     updateAboutContent,
     addExperience,
     updateExperience,

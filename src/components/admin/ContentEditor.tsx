@@ -16,10 +16,11 @@ const formSchema = z.object({
   name: z.string().min(2),
   title: z.string().min(5),
   bio: z.string().min(20),
+  image: z.string().url('Must be a valid URL'),
 });
 
 export default function ContentEditor() {
-  const { portfolioData, updatePortfolioData } = useAppState();
+  const { portfolioData, updateHeroContent } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -28,7 +29,7 @@ export default function ContentEditor() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    updatePortfolioData({ ...portfolioData, hero: values });
+    updateHeroContent(values);
     toast({
       title: 'Content Updated!',
       description: 'Your hero section has been successfully updated.',
@@ -91,6 +92,19 @@ export default function ContentEditor() {
                   <FormLabel>Biography</FormLabel>
                   <FormControl>
                     <Textarea rows={5} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Profile Image URL</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

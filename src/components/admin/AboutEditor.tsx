@@ -31,6 +31,7 @@ const formSchema = z.object({
   bio: z.string().min(20, 'Bio must be at least 20 characters'),
   services: z.array(serviceSchema),
   stats: z.array(statSchema),
+  image: z.string().url('Must be a valid URL'),
 });
 
 export default function AboutEditor() {
@@ -80,6 +81,19 @@ export default function AboutEditor() {
                   <FormLabel>Biography</FormLabel>
                   <FormControl>
                     <Textarea rows={5} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>About Section Image URL</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
