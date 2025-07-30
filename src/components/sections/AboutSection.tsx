@@ -9,11 +9,11 @@ const services = [
     title: 'Web Development',
   },
   {
-    icon: <Component className="h-8 w-8 text-primary" />,
+    icon: <Component className="h-8 w-8 text-chart-2" />,
     title: 'App Development',
   },
   {
-    icon: <Server className="h-8 w-8 text-primary" />,
+    icon: <Server className="h-8 w-8 text-chart-4" />,
     title: 'Backend & APIs',
   },
 ];
