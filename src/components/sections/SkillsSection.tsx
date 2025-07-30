@@ -1,16 +1,68 @@
 import { Badge } from "@/components/ui/badge";
+import {
+  FileCode,
+  Server,
+  Database,
+  GitMerge,
+  Unplug,
+  Component,
+  Wind,
+  Globe,
+  Bot,
+  TerminalSquare,
+  Cloud,
+  Layers,
+  MousePointer,
+  type LucideIcon,
+} from 'lucide-react';
+import React from 'react';
 
-const skills = {
-  "Languages": ["JavaScript", "TypeScript", "Python", "HTML5", "CSS3"],
-  "Frameworks & Libraries": ["React", "Next.js", "Node.js", "Express.js", "Tailwind CSS"],
-  "Databases": ["PostgreSQL", "MongoDB", "Firebase"],
-  "Tools & Platforms": ["Git", "Docker", "Vite", "Webpack", "Vercel", "Framer Motion"],
-  "ORM": ["Drizzle", "Prisma"],
+const skills: Record<string, { name: string; icon: LucideIcon }[]> = {
+  "Languages": [
+    { name: "JavaScript", icon: FileCode },
+    { name: "TypeScript", icon: FileCode },
+    { name: "Python", icon: FileCode },
+    { name: "HTML5", icon: Globe },
+    { name: "CSS3", icon: Globe },
+  ],
+  "Frameworks & Libraries": [
+    { name: "React", icon: Component },
+    { name: "Next.js", icon: Component },
+    { name: "Node.js", icon: Server },
+    { name: "Express.js", icon: Server },
+    { name: "Tailwind CSS", icon: Wind },
+  ],
+  "Databases": [
+    { name: "PostgreSQL", icon: Database },
+    { name: "MongoDB", icon: Database },
+    { name: "Firebase", icon: Cloud },
+  ],
+  "Tools & Platforms": [
+    { name: "Git", icon: GitMerge },
+    { name: "Docker", icon: Unplug },
+    { name: "Vite", icon: Bot },
+    { name: "Webpack", icon: Layers },
+    { name: "Vercel", icon: Cloud },
+    { name: "Framer Motion", icon: MousePointer },
+  ],
+  "ORM": [
+    { name: "Drizzle", icon: TerminalSquare },
+    { name: "Prisma", icon: TerminalSquare },
+  ],
 };
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2 className="text-3xl font-bold tracking-tight text-gradient-primary-accent">{children}</h2>
 );
+
+const iconColors = [
+  'text-chart-1',
+  'text-chart-2',
+  'text-chart-3',
+  'text-chart-4',
+  'text-chart-5',
+];
+
 
 export default function SkillsSection() {
   return (
@@ -29,9 +81,10 @@ export default function SkillsSection() {
             <div key={category} className="grid gap-4 rounded-lg p-4 transition-all hover:shadow-lg hover:shadow-primary/10 gradient-border">
               <SectionTitle>{category}</SectionTitle>
               <div className="flex flex-wrap gap-2">
-                {skillList.map((skill) => (
-                  <Badge key={skill} variant="secondary" className="text-sm">
-                    {skill}
+                {skillList.map((skill, index) => (
+                  <Badge key={skill.name} variant="secondary" className="flex items-center gap-2 text-sm">
+                     <skill.icon className={`h-4 w-4 ${iconColors[index % iconColors.length]}`} />
+                    <span>{skill.name}</span>
                   </Badge>
                 ))}
               </div>
