@@ -18,9 +18,10 @@ import {
 import React from 'react';
 import type { SkillCategory } from "@/lib/types";
 import { iconMap } from "@/lib/icon-map";
+import { cn } from "@/lib/utils";
 
-const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-3xl font-bold tracking-tight text-gradient-primary-accent">{children}</h2>
+const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <h2 className={cn("text-3xl font-bold tracking-tight", className)}>{children}</h2>
 );
 
 const iconColors = [
@@ -31,6 +32,15 @@ const iconColors = [
   'text-chart-5',
 ];
 
+const titleColors = [
+  'text-primary',
+  'text-accent',
+  'text-chart-3',
+  'text-chart-4',
+  'text-chart-5',
+  'text-chart-1',
+  'text-chart-2',
+];
 
 export default function SkillsSection({ skillsData }: { skillsData: SkillCategory[] }) {
   return (
@@ -45,9 +55,9 @@ export default function SkillsSection({ skillsData }: { skillsData: SkillCategor
           </div>
         </div>
         <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
-          {skillsData.map((category) => (
+          {skillsData.map((category, categoryIndex) => (
             <div key={category.title} className="grid gap-4 rounded-lg p-4 transition-all hover:shadow-lg hover:shadow-primary/10 gradient-border">
-              <SectionTitle>{category.title}</SectionTitle>
+              <SectionTitle className={cn(titleColors[categoryIndex % titleColors.length], 'glow-primary')}>{category.title}</SectionTitle>
               <div className="flex flex-wrap gap-2">
                 {category.skills.map((skill, index) => {
                   const Icon = iconMap[skill.icon as keyof typeof iconMap] || FileCode;
