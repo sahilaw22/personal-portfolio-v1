@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection content={portfolioData.hero} />
-      <AboutSection />
+      <AboutSection content={portfolioData.about} />
       <SkillsSection skillsData={portfolioData.skills} />
       <ExperienceSection experiences={portfolioData.experience} />
       <ProjectsSection projects={portfolioData.projects} />

@@ -10,6 +10,19 @@ export const initialData: PortfolioData = {
     title: "Full-Stack Developer & Tech Enthusiast",
     bio: "I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a strong focus on clean code and scalable architecture."
   },
+  about: {
+    bio: "As a dedicated Computer Science student, I've embarked on a journey from theoretical concepts to tangible creations. My passion lies in transforming complex problems into elegant software solutions. I thrive on learning new technologies and applying my skills to build meaningful and impactful projects.",
+    services: [
+      { id: 's1', icon: 'FileCode', title: 'Web Development', color: 'text-primary' },
+      { id: 's2', icon: 'Component', title: 'App Development', color: 'text-chart-2' },
+      { id: 's3', icon: 'Server', title: 'Backend & APIs', color: 'text-chart-4' },
+    ],
+    stats: [
+      { id: 'st1', value: '15+', label: 'Projects Completed' },
+      { id: 'st2', value: '95%', label: 'Coursework Completion' },
+      { id: 'st3', value: '1000+', label: 'Coding Hours' },
+    ]
+  },
   skills: [
     {
       title: "Languages",

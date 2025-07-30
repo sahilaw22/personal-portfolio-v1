@@ -12,8 +12,27 @@ export type HeroContent = {
   bio: string;
 };
 
+export type Service = {
+  id: string;
+  icon: string;
+  title: string;
+  color: string;
+};
+
+export type Stat = {
+  id: string;
+  value: string;
+  label: string;
+};
+
+export type AboutContent = {
+  bio: string;
+  services: Service[];
+  stats: Stat[];
+}
+
 export type Skill = {
-  name: string;
+  name:string;
   icon: any; // LucideIcon can't be serialized easily
 };
 
@@ -43,6 +62,7 @@ export type Project = {
 
 export type PortfolioData = {
   hero: HeroContent;
+  about: AboutContent;
   skills: SkillCategory[];
   experience: Experience[];
   projects: Project[];

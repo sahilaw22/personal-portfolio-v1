@@ -5,6 +5,7 @@ import HeadlineGenerator from '@/components/admin/HeadlineGenerator';
 import SkillsRecommender from '@/components/admin/SkillsRecommender';
 import ContactSubmissions from '@/components/admin/ContactSubmissions';
 import ContentEditor from '@/components/admin/ContentEditor';
+import AboutEditor from '@/components/admin/AboutEditor';
 import ExperienceEditor from '@/components/admin/ExperienceEditor';
 import ProjectsEditor from '@/components/admin/ProjectsEditor';
 import SkillsEditor from '@/components/admin/SkillsEditor';
@@ -19,6 +20,7 @@ export default function AdminPage() {
       <Tabs defaultValue="content" className="flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-4 md:grid-cols-7">
             <TabsTrigger value="content">Content</TabsTrigger>
+            <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="experience">Experience</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="skills-editor">Skills</TabsTrigger>
@@ -28,6 +30,9 @@ export default function AdminPage() {
           <div className="mt-6">
             <TabsContent value="content">
                 <ContentEditor />
+            </TabsContent>
+            <TabsContent value="about">
+                <AboutEditor />
             </TabsContent>
             <TabsContent value="experience">
                 <ExperienceEditor />

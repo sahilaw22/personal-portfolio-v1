@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory } from '@/lib/types';
+import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 
 
@@ -13,6 +13,7 @@ interface AppState {
   logout: () => void;
   handleAddSubmission: (submission: Omit<ContactSubmission, 'submittedAt'>) => void;
   updatePortfolioData: (data: PortfolioData) => void;
+  updateAboutContent: (about: AboutContent) => void;
   addExperience: (experience: Omit<Experience, 'id'>) => void;
   updateExperience: (experience: Experience) => void;
   deleteExperience: (id: string) => void;
@@ -70,6 +71,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const updatePortfolioData = (data: PortfolioData) => {
     setPortfolioData(data);
   };
+  
+  const updateAboutContent = (about: AboutContent) => {
+    setPortfolioData(prev => ({ ...prev, about }));
+  };
 
   const addExperience = (experience: Omit<Experience, 'id'>) => {
     setPortfolioData(prev => ({
@@ -126,6 +131,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     logout,
     handleAddSubmission,
     updatePortfolioData,
+    updateAboutContent,
     addExperience,
     updateExperience,
     deleteExperience,
