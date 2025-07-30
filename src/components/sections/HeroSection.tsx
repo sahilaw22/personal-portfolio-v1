@@ -88,8 +88,11 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               {content.name}
             </h1>
           </div>
-          <p className="mt-4 text-lg text-muted-foreground">
-            {content.title}
+          <p className="mt-4 text-xl font-medium text-muted-foreground">
+            <span className="text-gradient-primary-accent">{content.title}</span>
+          </p>
+          <p className="mt-4 text-lg text-muted-foreground max-w-xl">
+            {content.bio}
           </p>
           <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
             <Button size="lg" asChild>
