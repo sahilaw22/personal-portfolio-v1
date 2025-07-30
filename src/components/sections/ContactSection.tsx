@@ -59,11 +59,11 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
           </p>
           <div className="relative w-full h-64 md:h-96">
             <Image
-              src="https://placehold.co/600x400.png"
-              alt="Contact illustration"
+              src="/work-together.png"
+              alt="Let's work together"
               fill
               className="rounded-lg object-cover"
-              data-ai-hint="abstract tech"
+              data-ai-hint="collaboration message"
             />
           </div>
         </div>
