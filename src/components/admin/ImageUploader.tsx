@@ -7,7 +7,8 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Trash2 } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
 
 export default function ImageUploader() {
   const { portfolioData, updateHeroContent, updateAboutContent, updateProject } = useAppState();
@@ -78,15 +79,41 @@ export default function ImageUploader() {
     }
   };
 
+  const handleRemoveImage = () => {
+    if (!target) {
+        toast({ variant: 'destructive', title: 'Please select a target section first.'});
+        return;
+    }
+    
+    // Using a generic placeholder for all images.
+    const placeholderUrl = 'https://placehold.co/600x400.png';
+
+    if (target === 'hero') {
+        updateHeroContent({...portfolioData.hero, image: placeholderUrl});
+    } else if (target === 'about') {
+        updateAboutContent({...portfolioData.about, image: placeholderUrl});
+    } else if (target.startsWith('project-')) {
+        const projectId = target.replace('project-', '');
+        const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
+        if (projectToUpdate) {
+            updateProject({ ...projectToUpdate, image: placeholderUrl });
+        }
+    }
+    
+    toast({
+        title: 'Image Removed',
+        description: 'The image for the selected section has been reset to the default placeholder.'
+    });
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Portfolio Image Uploader</CardTitle>
-        <CardDescription>Upload an image and assign it to a section of your portfolio.</CardDescription>
+        <CardTitle>Portfolio Image Manager</CardTitle>
+        <CardDescription>Upload a new image or remove an existing one from a section of your portfolio.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleUpload} className="space-y-6">
-          <div className='grid md:grid-cols-2 gap-4'>
+        <div className='grid md:grid-cols-2 gap-4 mb-6'>
             <div className='space-y-2'>
                 <label className="text-sm font-medium">1. Select Target Section</label>
                 <Select onValueChange={setTarget} value={target}>
@@ -109,20 +136,43 @@ export default function ImageUploader() {
                 </Select>
             </div>
             <div className='space-y-2'>
-                 <label className="text-sm font-medium">2. Choose Image File</label>
-                <Input 
-                    type="file" 
-                    name="cover" 
-                    accept="image/*" 
-                    onChange={(e) => setFile(e.target.files?.[0] || null)}
-                    required 
-                />
+                <label className="text-sm font-medium">2. Choose New Image File</label>
+                <form onSubmit={handleUpload}>
+                    <div className="flex items-center gap-2">
+                         <Input 
+                            type="file" 
+                            name="cover" 
+                            accept="image/*" 
+                            onChange={(e) => setFile(e.target.files?.[0] || null)}
+                            className="flex-grow"
+                        />
+                         <Button type="submit" disabled={isLoading || !file || !target}>
+                            {isLoading ? <Loader2 className="animate-spin" /> : 'Upload'}
+                          </Button>
+                    </div>
+                </form>
             </div>
           </div>
-          <Button type="submit" disabled={isLoading || !file || !target} className="w-full">
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Upload and Update'}
-          </Button>
-        </form>
+
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button variant="destructive" disabled={!target} className="w-full">
+                    <Trash2 className="mr-2 h-4 w-4" /> Remove Current Image
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action will remove the current image from the selected section and replace it with a default placeholder. This cannot be undone.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleRemoveImage}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
         
         {preview && (
           <div className='mt-6'>
