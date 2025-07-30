@@ -72,7 +72,7 @@ export default function ImageUploader() {
          toast({
           variant: 'destructive',
           title: 'Upload Failed',
-          description: (err as Error).message,
+          description: (err as Error).message || 'An unknown error occurred. Check the server console.',
         });
     } finally {
         setIsLoading(false);
@@ -85,7 +85,6 @@ export default function ImageUploader() {
         return;
     }
     
-    // Using a generic placeholder for all images.
     const placeholderUrl = 'https://placehold.co/600x400.png';
 
     if (target === 'hero') {

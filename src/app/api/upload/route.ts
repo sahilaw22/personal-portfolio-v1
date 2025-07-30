@@ -1,51 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import formidable from 'formidable';
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
+import { mkdirSync } from 'fs';
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-const uploadDir = path.join(process.cwd(), '/public/uploads');
+const uploadDir = join(process.cwd(), '/public/uploads');
 
 // Ensure the upload directory exists
-fs.mkdirSync(uploadDir, { recursive: true });
-
-async function parseFormData(req: NextRequest): Promise<{ fields: formidable.Fields; files: formidable.Files }> {
-    return new Promise((resolve, reject) => {
-        const form = formidable({
-            uploadDir,
-            keepExtensions: true,
-        });
-
-        form.parse(req as any, (err, fields, files) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve({ fields, files });
-            }
-        });
-    });
+try {
+  mkdirSync(uploadDir, { recursive: true });
+} catch (error) {
+  console.error('Error creating upload directory:', error);
 }
-
 
 export async function POST(req: NextRequest) {
   try {
-    const { fields, files } = await parseFormData(req);
-    const file = files.cover?.[0];
+    const data = await req.formData();
+    const file: File | null = data.get('cover') as unknown as File;
 
     if (!file) {
       return NextResponse.json({ error: 'No file uploaded.' }, { status: 400 });
     }
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // Sanitize filename to prevent directory traversal
+    const sanitizedFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const finalFilename = `${uniqueSuffix}-${sanitizedFilename}`;
     
-    const filePath = file.newFilename;
-    return NextResponse.json({ filename: filePath, url: `/uploads/${filePath}` });
+    const filePath = join(uploadDir, finalFilename);
+
+    await writeFile(filePath, buffer);
+
+    const url = `/uploads/${finalFilename}`;
+
+    return NextResponse.json({ filename: finalFilename, url: url });
 
   } catch (err) {
-    console.error('Error parsing form:', err);
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    console.error('Error handling upload:', err);
+    let errorMessage = 'An unknown error occurred.';
+    if (err instanceof Error) {
+        errorMessage = err.message;
+    }
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
