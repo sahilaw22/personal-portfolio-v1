@@ -45,15 +45,15 @@ export default function HeroSection({ content }: { content: HeroContent }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div className="relative flex justify-center items-center md:order-last">
            <div className="relative w-[250px] h-[250px] md:w-[400px] md:h-[400px]">
+            <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl"></div>
             <Image
               src="/profile.jpg"
               alt={content.name}
               width={400}
               height={400}
-              className="rounded-full border-4 border-primary/50 object-cover"
+              className="rounded-full border-4 border-primary/50 object-cover relative z-10"
               data-ai-hint="profile picture"
             />
-             <div className="absolute inset-0 rounded-full border-4 border-accent animate-pulse"></div>
           </div>
         </div>
         <div className="text-center md:text-left">
@@ -67,7 +67,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
             aria-label="Tap five times to open admin panel"
             className="inline-block cursor-pointer"
           >
-            <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter text-gradient-primary-accent">
+            <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter">
               {content.name}
             </h1>
           </div>
@@ -84,9 +84,8 @@ export default function HeroSection({ content }: { content: HeroContent }) {
                   <ChevronRight className="h-5 w-5" />
                 </a>
               </Button>
-            <Button variant="secondary" size="lg" asChild>
+            <Button variant="outline" size="lg" asChild>
               <a href="/resume.pdf" download="Sahil_Ahmed_Wani_Resume.pdf">
-                <Download className="mr-2 h-5 w-5" />
                 My Resume
               </a>
             </Button>

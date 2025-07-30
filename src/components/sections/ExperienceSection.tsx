@@ -28,13 +28,13 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
                 
                 {/* Content Card */}
                 <div className={cn(
-                  'rounded-lg border bg-card p-6 shadow-lg transition-all hover:shadow-accent/10 w-full md:max-w-md',
+                  'rounded-lg border bg-card p-6 shadow-lg transition-all hover:shadow-primary/10 w-full md:max-w-md',
                   index % 2 === 0 
                     ? 'md:col-start-1 md:text-right' 
                     : 'md:col-start-2 md:text-left'
                 )}>
                     <p className="text-sm text-muted-foreground">{exp.period}</p>
-                    <h3 className="text-xl font-bold text-gradient-primary-accent">{exp.role}</h3>
+                    <h3 className="text-xl font-bold text-primary">{exp.role}</h3>
                     <p className="mb-2 text-lg font-semibold">{exp.company}</p>
                     <p className="text-muted-foreground">{exp.description}</p>
                 </div>

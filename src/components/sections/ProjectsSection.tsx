@@ -43,7 +43,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
   });
 
   return (
-    <section id="projects" className="w-full py-12 md:py-24 lg:py-32 bg-card">
+    <section id="projects" className="w-full py-12 md:py-24 lg:py-32 bg-background">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
@@ -67,12 +67,9 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
               return (
                 <Card 
                   key={project.id} 
-                  className="group/card overflow-hidden transition-all hover:-translate-y-1 relative focus-within:ring-0 focus-within:ring-offset-0"
+                  className="group/card overflow-hidden transition-all hover:-translate-y-1 relative focus-within:ring-0 focus-within:ring-offset-0 bg-card border-border"
                   style={cardStyle}
                 >
-                  <div 
-                    className="absolute inset-[-2px] z-0 rounded-[--radius] bg-gradient-to-r from-[--project-color-from] to-[--project-color-to] transition-all"
-                  />
                   <div className="relative z-10 flex h-full flex-col rounded-[calc(var(--radius)-2px)] bg-card">
                     <CardHeader className="p-0">
                       <Image
@@ -89,8 +86,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                       <CardDescription>{project.description}</CardDescription>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {project.tags.map((tag) => (
-                          <Badge key={tag} variant="outline">{tag}</Badge>
-
+                          <Badge key={tag} variant="secondary">{tag}</Badge>
                         ))}
                       </div>
                     </CardContent>
@@ -107,7 +103,6 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                       </Button>
                     </CardFooter>
                   </div>
-                  <div className="absolute inset-0 z-20 rounded-lg shadow-[0_0_20px_0px] shadow-[--project-shadow-color]/0 opacity-0 transition-all duration-300 group-hover/card:shadow-[--project-shadow-color]/20 group-hover/card:opacity-100" />
                 </Card>
               )
             })}
