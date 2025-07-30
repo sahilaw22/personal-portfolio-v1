@@ -39,7 +39,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
   }, [tapTimeout]);
 
   return (
-    <section id="hero" className="container min-h-[calc(80vh)] py-10 flex items-center">
+    <section id="hero" className="container min-h-[calc(100vh-4rem)] py-10 flex items-center">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div className="relative flex justify-center items-center md:order-last">
            <div className="relative w-[250px] h-[250px] md:w-[400px] md:h-[400px]">
