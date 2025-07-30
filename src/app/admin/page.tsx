@@ -10,7 +10,7 @@ import ExperienceEditor from '@/components/admin/ExperienceEditor';
 import ProjectsEditor from '@/components/admin/ProjectsEditor';
 import SkillsEditor from '@/components/admin/SkillsEditor';
 import { useAppState } from '@/components/AppStateProvider';
-import UploadPage from "./upload/page";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 export default function AdminPage() {
   const { contactSubmissions } = useAppState();
@@ -55,7 +55,7 @@ export default function AdminPage() {
                 <ContactSubmissions submissions={contactSubmissions} />
             </TabsContent>
              <TabsContent value="uploads">
-                <UploadPage />
+                <ImageUploader />
             </TabsContent>
         </div>
       </Tabs>
