@@ -9,23 +9,32 @@ export const config = {
   },
 };
 
+const uploadDir = path.join(process.cwd(), '/public/uploads');
+
+// Ensure the upload directory exists
+fs.mkdirSync(uploadDir, { recursive: true });
+
+async function parseFormData(req: NextRequest): Promise<{ fields: formidable.Fields; files: formidable.Files }> {
+    return new Promise((resolve, reject) => {
+        const form = formidable({
+            uploadDir,
+            keepExtensions: true,
+        });
+
+        form.parse(req as any, (err, fields, files) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve({ fields, files });
+            }
+        });
+    });
+}
+
+
 export async function POST(req: NextRequest) {
-  const uploadDir = path.join(process.cwd(), '/public/uploads');
-
   try {
-    await fs.promises.mkdir(uploadDir, { recursive: true });
-  } catch (error) {
-    console.error('Error creating upload directory:', error);
-    return NextResponse.json({ error: 'Failed to create upload directory.' }, { status: 500 });
-  }
-
-  const form = formidable({
-    uploadDir,
-    keepExtensions: true,
-  });
-
-  try {
-    const [fields, files] = await form.parse(req as any);
+    const { fields, files } = await parseFormData(req);
     const file = files.cover?.[0];
 
     if (!file) {
