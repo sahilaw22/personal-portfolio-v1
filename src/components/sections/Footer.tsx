@@ -8,7 +8,7 @@ export default function Footer() {
   const personalInfo = {
     name: 'Sahil A',
     email: 'sahilaw22@gmail.com',
-    github: 'https://github.com/sahilaw22',
+    github: 'https://www.github.com/sahilaw22',
     linkedin: 'https://www.linkedin.com/in/sahil-a-057a0231a',
   };
 

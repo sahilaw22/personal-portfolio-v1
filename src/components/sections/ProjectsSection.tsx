@@ -10,7 +10,7 @@ const projects = [
     description: 'A full-featured online store with product listings, a shopping cart, and a secure checkout process. Built with Next.js and integrated with Stripe for payments.',
     image: 'https://placehold.co/600x400.png',
     tags: ['Next.js', 'React', 'Stripe', 'Tailwind CSS'],
-    github: 'https://github.com/sahilaw22',
+    github: 'https://www.github.com/sahilaw22',
     live: '#',
     aiHint: 'e-commerce'
   },
@@ -19,7 +19,7 @@ const projects = [
     description: 'A collaborative task manager with drag-and-drop boards, real-time updates, and user authentication. Powered by React and Firebase.',
     image: 'https://placehold.co/600x400.png',
     tags: ['React', 'Firebase', 'Zustand', 'dnd-kit'],
-    github: 'https://github.com/sahilaw22',
+    github: 'https://www.github.com/sahilaw22',
     live: '#',
     aiHint: 'productivity app'
   },
@@ -28,7 +28,7 @@ const projects = [
     description: 'My previous personal portfolio website, designed to showcase my skills and projects with a clean, minimalist aesthetic.',
     image: 'https://placehold.co/600x400.png',
     tags: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
-    github: 'https://github.com/sahilaw22',
+    github: 'https://www.github.com/sahilaw22',
     live: '#',
     aiHint: 'portfolio design'
   },

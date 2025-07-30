@@ -1,21 +1,15 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Download, Send, Github, Linkedin, Twitter } from 'lucide-react';
-import Link from 'next/link';
+import { Download, Send } from 'lucide-react';
 import Image from 'next/image';
 
 export default function HeroSection() {
-  const socialLinks = {
-    github: 'https://github.com/sahilaw22',
-    linkedin: 'https://www.linkedin.com/in/sahil-a-057a0231a',
-    twitter: '#',
-  };
 
   return (
     <section id="hero" className="container min-h-[calc(80vh)] py-10 flex items-center">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <div className="relative flex justify-center items-center md:order-last">
-          <div className="relative w-[250px] h-[250px] md:w-[400px] md:h-[400px]">
+        <div className="relative flex justify-center items-center md:order-first">
+           <div className="relative w-[250px] h-[250px] md:w-[400px] md:h-[400px]">
             <Image
               src="https://placehold.co/400x400.png"
               alt="Sahil A"
