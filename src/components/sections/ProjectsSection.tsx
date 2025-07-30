@@ -85,7 +85,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                       />
                     </CardHeader>
                     <CardContent className="flex-1 p-6">
-                      <CardTitle className="mb-2 text-2xl text-chart-3">{project.title}</CardTitle>
+                      <CardTitle className="mb-2 text-2xl text-primary">{project.title}</CardTitle>
                       <CardDescription>{project.description}</CardDescription>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {project.tags.map((tag) => (

@@ -109,7 +109,7 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full group" size="lg" variant="orange" disabled={form.formState.isSubmitting}>
+              <Button type="submit" className="w-full group" size="lg" disabled={form.formState.isSubmitting}>
                 <span className="relative z-10 flex items-center">
                   {form.formState.isSubmitting ? 'Sending...' : 'Send Message'}
                    <ChevronRight className="ml-2 h-5 w-5" />
