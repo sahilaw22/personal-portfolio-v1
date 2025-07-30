@@ -57,7 +57,7 @@ export default function Footer() {
       onClick={handleTap}
       role="button"
       tabIndex={0}
-      aria-label="Footer - Tap five times for admin access"
+      aria-label="Footer area. Tap five times in this area for admin access."
     >
       <div className="container flex flex-col items-center justify-between gap-4 sm:flex-row">
         <p className="text-sm text-muted-foreground">
