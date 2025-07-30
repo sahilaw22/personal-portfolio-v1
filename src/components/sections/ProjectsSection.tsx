@@ -77,11 +77,12 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                     />
                   </CardHeader>
                   <CardContent className="flex-1 p-6">
-                    <CardTitle className="mb-2 text-2xl">{project.title}</CardTitle>
+                    <CardTitle className="mb-2 text-2xl text-gradient-primary-accent">{project.title}</CardTitle>
                     <CardDescription>{project.description}</CardDescription>
                     <div className="mt-4 flex flex-wrap gap-2">
                       {project.tags.map((tag) => (
                         <Badge key={tag} variant="outline">{tag}</Badge>
+
                       ))}
                     </div>
                   </CardContent>
