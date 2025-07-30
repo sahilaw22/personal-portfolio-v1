@@ -30,35 +30,22 @@ export default function ExperienceSection() {
           <div className="absolute left-6 h-full w-0.5 bg-border md:left-1/2 md:-translate-x-1/2"></div>
           
           {experiences.map((exp, index) => (
-            <div key={index} className="relative mb-10 pl-12 md:pl-0">
-              <div className="md:flex md:items-center md:justify-between">
-                
-                {/* Left side on desktop (for even indexes) or empty space for odd indexes */}
-                <div className={`hidden md:block md:w-1/2 ${index % 2 === 0 ? 'pr-8' : 'pl-8'}`}>
-                  {index % 2 !== 0 && (
-                     <div className={`rounded-lg border bg-card p-6 shadow-lg transition-all hover:shadow-accent/10 text-right`}>
-                        <p className="text-sm text-muted-foreground">{exp.period}</p>
-                        <h3 className="text-xl font-bold text-accent glow-accent">{exp.role}</h3>
-                        <p className="mb-2 text-lg font-semibold">{exp.company}</p>
-                        <p className="text-muted-foreground">{exp.description}</p>
-                      </div>
-                  )}
-                </div>
-
-                {/* Timeline Dot */}
-                <div className="absolute left-6 top-1 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-primary bg-background glow-primary md:left-1/2"></div>
-                
-                {/* Right side on desktop (for odd indexes) or main content */}
-                <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:pl-8' : 'md:pr-8'}`}>
-                   <div className={`rounded-lg border bg-card p-6 shadow-lg transition-all hover:shadow-accent/10 text-left`}>
-                      <p className="text-sm text-muted-foreground">{exp.period}</p>
-                      <h3 className="text-xl font-bold text-accent glow-accent">{exp.role}</h3>
-                      <p className="mb-2 text-lg font-semibold">{exp.company}</p>
-                      <p className="text-muted-foreground">{exp.description}</p>
-                    </div>
-                </div>
-
+            <div key={index} className="relative mb-10 pl-12 md:grid md:grid-cols-2 md:gap-x-12 md:pl-0">
+              {/* Timeline Dot */}
+              <div className="absolute left-6 top-1 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-primary bg-background glow-primary md:left-1/2"></div>
+              
+              <div className={`md:flex ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
+                 <div className={`rounded-lg border bg-card p-6 shadow-lg transition-all hover:shadow-accent/10 w-full md:max-w-md ${index % 2 === 0 ? 'md:col-start-1' : 'md:col-start-2 md:text-right'}`}>
+                    <p className="text-sm text-muted-foreground">{exp.period}</p>
+                    <h3 className="text-xl font-bold text-accent glow-accent">{exp.role}</h3>
+                    <p className="mb-2 text-lg font-semibold">{exp.company}</p>
+                    <p className="text-muted-foreground">{exp.description}</p>
+                  </div>
               </div>
+
+              {/* Empty div for spacing on desktop */}
+              <div className="hidden md:block"></div>
+
             </div>
           ))}
         </div>
