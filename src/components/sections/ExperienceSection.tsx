@@ -26,23 +26,21 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
                 {/* Timeline Dot */}
                 <div className="absolute left-6 top-1 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-primary bg-background glow-primary md:left-1/2"></div>
                 
+                {/* Content Card */}
                 <div className={cn(
-                  'md:flex',
-                  index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'
+                  'rounded-lg border bg-card p-6 shadow-lg transition-all hover:shadow-accent/10 w-full md:max-w-md',
+                  index % 2 === 0 
+                    ? 'md:col-start-1 md:text-right' 
+                    : 'md:col-start-2 md:text-left'
                 )}>
-                  <div className={cn(
-                    'rounded-lg border bg-card p-6 shadow-lg transition-all hover:shadow-accent/10 w-full md:max-w-md',
-                    index % 2 === 0 ? 'md:col-start-1 md:text-right' : 'md:col-start-2 text-left'
-                  )}>
-                      <p className="text-sm text-muted-foreground">{exp.period}</p>
-                      <h3 className="text-xl font-bold text-accent glow-accent">{exp.role}</h3>
-                      <p className="mb-2 text-lg font-semibold">{exp.company}</p>
-                      <p className="text-muted-foreground">{exp.description}</p>
-                    </div>
+                    <p className="text-sm text-muted-foreground">{exp.period}</p>
+                    <h3 className="text-xl font-bold text-accent glow-accent">{exp.role}</h3>
+                    <p className="mb-2 text-lg font-semibold">{exp.company}</p>
+                    <p className="text-muted-foreground">{exp.description}</p>
                 </div>
 
-                {/* Empty div for spacing on desktop */}
-                <div className="hidden md:block"></div>
+                {/* Empty div for spacing on desktop - this is what creates the alternating effect */}
+                <div className={cn('hidden md:block', index % 2 === 0 ? 'md:col-start-2' : 'md:col-start-1')}></div>
 
               </div>
             ))}

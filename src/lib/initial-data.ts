@@ -73,6 +73,13 @@ export const initialData: PortfolioData = {
       period: "Summer 2022",
       description: "Contributed to the development of a large-scale e-commerce platform. Worked with a team of senior engineers on both frontend and backend tasks, gaining hands-on experience with agile methodologies."
     },
+     {
+      id: "exp3",
+      role: "Jr. Frontend Developer",
+      company: "Web Solutions Co.",
+      period: "2021-2022",
+      description: "Built responsive and interactive user interfaces for client websites using HTML, CSS, and JavaScript. Collaborated with designers to translate mockups into functional web pages."
+    }
   ],
   projects: [
     {
