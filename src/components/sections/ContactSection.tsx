@@ -57,12 +57,12 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
           <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Have a project in mind, a question, or just want to connect? My inbox is always open. I'm excited to hear about your ideas and see how we can work together to create something amazing.
           </p>
-          <div className="w-full aspect-video relative">
-            <Image
-              src="/work-together.png"
-              alt="Let's work together"
+           <div className="w-full aspect-video relative">
+             <Image
+              src="https://placehold.co/600x400.png"
+              alt="Collaboration"
               fill
-              className="rounded-lg object-contain"
+              className="rounded-lg object-cover"
               data-ai-hint="collaboration message"
             />
           </div>
