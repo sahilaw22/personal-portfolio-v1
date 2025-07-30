@@ -8,10 +8,10 @@ export default function HeroSection() {
   return (
     <section id="hero" className="container min-h-[calc(80vh)] py-10 flex items-center">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <div className="relative flex justify-center items-center md:order-first">
+        <div className="relative flex justify-center items-center md:order-last">
            <div className="relative w-[250px] h-[250px] md:w-[400px] md:h-[400px]">
             <Image
-              src="https://placehold.co/400x400.png"
+              src="/profile.jpg"
               alt="Sahil A"
               width={400}
               height={400}
