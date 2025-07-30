@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 
 const navItems = [
-  { name: 'About', href: '#hero' },
+  { name: 'About', href: '#about' },
   { name: 'Skills', href: '#skills' },
   { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' },
@@ -19,7 +19,7 @@ const navItems = [
 export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState('#hero');
+  const [activeLink, setActiveLink] = useState('#about');
 
   React.useEffect(() => {
     const handleScroll = () => {
