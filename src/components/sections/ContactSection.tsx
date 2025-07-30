@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import type { ContactSubmission } from '@/lib/types';
 import Image from 'next/image';
-import { Send } from 'lucide-react';
+import { Send, Github, Linkedin } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -20,6 +20,11 @@ const formSchema = z.object({
 
 type ContactFormProps = {
   onFormSubmit: (submission: Omit<ContactSubmission, 'submittedAt'>) => void;
+};
+
+const personalInfo = {
+  github: 'https://www.github.com/sahilaw22',
+  linkedin: 'https://www.linkedin.com/in/sahil-a-057a0231a',
 };
 
 export default function ContactSection({ onFormSubmit }: ContactFormProps) {
@@ -110,6 +115,21 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
               </Button>
             </form>
           </Form>
+           <div className="mt-6 flex flex-col items-center gap-4">
+              <p className="text-sm text-muted-foreground">Or connect with me on:</p>
+              <div className="flex gap-4">
+                <Button variant="ghost" size="icon" asChild>
+                  <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <Github className="h-7 w-7 transition-colors hover:text-primary hover:glow-primary" />
+                  </a>
+                </Button>
+                <Button variant="ghost" size="icon" asChild>
+                  <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <Linkedin className="h-7 w-7 transition-colors hover:text-primary hover:glow-primary" />
+                  </a>
+                </Button>
+              </div>
+          </div>
         </div>
       </div>
     </section>
