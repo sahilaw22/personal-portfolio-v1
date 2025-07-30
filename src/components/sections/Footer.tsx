@@ -1,40 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAppState } from '@/components/AppStateProvider';
 
 export default function Footer() {
   const { setIsPasswordDialogOpen } = useAppState();
-  const [tapCount, setTapCount] = useState(0);
-  const [tapTimeout, setTapTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const personalInfo = {
-    name: 'Sahil A',
+    name: 'Sahil Ahmed Wani',
     email: 'sahilaw22@gmail.com',
   };
 
-  const handleTap = () => {
-    if (tapTimeout) {
-      clearTimeout(tapTimeout);
-    }
-
-    const newTapCount = tapCount + 1;
-    setTapCount(newTapCount);
-
-    if (newTapCount >= 5) {
-      setIsPasswordDialogOpen(true);
-      setTapCount(0);
-    } else {
-      const timeout = setTimeout(() => {
-        setTapCount(0);
-      }, 1500); // Reset taps after 1.5 seconds of inactivity
-      setTapTimeout(timeout);
-    }
-  };
-
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Keep desktop shortcut as a fallback
+      // Secret admin access shortcut
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
         event.preventDefault();
         setIsPasswordDialogOpen(true);
@@ -45,19 +23,12 @@ export default function Footer() {
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-       if (tapTimeout) {
-        clearTimeout(tapTimeout);
-      }
     };
-  }, [setIsPasswordDialogOpen, tapTimeout]);
+  }, [setIsPasswordDialogOpen]);
 
   return (
     <footer 
       className="w-full border-t border-border/40 bg-background/95 py-6"
-      onClick={handleTap}
-      role="button"
-      tabIndex={0}
-      aria-label="Footer area. Tap five times in this area for admin access."
     >
       <div className="container flex flex-col items-center justify-between gap-4 sm:flex-row">
         <p className="text-sm text-muted-foreground">
