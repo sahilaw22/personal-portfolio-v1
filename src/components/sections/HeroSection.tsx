@@ -76,7 +76,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
             {content.bio}
           </p>
           <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
-            <Button size="lg" asChild>
+            <Button size="lg" asChild variant="accent">
                 <a href="#contact">
                   <Send className="mr-2 h-5 w-5" />
                   Get in Touch
