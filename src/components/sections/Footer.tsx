@@ -1,9 +1,9 @@
 'use client';
 import { useEffect } from 'react';
-import { useAppState } from '@/components/AppStateProvider';
+import { useRouter } from 'next/navigation';
 
 export default function Footer() {
-  const { setIsPasswordDialogOpen } = useAppState();
+  const router = useRouter();
 
   const personalInfo = {
     name: 'Sahil Ahmed Wani',
@@ -12,10 +12,9 @@ export default function Footer() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Secret admin access shortcut
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
         event.preventDefault();
-        setIsPasswordDialogOpen(true);
+        router.push('/admin/login');
       }
     };
 
@@ -24,7 +23,7 @@ export default function Footer() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [setIsPasswordDialogOpen]);
+  }, [router]);
 
   return (
     <footer 

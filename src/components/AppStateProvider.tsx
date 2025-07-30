@@ -1,18 +1,16 @@
 'use client';
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import PasswordDialog from '@/components/admin/PasswordDialog';
-import AdminPanel from '@/components/admin/AdminPanel';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 
 
 interface AppState {
   isAdminAuthenticated: boolean;
-  isPasswordDialogOpen: boolean;
   contactSubmissions: ContactSubmission[];
   portfolioData: PortfolioData;
-  setIsAdminAuthenticated: (value: boolean) => void;
-  setIsPasswordDialogOpen: (value: boolean) => void;
+  login: (password: string) => boolean;
+  logout: () => void;
   handleAddSubmission: (submission: Omit<ContactSubmission, 'submittedAt'>) => void;
   updatePortfolioData: (data: PortfolioData) => void;
   addExperience: (experience: Omit<Experience, 'id'>) => void;
@@ -26,11 +24,44 @@ interface AppState {
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
+const UNLOCK_PASSWORD = 'IamNerd';
+
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(initialData);
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // On initial load, check if we should be authenticated from session storage
+    if (sessionStorage.getItem('isAdminAuthenticated') === 'true') {
+      setIsAdminAuthenticated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login') && !isAdminAuthenticated) {
+      router.replace('/admin/login');
+    }
+  }, [pathname, isAdminAuthenticated, router]);
+  
+  const login = (password: string) => {
+    if (password === UNLOCK_PASSWORD) {
+      setIsAdminAuthenticated(true);
+      sessionStorage.setItem('isAdminAuthenticated', 'true');
+      router.push('/admin');
+      return true;
+    }
+    return false;
+  };
+  
+  const logout = () => {
+    setIsAdminAuthenticated(false);
+    sessionStorage.removeItem('isAdminAuthenticated');
+    router.push('/admin/login');
+  };
 
   const handleAddSubmission = (submission: Omit<ContactSubmission, 'submittedAt'>) => {
     setContactSubmissions(prev => [...prev, { ...submission, submittedAt: new Date() }]);
@@ -89,11 +120,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
 
   const value = {
     isAdminAuthenticated,
-    isPasswordDialogOpen,
     contactSubmissions,
     portfolioData,
-    setIsAdminAuthenticated,
-    setIsPasswordDialogOpen,
+    login,
+    logout,
     handleAddSubmission,
     updatePortfolioData,
     addExperience,
@@ -108,15 +138,6 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   return (
     <AppStateContext.Provider value={value}>
       {children}
-      <PasswordDialog
-        isOpen={isPasswordDialogOpen}
-        onClose={() => setIsPasswordDialogOpen(false)}
-        onSuccess={() => {
-          setIsAdminAuthenticated(true);
-          setIsPasswordDialogOpen(false);
-        }}
-      />
-      {isAdminAuthenticated && <AdminPanel contactSubmissions={contactSubmissions} />}
     </AppStateContext.Provider>
   );
 }

@@ -5,9 +5,11 @@ import { Download, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useAppState } from '@/components/AppStateProvider';
 import type { HeroContent } from '@/lib/types';
+import { useRouter } from 'next/navigation';
 
 export default function HeroSection({ content }: { content: HeroContent }) {
-  const { setIsPasswordDialogOpen } = useAppState();
+  const { isAdminAuthenticated } = useAppState();
+  const router = useRouter();
   const [tapCount, setTapCount] = useState(0);
   const [tapTimeout, setTapTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -20,7 +22,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
     setTapCount(newTapCount);
 
     if (newTapCount >= 5) {
-      setIsPasswordDialogOpen(true);
+       router.push(isAdminAuthenticated ? '/admin' : '/admin/login');
       setTapCount(0);
     } else {
       const timeout = setTimeout(() => {
