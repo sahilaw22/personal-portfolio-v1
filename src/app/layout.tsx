@@ -3,8 +3,6 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import Header from '@/components/sections/Header';
 import Footer from '@/components/sections/Footer';
-import PasswordDialog from '@/components/admin/PasswordDialog';
-import AdminPanel from '@/components/admin/AdminPanel';
 import AppStateProvider from '@/components/AppStateProvider';
 
 
