@@ -130,10 +130,10 @@ export default function AboutEditor() {
               <h3 className="text-lg font-medium mb-2">Stats</h3>
               <div className="grid grid-cols-1 gap-4">
                  {statFields.map((field, index) => (
-                    <div key={field.id} className="flex items-center gap-2 p-2 border rounded-md">
-                        <FormField control={form.control} name={`stats.${index}.value`} render={({ field }) => ( <FormItem className="flex-1"><FormLabel>Value</FormLabel><FormControl><Input {...field} /></FormControl></FormItem> )} />
-                        <FormField control={form.control} name={`stats.${index}.label`} render={({ field }) => ( <FormItem className="flex-1"><FormLabel>Label</FormLabel><FormControl><Input {...field} /></FormControl></FormItem> )} />
-                        <Button type="button" variant="ghost" size="icon" onClick={() => removeStat(index)}>
+                    <div key={field.id} className="flex flex-col sm:flex-row items-center gap-2 p-2 border rounded-md">
+                        <FormField control={form.control} name={`stats.${index}.value`} render={({ field }) => ( <FormItem className="w-full sm:w-1/2"><FormLabel>Value</FormLabel><FormControl><Input {...field} /></FormControl></FormItem> )} />
+                        <FormField control={form.control} name={`stats.${index}.label`} render={({ field }) => ( <FormItem className="w-full sm:w-1/2"><FormLabel>Label</FormLabel><FormControl><Input {...field} /></FormControl></FormItem> )} />
+                        <Button type="button" variant="ghost" size="icon" onClick={() => removeStat(index)} className="mt-4 sm:mt-0">
                             <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                     </div>
