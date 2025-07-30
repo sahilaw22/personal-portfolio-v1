@@ -1,0 +1,109 @@
+import type { PortfolioData } from './types';
+import {
+  FileCode, Server, Database, GitMerge, Unplug, Component, Wind, Globe, Bot, TerminalSquare, Cloud, Layers, MousePointer
+} from 'lucide-react';
+
+export const initialData: PortfolioData = {
+  hero: {
+    greeting: "Hello, I'm",
+    name: "Sahil Ahmed Wani",
+    title: "Full-Stack Developer & Tech Enthusiast",
+    bio: "I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a strong focus on clean code and scalable architecture."
+  },
+  skills: [
+    {
+      title: "Languages",
+      skills: [
+        { name: "JavaScript", icon: 'FileCode' },
+        { name: "TypeScript", icon: 'FileCode' },
+        { name: "Python", icon: 'FileCode' },
+        { name: "HTML5", icon: 'Globe' },
+        { name: "CSS3", icon: 'Globe' },
+      ],
+    },
+    {
+      title: "Frameworks & Libraries",
+      skills: [
+        { name: "React", icon: 'Component' },
+        { name: "Next.js", icon: 'Component' },
+        { name: "Node.js", icon: 'Server' },
+        { name: "Express.js", icon: 'Server' },
+        { name: "Tailwind CSS", icon: 'Wind' },
+      ],
+    },
+    {
+      title: "Databases",
+      skills: [
+        { name: "PostgreSQL", icon: 'Database' },
+        { name: "MongoDB", icon: 'Database' },
+        { name: "Firebase", icon: 'Cloud' },
+      ],
+    },
+    {
+      title: "Tools & Platforms",
+      skills: [
+        { name: "Git", icon: 'GitMerge' },
+        { name: "Docker", icon: 'Unplug' },
+        { name: "Vite", icon: 'Bot' },
+        { name: "Webpack", icon: 'Layers' },
+        { name: "Vercel", icon: 'Cloud' },
+        { name: "Framer Motion", icon: 'MousePointer' },
+      ],
+    },
+    {
+      title: "ORM",
+      skills: [
+        { name: "Drizzle", icon: 'TerminalSquare' },
+        { name: "Prisma", icon: 'TerminalSquare' },
+      ],
+    }
+  ],
+  experience: [
+    {
+      id: "exp1",
+      role: "Freelance Web Developer",
+      company: "Upwork",
+      period: "2023 - Present",
+      description: "Developed and maintained full-stack web applications for various clients. Specialized in React, Node.js, and modern Jamstack architecture. Consistently delivered high-quality, scalable solutions on time."
+    },
+    {
+      id: "exp2",
+      role: "Software Development Intern",
+      company: "Tech Innovators Inc.",
+      period: "Summer 2022",
+      description: "Contributed to the development of a large-scale e-commerce platform. Worked with a team of senior engineers on both frontend and backend tasks, gaining hands-on experience with agile methodologies."
+    },
+  ],
+  projects: [
+    {
+      id: "proj1",
+      title: 'E-Commerce Platform',
+      description: 'A full-featured online store with product listings, a shopping cart, and a secure checkout process. Built with Next.js and integrated with Stripe for payments.',
+      image: 'https://placehold.co/600x400.png',
+      tags: ['Next.js', 'React', 'Stripe', 'Tailwind CSS'],
+      github: 'https://www.github.com/sahilaw22',
+      live: '#',
+      aiHint: 'e-commerce'
+    },
+    {
+      id: "proj2",
+      title: 'Task Management App',
+      description: 'A collaborative task manager with drag-and-drop boards, real-time updates, and user authentication. Powered by React and Firebase.',
+      image: 'https://placehold.co/600x400.png',
+      tags: ['React', 'Firebase', 'Zustand', 'dnd-kit'],
+      github: 'https://www.github.com/sahilaw22',
+      live: '#',
+      aiHint: 'productivity app'
+    },
+    {
+      id: "proj3",
+      title: 'Portfolio Website V1',
+      description: 'My previous personal portfolio website, designed to showcase my skills and projects with a clean, minimalist aesthetic.',
+      image: 'https://placehold.co/600x400.png',
+      tags: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
+      github: 'https://www.github.com/sahilaw22',
+      live: '#',
+      aiHint: 'portfolio design'
+    },
+  ]
+};

@@ -16,40 +16,8 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import React from 'react';
-
-const skills: Record<string, { name: string; icon: LucideIcon }[]> = {
-  "Languages": [
-    { name: "JavaScript", icon: FileCode },
-    { name: "TypeScript", icon: FileCode },
-    { name: "Python", icon: FileCode },
-    { name: "HTML5", icon: Globe },
-    { name: "CSS3", icon: Globe },
-  ],
-  "Frameworks & Libraries": [
-    { name: "React", icon: Component },
-    { name: "Next.js", icon: Component },
-    { name: "Node.js", icon: Server },
-    { name: "Express.js", icon: Server },
-    { name: "Tailwind CSS", icon: Wind },
-  ],
-  "Databases": [
-    { name: "PostgreSQL", icon: Database },
-    { name: "MongoDB", icon: Database },
-    { name: "Firebase", icon: Cloud },
-  ],
-  "Tools & Platforms": [
-    { name: "Git", icon: GitMerge },
-    { name: "Docker", icon: Unplug },
-    { name: "Vite", icon: Bot },
-    { name: "Webpack", icon: Layers },
-    { name: "Vercel", icon: Cloud },
-    { name: "Framer Motion", icon: MousePointer },
-  ],
-  "ORM": [
-    { name: "Drizzle", icon: TerminalSquare },
-    { name: "Prisma", icon: TerminalSquare },
-  ],
-};
+import type { SkillCategory } from "@/lib/types";
+import { iconMap } from "@/lib/icon-map";
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2 className="text-3xl font-bold tracking-tight text-gradient-primary-accent">{children}</h2>
@@ -64,7 +32,7 @@ const iconColors = [
 ];
 
 
-export default function SkillsSection() {
+export default function SkillsSection({ skillsData }: { skillsData: SkillCategory[] }) {
   return (
     <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-card">
       <div className="container px-4 md:px-6">
@@ -77,16 +45,19 @@ export default function SkillsSection() {
           </div>
         </div>
         <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
-          {Object.entries(skills).map(([category, skillList]) => (
-            <div key={category} className="grid gap-4 rounded-lg p-4 transition-all hover:shadow-lg hover:shadow-primary/10 gradient-border">
-              <SectionTitle>{category}</SectionTitle>
+          {skillsData.map((category) => (
+            <div key={category.title} className="grid gap-4 rounded-lg p-4 transition-all hover:shadow-lg hover:shadow-primary/10 gradient-border">
+              <SectionTitle>{category.title}</SectionTitle>
               <div className="flex flex-wrap gap-2">
-                {skillList.map((skill, index) => (
-                  <Badge key={skill.name} variant="secondary" className="flex items-center gap-2 text-sm">
-                     <skill.icon className={`h-4 w-4 ${iconColors[index % iconColors.length]}`} />
-                    <span>{skill.name}</span>
-                  </Badge>
-                ))}
+                {category.skills.map((skill, index) => {
+                  const Icon = iconMap[skill.icon as keyof typeof iconMap] || FileCode;
+                  return (
+                    <Badge key={skill.name} variant="secondary" className="flex items-center gap-2 text-sm">
+                       <Icon className={`h-4 w-4 ${iconColors[index % iconColors.length]}`} />
+                      <span>{skill.name}</span>
+                    </Badge>
+                  )
+                })}
               </div>
             </div>
           ))}

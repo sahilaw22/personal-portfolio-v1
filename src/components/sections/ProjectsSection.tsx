@@ -3,38 +3,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Github, ExternalLink } from 'lucide-react';
+import type { Project } from '@/lib/types';
 
-const projects = [
-  {
-    title: 'E-Commerce Platform',
-    description: 'A full-featured online store with product listings, a shopping cart, and a secure checkout process. Built with Next.js and integrated with Stripe for payments.',
-    image: 'https://placehold.co/600x400.png',
-    tags: ['Next.js', 'React', 'Stripe', 'Tailwind CSS'],
-    github: 'https://www.github.com/sahilaw22',
-    live: '#',
-    aiHint: 'e-commerce'
-  },
-  {
-    title: 'Task Management App',
-    description: 'A collaborative task manager with drag-and-drop boards, real-time updates, and user authentication. Powered by React and Firebase.',
-    image: 'https://placehold.co/600x400.png',
-    tags: ['React', 'Firebase', 'Zustand', 'dnd-kit'],
-    github: 'https://www.github.com/sahilaw22',
-    live: '#',
-    aiHint: 'productivity app'
-  },
-  {
-    title: 'Portfolio Website V1',
-    description: 'My previous personal portfolio website, designed to showcase my skills and projects with a clean, minimalist aesthetic.',
-    image: 'https://placehold.co/600x400.png',
-    tags: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
-    github: 'https://www.github.com/sahilaw22',
-    live: '#',
-    aiHint: 'portfolio design'
-  },
-];
-
-export default function ProjectsSection() {
+export default function ProjectsSection({ projects }: { projects: Project[] }) {
   return (
     <section id="projects" className="w-full py-12 md:py-24 lg:py-32 bg-card">
       <div className="container px-4 md:px-6">
@@ -48,7 +19,7 @@ export default function ProjectsSection() {
         </div>
         <div className="mx-auto grid max-w-5xl gap-8 py-12 sm:grid-cols-1 md:grid-cols-2 lg:gap-12">
           {projects.map((project) => (
-            <Card key={project.title} className="overflow-hidden transition-all hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-1 gradient-border">
+            <Card key={project.id} className="overflow-hidden transition-all hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-1 gradient-border">
               <CardHeader className="p-0">
                 <Image
                   src={project.image}

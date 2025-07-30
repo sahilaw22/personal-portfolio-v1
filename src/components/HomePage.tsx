@@ -8,13 +8,13 @@ import ContactSection from '@/components/sections/ContactSection';
 import { useAppState } from '@/components/AppStateProvider';
 
 export default function HomePage() {
-  const { handleAddSubmission } = useAppState();
+  const { handleAddSubmission, portfolioData } = useAppState();
   return (
     <>
-      <HeroSection />
-      <SkillsSection />
-      <ExperienceSection />
-      <ProjectsSection />
+      <HeroSection content={portfolioData.hero} />
+      <SkillsSection skillsData={portfolioData.skills} />
+      <ExperienceSection experiences={portfolioData.experience} />
+      <ProjectsSection projects={portfolioData.projects} />
       <ContactSection onFormSubmit={handleAddSubmission} />
     </>
   );
