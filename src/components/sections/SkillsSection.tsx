@@ -32,16 +32,6 @@ const iconColors = [
   'text-chart-5',
 ];
 
-const titleColors = [
-  'text-primary',
-  'text-accent',
-  'text-chart-3',
-  'text-chart-4',
-  'text-chart-5',
-  'text-chart-1',
-  'text-chart-2',
-];
-
 export default function SkillsSection({ skillsData }: { skillsData: SkillCategory[] }) {
   return (
     <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-card">
@@ -55,9 +45,9 @@ export default function SkillsSection({ skillsData }: { skillsData: SkillCategor
           </div>
         </div>
         <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
-          {skillsData.map((category, categoryIndex) => (
+          {skillsData.map((category) => (
             <div key={category.title} className="grid gap-4 rounded-lg p-4 transition-all hover:shadow-lg hover:shadow-primary/10 gradient-border">
-              <SectionTitle className={cn(titleColors[categoryIndex % titleColors.length], 'glow-primary')}>{category.title}</SectionTitle>
+              <SectionTitle className="text-primary">{category.title}</SectionTitle>
               <div className="flex flex-wrap gap-2">
                 {category.skills.map((skill, index) => {
                   const Icon = iconMap[skill.icon as keyof typeof iconMap] || FileCode;
