@@ -4,6 +4,35 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Github, ExternalLink } from 'lucide-react';
 import type { Project } from '@/lib/types';
+import { colorMap } from '@/lib/color-map';
+import { cn } from '@/lib/utils';
+
+const getProjectColors = (tags: string[]) => {
+  const availableColors = ['primary', 'accent', 'chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'];
+  const projectColors = tags
+    .map(tag => colorMap[tag.toLowerCase()])
+    .filter(Boolean);
+  
+  if (projectColors.length === 0) {
+    return {
+      from: `hsl(var(--${availableColors[0]}))`,
+      to: `hsl(var(--${availableColors[1]}))`,
+      shadow: `hsl(var(--${availableColors[0]}))`,
+    };
+  }
+  if (projectColors.length === 1) {
+    return {
+      from: `hsl(var(--${projectColors[0]}))`,
+      to: `hsl(var(--${availableColors.find(c => c !== projectColors[0]) || 'accent'}))`,
+      shadow: `hsl(var(--${projectColors[0]}))`,
+    };
+  }
+  return {
+    from: `hsl(var(--${projectColors[0]}))`,
+    to: `hsl(var(--${projectColors[1]}))`,
+    shadow: `hsl(var(--${projectColors[0]}))`,
+  };
+};
 
 export default function ProjectsSection({ projects }: { projects: Project[] }) {
   return (
@@ -18,41 +47,61 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
           </div>
         </div>
         <div className="mx-auto grid max-w-5xl gap-8 py-12 sm:grid-cols-1 md:grid-cols-2 lg:gap-12">
-          {projects.map((project) => (
-            <Card key={project.id} className="overflow-hidden transition-all hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-1 gradient-border">
-              <CardHeader className="p-0">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  width={600}
-                  height={400}
-                  className="rounded-t-lg object-cover"
-                  data-ai-hint={project.aiHint}
+          {projects.map((project) => {
+            const { from, to, shadow } = getProjectColors(project.tags);
+            
+            const cardStyle = {
+              '--project-color-from': from,
+              '--project-color-to': to,
+              '--project-shadow-color': shadow,
+            } as React.CSSProperties;
+
+            return (
+              <Card 
+                key={project.id} 
+                className="group/card overflow-hidden transition-all hover:-translate-y-1 relative focus-within:ring-0 focus-within:ring-offset-0"
+                style={cardStyle}
+              >
+                <div 
+                  className="absolute inset-[-2px] z-0 rounded-[--radius] bg-gradient-to-r from-[--project-color-from] to-[--project-color-to] transition-all"
                 />
-              </CardHeader>
-              <CardContent className="p-6">
-                <CardTitle className="mb-2 text-2xl">{project.title}</CardTitle>
-                <CardDescription>{project.description}</CardDescription>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <Badge key={tag} variant="outline">{tag}</Badge>
-                  ))}
+                <div className="relative z-10 flex h-full flex-col rounded-[calc(var(--radius)-2px)] bg-card">
+                  <CardHeader className="p-0">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      width={600}
+                      height={400}
+                      className="rounded-t-lg object-cover"
+                      data-ai-hint={project.aiHint}
+                    />
+                  </CardHeader>
+                  <CardContent className="flex-1 p-6">
+                    <CardTitle className="mb-2 text-2xl">{project.title}</CardTitle>
+                    <CardDescription>{project.description}</CardDescription>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <Badge key={tag} variant="outline">{tag}</Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex justify-end gap-2 p-6 pt-0">
+                    <Button variant="ghost" size="icon" asChild>
+                      <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+                        <Github className="h-5 w-5 hover:text-primary transition-colors" />
+                      </a>
+                    </Button>
+                    <Button variant="ghost" size="icon" asChild>
+                      <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label="Live demo">
+                        <ExternalLink className="h-5 w-5 hover:text-primary transition-colors" />
+                      </a>
+                    </Button>
+                  </CardFooter>
                 </div>
-              </CardContent>
-              <CardFooter className="flex justify-end gap-2 p-6 pt-0">
-                <Button variant="ghost" size="icon" asChild>
-                  <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
-                    <Github className="h-5 w-5 hover:text-primary transition-colors" />
-                  </a>
-                </Button>
-                <Button variant="ghost" size="icon" asChild>
-                  <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label="Live demo">
-                    <ExternalLink className="h-5 w-5 hover:text-primary transition-colors" />
-                  </a>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
+                <div className="absolute inset-0 z-20 rounded-lg shadow-[0_0_20px_0px] shadow-[--project-shadow-color]/0 opacity-0 transition-all duration-300 group-hover/card:shadow-[--project-shadow-color]/20 group-hover/card:opacity-100" />
+              </Card>
+            )
+          })}
         </div>
       </div>
     </section>
