@@ -1,5 +1,1 @@
-import ExperienceSection from '@/components/sections/ExperienceSection';
-
-export default function ExperiencePage() {
-  return <ExperienceSection />;
-}
+// This page is no longer needed as the experience section is now on the main page.

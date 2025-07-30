@@ -1,9 +1,5 @@
-import HeroSection from '@/components/sections/HeroSection';
+import HomePage from '@/components/HomePage';
 
-export default function AboutPage() {
-  return (
-    <div id="about">
-      <HeroSection />
-    </div>
-  );
+export default function Page() {
+  return <HomePage />;
 }

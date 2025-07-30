@@ -42,10 +42,10 @@ export default function HeroSection() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
             <Button size="lg" asChild>
-                <Link href="/contact">
+                <a href="#contact">
                   <Send className="mr-2 h-5 w-5" />
                   Get in Touch
-                </Link>
+                </a>
               </Button>
             <Button variant="secondary" size="lg" asChild>
               <a href="/resume.pdf" download="Sahil_A_Resume.pdf">

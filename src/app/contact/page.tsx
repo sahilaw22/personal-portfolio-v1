@@ -1,8 +1,1 @@
-'use client';
-import ContactSection from '@/components/sections/ContactSection';
-import { useAppState } from '@/components/AppStateProvider';
-
-export default function ContactPage() {
-  const { handleAddSubmission } = useAppState();
-  return <ContactSection onFormSubmit={handleAddSubmission} />;
-}
+// This page is no longer needed as the contact section is now on the main page.

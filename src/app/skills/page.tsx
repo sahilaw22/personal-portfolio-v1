@@ -1,5 +1,1 @@
-import SkillsSection from '@/components/sections/SkillsSection';
-
-export default function SkillsPage() {
-  return <SkillsSection />;
-}
+// This page is no longer needed as the skills section is now on the main page.
