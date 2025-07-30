@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Send } from 'lucide-react';
+import { Download, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useAppState } from '@/components/AppStateProvider';
 import type { HeroContent } from '@/lib/types';
@@ -76,10 +76,10 @@ export default function HeroSection({ content }: { content: HeroContent }) {
             {content.bio}
           </p>
           <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
-            <Button size="lg" asChild variant="accent">
+            <Button size="lg" asChild variant="lime">
                 <a href="#contact">
-                  <Send className="mr-2 h-5 w-5" />
                   Get in Touch
+                  <ChevronRight className="h-5 w-5" />
                 </a>
               </Button>
             <Button variant="secondary" size="lg" asChild>

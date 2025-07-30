@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import type { ContactSubmission } from '@/lib/types';
 import Image from 'next/image';
-import { Send, Github, Linkedin } from 'lucide-react';
+import { ChevronRight, Github, Linkedin } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -109,10 +109,10 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full group" size="lg" disabled={form.formState.isSubmitting}>
+              <Button type="submit" className="w-full group" size="lg" variant="lime" disabled={form.formState.isSubmitting}>
                 <span className="relative z-10 flex items-center">
-                   <Send className="mr-2 h-5 w-5" />
                   {form.formState.isSubmitting ? 'Sending...' : 'Send Message'}
+                   <ChevronRight className="ml-2 h-5 w-5" />
                 </span>
               </Button>
             </form>
