@@ -57,12 +57,12 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
           <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Have a project in mind, a question, or just want to connect? My inbox is always open. I'm excited to hear about your ideas and see how we can work together to create something amazing.
           </p>
-          <div className="relative w-full h-64 md:h-96">
+          <div className="w-full aspect-video relative">
             <Image
               src="/work-together.png"
               alt="Let's work together"
               fill
-              className="rounded-lg object-cover"
+              className="rounded-lg object-contain"
               data-ai-hint="collaboration message"
             />
           </div>
@@ -109,9 +109,11 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" size="lg" disabled={form.formState.isSubmitting} variant="accent">
-                 <Send className="mr-2 h-5 w-5" />
-                {form.formState.isSubmitting ? 'Sending...' : 'Send Message'}
+              <Button type="submit" className="w-full group" size="lg" disabled={form.formState.isSubmitting}>
+                <span className="relative z-10 flex items-center">
+                   <Send className="mr-2 h-5 w-5" />
+                  {form.formState.isSubmitting ? 'Sending...' : 'Send Message'}
+                </span>
               </Button>
             </form>
           </Form>
