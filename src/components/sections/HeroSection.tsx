@@ -48,7 +48,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               alt={content.name}
               width={400}
               height={400}
-              className="rounded-full border-4 border-primary/50 glow-primary object-cover"
+              className="rounded-full border-4 border-primary/50 object-cover"
               data-ai-hint="profile picture"
             />
              <div className="absolute inset-0 rounded-full border-4 border-accent animate-pulse"></div>

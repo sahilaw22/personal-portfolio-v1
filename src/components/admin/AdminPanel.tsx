@@ -26,7 +26,7 @@ export default function AdminPanel({ contactSubmissions }: AdminPanelProps) {
       <SheetTrigger asChild>
         <Button
           variant="secondary"
-          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full shadow-lg glow-accent"
+          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full shadow-lg"
         >
           <SlidersHorizontal className="h-6 w-6" />
         </Button>

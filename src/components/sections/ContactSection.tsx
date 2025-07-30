@@ -120,12 +120,12 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
               <div className="flex gap-4">
                 <Button variant="ghost" size="icon" asChild>
                   <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                    <Github className="h-7 w-7 transition-colors hover:text-primary hover:glow-primary" />
+                    <Github className="h-7 w-7 transition-colors hover:text-primary" />
                   </a>
                 </Button>
                 <Button variant="ghost" size="icon" asChild>
                   <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                    <Linkedin className="h-7 w-7 transition-colors hover:text-primary hover:glow-primary" />
+                    <Linkedin className="h-7 w-7 transition-colors hover:text-primary" />
                   </a>
                 </Button>
               </div>

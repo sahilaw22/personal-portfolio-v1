@@ -122,7 +122,7 @@ export default function HeadlineGenerator() {
         </Form>
         {headline && (
           <div className="mt-6 rounded-lg border border-primary/50 bg-primary/10 p-4 text-center">
-            <p className="text-lg font-medium text-primary glow-primary">{headline}</p>
+            <p className="text-lg font-medium text-primary">{headline}</p>
           </div>
         )}
       </CardContent>

@@ -52,7 +52,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
         <a href="#hero" className="flex items-center gap-2" onClick={() => handleLinkClick('#hero')}>
-          <Terminal className="h-8 w-8 text-primary glow-primary" />
+          <Terminal className="h-8 w-8 text-primary" />
           <span className="font-bold text-xl">Nerdfolio</span>
         </a>
         <nav className="hidden md:flex items-center gap-6 text-base">
@@ -65,8 +65,8 @@ export default function Header() {
                 handleLinkClick(item.href);
               }}
               className={cn(
-                'transition-colors hover:text-primary hover:glow-primary font-medium',
-                activeLink === item.href ? 'text-primary glow-primary' : 'text-muted-foreground'
+                'transition-colors hover:text-primary font-medium',
+                activeLink === item.href ? 'text-primary' : 'text-muted-foreground'
               )}
             >
               {item.name}
@@ -94,8 +94,8 @@ export default function Header() {
                 handleLinkClick(item.href);
               }}
               className={cn(
-                'transition-colors hover:text-primary hover:glow-primary font-medium w-full text-center py-2',
-                activeLink === item.href ? 'text-primary glow-primary bg-accent/10' : 'text-muted-foreground'
+                'transition-colors hover:text-primary font-medium w-full text-center py-2',
+                activeLink === item.href ? 'text-primary bg-accent/10' : 'text-muted-foreground'
               )}
             >
               {item.name}

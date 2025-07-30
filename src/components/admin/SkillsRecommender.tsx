@@ -106,7 +106,7 @@ export default function SkillsRecommender() {
         </Form>
         {skills.length > 0 && (
           <div className="mt-6">
-            <h4 className="font-semibold mb-2 text-accent glow-accent">Recommended Skills:</h4>
+            <h4 className="font-semibold mb-2 text-accent">Recommended Skills:</h4>
             <div className="flex flex-wrap gap-2 rounded-lg border p-4">
               {skills.map((skill, index) => (
                 <Badge key={index} variant="secondary" className="text-sm">

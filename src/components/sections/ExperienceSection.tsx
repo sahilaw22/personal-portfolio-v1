@@ -24,7 +24,7 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
             {experiences.map((exp, index) => (
               <div key={exp.id} className="relative mb-10 pl-12 md:grid md:grid-cols-2 md:gap-x-12 md:pl-0">
                 {/* Timeline Dot */}
-                <div className="absolute left-6 top-1 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-primary bg-background glow-primary md:left-1/2"></div>
+                <div className="absolute left-6 top-1 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-primary bg-background md:left-1/2"></div>
                 
                 {/* Content Card */}
                 <div className={cn(
@@ -34,7 +34,7 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
                     : 'md:col-start-2 md:text-left'
                 )}>
                     <p className="text-sm text-muted-foreground">{exp.period}</p>
-                    <h3 className="text-xl font-bold text-accent glow-accent">{exp.role}</h3>
+                    <h3 className="text-xl font-bold text-gradient-primary-accent">{exp.role}</h3>
                     <p className="mb-2 text-lg font-semibold">{exp.company}</p>
                     <p className="text-muted-foreground">{exp.description}</p>
                 </div>
