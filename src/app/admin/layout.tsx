@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
   Briefcase,
+  Download,
   GraduationCap,
   Home,
   Image as ImageIcon,
@@ -32,6 +33,7 @@ const navLinks = [
   { href: '/admin/ai-tools', label: 'AI Tools', icon: Sparkles },
   { href: '/admin/messages', label: 'Messages', icon: Mail },
   { href: '/admin/uploads', label: 'Uploads', icon: ImageIcon },
+  { href: '/admin/export', label: 'Export Data', icon: Download },
 ];
 
 function NavContent() {
@@ -154,5 +156,3 @@ export default function AdminLayout({
     </div>
   );
 }
-
-    
