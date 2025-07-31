@@ -30,24 +30,27 @@ const formSchema = z.object({
 });
 
 export default function ProjectsEditor() {
-  const { portfolioData, addProject, updateProject, deleteProject } = useAppState();
+  const { portfolioData, updateProject, addProject, deleteProject } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      projects: portfolioData.projects.map(p => ({...p, tags: p.tags || []})),
+      projects: [],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: "projects",
   });
-  
+
   useEffect(() => {
-    form.reset({ projects: portfolioData.projects });
-  }, [portfolioData.projects, form.reset]);
+    if (portfolioData.projects) {
+      replace(portfolioData.projects);
+    }
+  }, [portfolioData.projects, replace]);
+
 
   const handleAddNew = () => {
     const newProject = { id: new Date().toISOString(), title: 'New Project', description: 'A brief description of this project.', image: 'https://placehold.co/600x400.png', tags: ['new-tag'], github: 'https://github.com', live: 'https://example.com', aiHint: 'new project' };
@@ -56,7 +59,6 @@ export default function ProjectsEditor() {
   
   const handleRemove = (id: string, index: number) => {
     deleteProject(id);
-    remove(index);
     toast({ title: 'Project Removed' });
   };
 
@@ -80,7 +82,7 @@ export default function ProjectsEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
+            <Accordion type="multiple" value={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
                   <div className="flex items-center">

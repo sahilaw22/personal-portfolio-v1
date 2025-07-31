@@ -33,18 +33,20 @@ export default function ExperienceEditor() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      experience: portfolioData.experience,
+      experience: [],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: "experience",
   });
   
   useEffect(() => {
-    form.reset({ experience: portfolioData.experience });
-  }, [portfolioData.experience, form.reset]);
+    if (portfolioData.experience) {
+      replace(portfolioData.experience);
+    }
+  }, [portfolioData.experience, replace]);
 
 
   const handleAddNew = () => {
@@ -54,7 +56,6 @@ export default function ExperienceEditor() {
   
   const handleRemove = (id: string, index: number) => {
     deleteExperience(id);
-    remove(index);
     toast({ title: 'Experience Entry Removed' });
   };
 
@@ -78,7 +79,7 @@ export default function ExperienceEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
+            <Accordion type="multiple" value={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
                   <div className="flex items-center">

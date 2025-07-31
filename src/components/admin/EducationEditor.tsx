@@ -33,18 +33,20 @@ export default function EducationEditor() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      education: portfolioData.education,
+      education: [],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: "education",
   });
   
   useEffect(() => {
-    form.reset({ education: portfolioData.education });
-  }, [portfolioData.education, form.reset]);
+    if (portfolioData.education) {
+        replace(portfolioData.education);
+    }
+  }, [portfolioData.education, replace]);
 
   const handleAddNew = () => {
     const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
@@ -53,7 +55,6 @@ export default function EducationEditor() {
   
   const handleRemove = (id: string, index: number) => {
     deleteEducation(id);
-    remove(index);
     toast({ title: 'Education Entry Removed' });
   };
 
@@ -77,7 +78,7 @@ export default function EducationEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
+            <Accordion type="multiple" value={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
                   <div className="flex items-center">
