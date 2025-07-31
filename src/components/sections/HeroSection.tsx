@@ -103,6 +103,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
               height={400}
               className="object-cover w-full h-full rounded-full"
               data-ai-hint="profile picture"
+              priority
             />
           </div>
         </div>
