@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export default function EducationEditor() {
-  const { portfolioData, updateEducation, addEducation, deleteEducation } = useAppState();
+  const { portfolioData, addEducation, updateEducation, deleteEducation } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,23 +42,55 @@ export default function EducationEditor() {
     name: "education",
   });
   
+  // This effect synchronizes the form with the global state when the component first loads
+  // or if the global state is updated from an external source.
   useEffect(() => {
-    form.reset({ education: portfolioData.education });
-  }, [portfolioData.education, form.reset]);
+    if (JSON.stringify(fields) !== JSON.stringify(portfolioData.education)) {
+      form.reset({ education: portfolioData.education });
+    }
+  }, [portfolioData.education, form.reset, fields]);
 
   const handleAddNew = () => {
-    addEducation({ id: new Date().toISOString(), institution: '', degree: '', period: '', description: '' });
+    const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
+    append(newEducation);
   };
   
   const handleRemove = (id: string, index: number) => {
-    deleteEducation(id);
-    toast({ title: 'Education Entry Removed' });
+    remove(index);
+    toast({ title: 'Education Entry Marked for Deletion' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    values.education.forEach(edu => {
-      updateEducation(edu);
+    // This function now becomes the single source of truth for updating the global state.
+    // It will add, update, and remove items based on the final form state.
+    
+    // Simple approach: replace the entire education array in the global state
+    // with the one from the form. AppStateProvider needs a method for this.
+    // Let's assume a new method `setEducation` for simplicity, or we can do it manually.
+    
+    // To avoid adding a new method to the provider, we can diff the arrays, but that's complex.
+    // The most robust way is to just replace the whole array. For now, let's just update all.
+    // The issue is that the global state is the source of truth, but the form is the editor.
+    
+    const initialIds = portfolioData.education.map(e => e.id);
+    const formIds = values.education.map(e => e.id);
+
+    // Find and delete removed items
+    initialIds.forEach(id => {
+      if (!formIds.includes(id)) {
+        deleteEducation(id);
+      }
     });
+
+    // Find and add/update items
+    values.education.forEach(edu => {
+      if (initialIds.includes(edu.id)) {
+        updateEducation(edu);
+      } else {
+        addEducation(edu);
+      }
+    });
+    
     toast({
       title: 'Education Updated!',
       description: 'Your education section has been successfully updated.',

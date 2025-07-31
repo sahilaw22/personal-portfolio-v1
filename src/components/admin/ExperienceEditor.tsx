@@ -42,30 +42,49 @@ export default function ExperienceEditor() {
     name: "experience",
   });
   
+  // This effect synchronizes the form with the global state when the component first loads
+  // or if the global state is updated from an external source.
   useEffect(() => {
-    // This effect synchronizes the form state with the global app state.
-    // It's crucial for reflecting deletions immediately in the UI.
-    form.reset({ experience: portfolioData.experience });
-  }, [portfolioData.experience, form.reset]);
+    // A deep comparison to prevent unnecessary re-renders/resets
+    if (JSON.stringify(fields) !== JSON.stringify(portfolioData.experience)) {
+        form.reset({ experience: portfolioData.experience });
+    }
+  }, [portfolioData.experience, form.reset, fields]);
 
 
   const handleAddNew = () => {
-    const newExperience = { id: new Date().toISOString(), role: '', company: '', period: '', description: '' };
-    addExperience(newExperience);
+    const newExperience = { id: new Date().toISOString(), role: 'New Role', company: 'New Company', period: 'Year - Year', description: 'A brief description of your responsibilities.' };
+    append(newExperience);
   };
   
-  const handleRemove = (id: string, index: number) => {
-    deleteExperience(id);
-    // No need to call remove(index) from useFieldArray because the useEffect will trigger a form reset.
-    toast({ title: 'Experience Removed' });
+  const handleRemove = (index: number) => {
+    remove(index);
+    toast({ title: 'Experience Entry Marked for Deletion' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    values.experience.forEach(exp => {
-      // The `addExperience` from handleAddNew already added it to the state.
-      // So we only need to update existing ones.
-      updateExperience(exp);
+    // This function now becomes the single source of truth for updating the global state.
+    const initialIds = portfolioData.experience.map(e => e.id);
+    const formIds = values.experience.map(e => e.id);
+
+    // Find and delete removed items
+    initialIds.forEach(id => {
+      if (!formIds.includes(id)) {
+        deleteExperience(id);
+      }
     });
+
+    // Find and add/update items
+    values.experience.forEach(exp => {
+      if (initialIds.includes(exp.id)) {
+        // It's an existing item, so update it
+        updateExperience(exp);
+      } else {
+        // It's a new item, so add it
+        addExperience(exp);
+      }
+    });
+
     toast({
       title: 'Experience Updated!',
       description: 'Your experience section has been successfully updated.',
@@ -88,7 +107,7 @@ export default function ExperienceEditor() {
                     <AccordionTrigger className="flex-1">
                       {form.watch(`experience.${index}.role`) || 'New Experience'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
