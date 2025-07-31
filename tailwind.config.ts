@@ -62,7 +62,7 @@ export default {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
-        'portfolio-silver': '#757575',
+        'portfolio-silver': '#BDBDBD',
       },
       borderRadius: {
         lg: 'var(--radius)',
