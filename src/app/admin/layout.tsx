@@ -38,6 +38,7 @@ function NavContent() {
     <nav className="grid gap-2 text-lg font-medium">
       <Link
         href="/admin"
+        prefetch={true}
         className="flex items-center gap-2 text-lg font-semibold mb-4"
       >
         <Sparkles className="h-6 w-6" />
@@ -47,6 +48,7 @@ function NavContent() {
         <Link
           key={href}
           href={href}
+          prefetch={true}
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
             pathname === href && 'bg-muted text-primary'
