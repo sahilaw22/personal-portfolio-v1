@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export default function EducationEditor() {
-  const { portfolioData, deleteEducation, updateAllEducation } = useAppState();
+  const { portfolioData, updateAllEducation } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,22 +37,21 @@ export default function EducationEditor() {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control: form.control,
     name: "education",
   });
   
   useEffect(() => {
     form.reset({ education: portfolioData.education });
-  }, [portfolioData.education]);
+  }, [portfolioData.education, form.reset]);
 
   const handleAddNew = () => {
     const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
     append(newEducation);
   };
   
-  const handleRemove = (id: string, index: number) => {
-    deleteEducation(id);
+  const handleRemove = (index: number) => {
     remove(index);
     toast({ title: 'Education Entry Removed' });
   };
@@ -81,7 +80,7 @@ export default function EducationEditor() {
                     <AccordionTrigger className="flex-1">
                       {form.watch(`education.${index}.institution`) || 'New Education'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

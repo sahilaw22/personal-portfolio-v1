@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export default function ExperienceEditor() {
-  const { portfolioData, updateAllExperience, deleteExperience } = useAppState();
+  const { portfolioData, updateAllExperience } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,7 +44,7 @@ export default function ExperienceEditor() {
   
   useEffect(() => {
     form.reset({ experience: portfolioData.experience });
-  }, [portfolioData.experience]);
+  }, [portfolioData.experience, form.reset]);
 
 
   const handleAddNew = () => {
@@ -52,8 +52,7 @@ export default function ExperienceEditor() {
     append(newExperience);
   };
   
-  const handleRemove = (id: string, index: number) => {
-    deleteExperience(id);
+  const handleRemove = (index: number) => {
     remove(index);
     toast({ title: 'Experience Entry Removed' });
   };
@@ -82,7 +81,7 @@ export default function ExperienceEditor() {
                     <AccordionTrigger className="flex-1">
                       {form.watch(`experience.${index}.role`) || 'New Experience'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

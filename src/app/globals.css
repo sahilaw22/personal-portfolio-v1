@@ -30,7 +30,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
   }
- 
+
   .dark {
     --background: 222 84% 5%;
     --foreground: 210 40% 98%;
@@ -58,7 +58,7 @@
     --chart-5: 340 75% 55%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
@@ -88,8 +88,8 @@
   border-radius: inherit;
   padding: 2px;
   background: linear-gradient(to right, var(--project-color-from), var(--project-color-to));
-  -webkit-mask: 
-     linear-gradient(#fff 0 0) content-box, 
+  -webkit-mask:
+     linear-gradient(#fff 0 0) content-box,
      linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude;

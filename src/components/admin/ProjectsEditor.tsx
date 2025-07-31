@@ -30,7 +30,7 @@ const formSchema = z.object({
 });
 
 export default function ProjectsEditor() {
-  const { portfolioData, deleteProject, updateAllProjects } = useAppState();
+  const { portfolioData, updateAllProjects } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,7 +47,7 @@ export default function ProjectsEditor() {
 
   useEffect(() => {
     form.reset({ projects: portfolioData.projects });
-  }, [portfolioData.projects]);
+  }, [portfolioData.projects, form.reset]);
 
 
   const handleAddNew = () => {
@@ -55,8 +55,7 @@ export default function ProjectsEditor() {
     append(newProject);
   };
   
-  const handleRemove = (id: string, index: number) => {
-    deleteProject(id);
+  const handleRemove = (index: number) => {
     remove(index);
     toast({ title: 'Project Removed' });
   };
@@ -85,7 +84,7 @@ export default function ProjectsEditor() {
                     <AccordionTrigger className="flex-1">
                       {form.watch(`projects.${index}.title`) || 'New Project'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

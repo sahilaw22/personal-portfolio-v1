@@ -46,7 +46,7 @@ export default function AboutEditor() {
 
   useEffect(() => {
     form.reset(portfolioData.about);
-  }, [portfolioData.about]);
+  }, [portfolioData.about, form.reset]);
 
   const { fields: serviceFields, append: appendService, remove: removeService } = useFieldArray({
     control: form.control,
