@@ -7,33 +7,12 @@ import { useAppState } from '@/components/AppStateProvider';
 import type { HeroContent } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 
-const GeometricBackground = () => (
-    <svg
-      className="absolute inset-0 w-full h-full text-gray-800/50"
-      xmlns="http://www.w3.org/2000/svg"
-      width="100%"
-      height="100%"
-    >
-      <defs>
-        <pattern
-          id="pattern-1"
-          x="0"
-          y="0"
-          width="100"
-          height="100"
-          patternUnits="userSpaceOnUse"
-          patternTransform="rotate(45)"
-        >
-          <line x1="0" y1="0" x2="0" y2="100" stroke="currentColor" strokeWidth="1" />
-        </pattern>
-      </defs>
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-1)" opacity="0.1" />
-      <g transform="translate(50, 50)">
-        <path d="M 0 150 L 150 0 L 300 150 L 150 300 Z" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-        <path d="M 75 225 L 150 150 L 225 225" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-      </g>
-    </svg>
-  );
+const OrangeGlowBackground = () => (
+    <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] bg-primary/20 rounded-full blur-3xl" />
+        <div className="absolute w-full h-full bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(255,121,44,0.15),rgba(255,255,255,0))]"></div>
+    </div>
+);
   
 
 export default function HeroSection({ content }: { content: HeroContent }) {
@@ -110,18 +89,16 @@ export default function HeroSection({ content }: { content: HeroContent }) {
         </div>
 
         <div className="relative flex justify-center items-center order-1 md:order-2">
-           <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10">
+           <OrangeGlowBackground />
+           <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10 p-4">
             <Image
               src={content.image}
               alt={content.name}
               width={400}
               height={400}
-              className="object-cover w-full h-full"
+              className="object-cover w-full h-full rounded-full"
               data-ai-hint="profile picture"
             />
-          </div>
-           <div className="absolute inset-0 flex items-center justify-center">
-            <GeometricBackground />
           </div>
         </div>
 
