@@ -46,16 +46,6 @@ export default function EducationEditor() {
     form.reset({ education: portfolioData.education });
   }, [portfolioData.education, form.reset]);
 
-  const handleAddNew = () => {
-    const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
-    append(newEducation);
-  };
-  
-  const handleRemove = (index: number) => {
-    remove(index);
-    toast({ title: 'Education Entry Removed' });
-  };
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateAllEducation(values.education);
     toast({
@@ -73,14 +63,14 @@ export default function EducationEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Accordion type="multiple" value={fields.map(f => f.id)} className="w-full">
+            <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
                   <div className="flex items-center">
                     <AccordionTrigger className="flex-1">
                       {form.watch(`education.${index}.institution`) || 'New Education'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -93,7 +83,7 @@ export default function EducationEditor() {
                 </AccordionItem>
               ))}
             </Accordion>
-             <Button type="button" variant="outline" onClick={handleAddNew} className="mt-4">
+             <Button type="button" variant="outline" onClick={() => append({ id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' })} className="mt-4">
               <PlusCircle className="mr-2 h-4 w-4" /> Add New Education
             </Button>
             <Button type="submit" className="w-full mt-6">Save All Changes</Button>

@@ -47,16 +47,6 @@ export default function ExperienceEditor() {
   }, [portfolioData.experience, form.reset]);
 
 
-  const handleAddNew = () => {
-    const newExperience = { id: new Date().toISOString(), role: 'New Role', company: 'New Company', period: 'Year - Year', description: 'A brief description of your responsibilities.' };
-    append(newExperience);
-  };
-  
-  const handleRemove = (index: number) => {
-    remove(index);
-    toast({ title: 'Experience Entry Removed' });
-  };
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateAllExperience(values.experience);
     toast({
@@ -74,14 +64,14 @@ export default function ExperienceEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Accordion type="multiple" value={fields.map(f => f.id)} className="w-full">
+            <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
                   <div className="flex items-center">
                     <AccordionTrigger className="flex-1">
                       {form.watch(`experience.${index}.role`) || 'New Experience'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -134,7 +124,7 @@ export default function ExperienceEditor() {
                 </AccordionItem>
               ))}
             </Accordion>
-             <Button type="button" variant="outline" onClick={handleAddNew} className="mt-4">
+             <Button type="button" variant="outline" onClick={() => append({ id: new Date().toISOString(), role: 'New Role', company: 'New Company', period: 'Year - Year', description: 'A brief description of your responsibilities.' })} className="mt-4">
               <PlusCircle className="mr-2 h-4 w-4" /> Add New Experience
             </Button>
             <Button type="submit" className="w-full mt-6">Save All Changes</Button>

@@ -19,13 +19,14 @@ interface AppState {
   updateAllExperience: (experiences: Experience[]) => void;
   updateAllEducation: (educationItems: Education[]) => void;
   updateAllProjects: (projects: Project[]) => void;
+  updateProject: (project: Project) => void;
   updateSkills: (skills: SkillCategory[]) => void;
 }
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
-const DATA_VERSION = 'v3'; // Increment this to force a reset
+const DATA_VERSION = 'v4'; // Increment this to force a reset
 
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -114,16 +115,23 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     setPortfolioData(prev => ({ ...prev, contact }));
   }
   
-  const updateAllExperience = (experiences: Experience[]) => {
-    setPortfolioData(prev => ({...prev, experience: experiences }));
+  const updateAllExperience = (experience: Experience[]) => {
+    setPortfolioData(prev => ({...prev, experience }));
   };
 
-  const updateAllEducation = (educationItems: Education[]) => {
-    setPortfolioData(prev => ({...prev, education: educationItems }));
+  const updateAllEducation = (education: Education[]) => {
+    setPortfolioData(prev => ({...prev, education }));
   };
   
   const updateAllProjects = (projects: Project[]) => {
-    setPortfolioData(prev => ({...prev, projects: projects }));
+    setPortfolioData(prev => ({...prev, projects }));
+  };
+
+  const updateProject = (updatedProject: Project) => {
+    setPortfolioData(prev => ({
+      ...prev,
+      projects: prev.projects.map(p => p.id === updatedProject.id ? updatedProject : p)
+    }));
   };
   
   const updateSkills = (skills: SkillCategory[]) => {
@@ -144,6 +152,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     updateAllExperience,
     updateAllEducation,
     updateAllProjects,
+    updateProject,
     updateSkills,
   };
 
