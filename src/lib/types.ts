@@ -32,7 +32,11 @@ export type AboutContent = {
   services: Service[];
   stats: Stat[];
   image: string;
-}
+};
+
+export type ContactContent = {
+  image: string;
+};
 
 export type Skill = {
   name:string;
@@ -74,6 +78,7 @@ export type Project = {
 export type PortfolioData = {
   hero: HeroContent;
   about: AboutContent;
+  contact: ContactContent;
   skills: SkillCategory[];
   experience: Experience[];
   education: Education[];

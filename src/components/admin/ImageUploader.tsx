@@ -13,7 +13,7 @@ import ImageCropper from './ImageCropper';
 
 
 export default function ImageUploader() {
-  const { portfolioData, updateHeroContent, updateAboutContent, updateProject } = useAppState();
+  const { portfolioData, updateHeroContent, updateAboutContent, updateProject, updateContactContent } = useAppState();
   const [target, setTarget] = useState<string>('');
   const [lastUploadedImage, setLastUploadedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +59,8 @@ export default function ImageUploader() {
             updateHeroContent({...portfolioData.hero, image: data.url});
         } else if (target === 'about') {
             updateAboutContent({...portfolioData.about, image: data.url});
+        } else if (target === 'contact') {
+            updateContactContent({...portfolioData.contact, image: data.url});
         } else if (target.startsWith('project-')) {
             const projectId = target.replace('project-', '');
             const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
@@ -103,6 +105,8 @@ export default function ImageUploader() {
         updateHeroContent({...portfolioData.hero, image: placeholderUrl});
     } else if (target === 'about') {
         updateAboutContent({...portfolioData.about, image: placeholderUrl});
+    } else if (target === 'contact') {
+        updateContactContent({...portfolioData.contact, image: placeholderUrl});
     } else if (target.startsWith('project-')) {
         const projectId = target.replace('project-', '');
         const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
@@ -120,7 +124,7 @@ export default function ImageUploader() {
   const getAspectRatio = () => {
     if (target === 'hero' || target === 'about') return 1 / 1;
     if (target.startsWith('project-')) return 3 / 2;
-    return 16 / 9;
+    return 3 / 2;
   }
 
   return (
@@ -151,6 +155,7 @@ export default function ImageUploader() {
                         <SelectLabel>Main Sections</SelectLabel>
                         <SelectItem value="hero">Hero Profile Image</SelectItem>
                         <SelectItem value="about">About Section Image</SelectItem>
+                        <SelectItem value="contact">Contact Section Image</SelectItem>
                     </SelectGroup>
                     <SelectGroup>
                         <SelectLabel>Projects</SelectLabel>

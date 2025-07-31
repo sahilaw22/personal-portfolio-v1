@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education } from '@/lib/types';
+import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 
 
@@ -14,6 +14,7 @@ interface AppState {
   handleAddSubmission: (submission: Omit<ContactSubmission, 'submittedAt'>) => void;
   updateHeroContent: (hero: HeroContent) => void;
   updateAboutContent: (about: AboutContent) => void;
+  updateContactContent: (contact: ContactContent) => void;
   addExperience: (experience: Omit<Experience, 'id'>) => void;
   updateExperience: (experience: Experience) => void;
   deleteExperience: (id: string) => void;
@@ -78,6 +79,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const updateAboutContent = (about: AboutContent) => {
     setPortfolioData(prev => ({ ...prev, about }));
   };
+
+  const updateContactContent = (contact: ContactContent) => {
+    setPortfolioData(prev => ({ ...prev, contact }));
+  }
 
   const addExperience = (experience: Omit<Experience, 'id'>) => {
     setPortfolioData(prev => ({
@@ -156,6 +161,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     handleAddSubmission,
     updateHeroContent,
     updateAboutContent,
+    updateContactContent,
     addExperience,
     updateExperience,
     deleteExperience,

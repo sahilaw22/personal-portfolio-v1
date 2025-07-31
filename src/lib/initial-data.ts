@@ -26,6 +26,9 @@ export const initialData: PortfolioData = {
     ],
     image: "https://placehold.co/600x600.png"
   },
+  contact: {
+    image: "https://placehold.co/600x400.png"
+  },
   skills: [
     {
       title: "Languages",

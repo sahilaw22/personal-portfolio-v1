@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { ContactSubmission } from '@/lib/types';
 import Image from 'next/image';
 import { ChevronRight, Github, Linkedin } from 'lucide-react';
+import { useAppState } from '../AppStateProvider';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -29,6 +30,8 @@ const personalInfo = {
 
 export default function ContactSection({ onFormSubmit }: ContactFormProps) {
   const { toast } = useToast();
+  const { portfolioData } = useAppState();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,7 +62,7 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
           </p>
            <div className="w-full aspect-video relative">
              <Image
-              src="https://placehold.co/600x400.png"
+              src={portfolioData.contact.image}
               alt="Collaboration"
               fill
               className="rounded-lg object-cover"
