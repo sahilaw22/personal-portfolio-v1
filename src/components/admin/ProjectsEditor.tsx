@@ -52,7 +52,6 @@ export default function ProjectsEditor() {
   const handleAddNew = () => {
     const newProject = { id: new Date().toISOString(), title: 'New Project', description: 'A brief description of this project.', image: 'https://placehold.co/600x400.png', tags: ['new-tag'], github: 'https://github.com', live: 'https://example.com', aiHint: 'new project' };
     addProject(newProject);
-    append(newProject);
   };
   
   const handleRemove = (id: string, index: number) => {

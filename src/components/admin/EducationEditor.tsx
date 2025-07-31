@@ -49,7 +49,6 @@ export default function EducationEditor() {
   const handleAddNew = () => {
     const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
     addEducation(newEducation);
-    append(newEducation);
   };
   
   const handleRemove = (id: string, index: number) => {

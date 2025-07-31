@@ -50,7 +50,6 @@ export default function ExperienceEditor() {
   const handleAddNew = () => {
     const newExperience = { id: new Date().toISOString(), role: 'New Role', company: 'New Company', period: 'Year - Year', description: 'A brief description of your responsibilities.' };
     addExperience(newExperience);
-    append(newExperience);
   };
   
   const handleRemove = (id: string, index: number) => {
