@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { HeroContent } from '@/lib/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const formSchema = z.object({
   greeting: z.string().min(2),
@@ -36,6 +36,14 @@ export default function ContentEditor() {
       description: 'Your hero section has been successfully updated.',
     });
   }
+  
+  const availabilityOptions = [
+      "Available for Internship",
+      "Available for Freelance",
+      "Available for Full-time work",
+      "Available for Part-time work",
+      "Not currently available",
+  ];
 
   return (
     <Card>
@@ -91,9 +99,20 @@ export default function ContentEditor() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Availability Status</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select an availability status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {availabilityOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
