@@ -18,8 +18,8 @@ export default function AdminPage() {
   return (
     <div className="flex flex-col">
       <h1 className="text-3xl font-bold tracking-tight text-gradient-primary-accent mb-6">Portfolio Customization</h1>
-      <Tabs defaultValue="content" className="flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-8">
+      <Tabs defaultValue="content" className="flex-1 flex flex-col md:flex-row md:gap-8" orientation="vertical">
+          <TabsList className="w-full md:w-48 shrink-0 grid-cols-2 grid sm:grid-cols-4 md:grid-cols-1 h-auto">
             <TabsTrigger value="content">Content</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="experience">Experience</TabsTrigger>
@@ -29,7 +29,7 @@ export default function AdminPage() {
             <TabsTrigger value="messages">Messages</TabsTrigger>
             <TabsTrigger value="uploads">Uploads</TabsTrigger>
           </TabsList>
-          <div className="mt-6">
+          <div className="mt-6 md:mt-0 flex-1">
             <TabsContent value="content">
                 <ContentEditor />
             </TabsContent>
