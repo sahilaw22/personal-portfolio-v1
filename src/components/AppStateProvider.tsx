@@ -1,3 +1,4 @@
+
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -31,13 +32,34 @@ const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
 
+const getInitialPortfolioData = (): PortfolioData => {
+    if (typeof window === 'undefined') {
+        return initialData;
+    }
+    try {
+        const item = window.localStorage.getItem('portfolioData');
+        return item ? JSON.parse(item) : initialData;
+    } catch (error) {
+        console.error("Error reading from localStorage", error);
+        return initialData;
+    }
+};
+
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
-  const [portfolioData, setPortfolioData] = useState<PortfolioData>(initialData);
+  const [portfolioData, setPortfolioData] = useState<PortfolioData>(getInitialPortfolioData());
 
   const router = useRouter();
   const pathname = usePathname();
+  
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
+    } catch (error) {
+      console.error("Error writing to localStorage", error);
+    }
+  }, [portfolioData]);
 
   useEffect(() => {
     // On initial load, check if we should be authenticated from session storage
