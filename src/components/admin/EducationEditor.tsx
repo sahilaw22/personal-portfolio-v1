@@ -1,4 +1,6 @@
+
 'use client';
+import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -39,26 +41,23 @@ export default function EducationEditor() {
     control: form.control,
     name: "education",
   });
+  
+  useEffect(() => {
+    form.reset({ education: portfolioData.education });
+  }, [portfolioData.education, form.reset]);
 
   const handleAddNew = () => {
-    append({ id: new Date().toISOString(), institution: '', degree: '', period: '', description: '' });
+    addEducation({ id: new Date().toISOString(), institution: '', degree: '', period: '', description: '' });
   };
   
-  const handleRemove = (index: number) => {
-    const idToDelete = fields[index].id;
-    deleteEducation(idToDelete);
-    remove(index);
+  const handleRemove = (id: string, index: number) => {
+    deleteEducation(id);
     toast({ title: 'Education Entry Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.education.forEach(edu => {
-      const existing = portfolioData.education.find(e => e.id === edu.id);
-      if (existing) {
-        updateEducation(edu);
-      } else {
-        addEducation(edu);
-      }
+      updateEducation(edu);
     });
     toast({
       title: 'Education Updated!',
@@ -82,7 +81,7 @@ export default function EducationEditor() {
                     <AccordionTrigger className="flex-1">
                       {form.watch(`education.${index}.institution`) || 'New Education'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

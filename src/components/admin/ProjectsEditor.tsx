@@ -1,5 +1,6 @@
-'use client';
 
+'use client';
+import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -43,26 +44,23 @@ export default function ProjectsEditor() {
     control: form.control,
     name: "projects",
   });
+  
+  useEffect(() => {
+    form.reset({ projects: portfolioData.projects });
+  }, [portfolioData.projects, form.reset]);
 
   const handleAddNew = () => {
-    append({ id: new Date().toISOString(), title: '', description: '', image: 'https://placehold.co/600x400.png', tags: [], github: '', live: '', aiHint: '' });
+    addProject({ id: new Date().toISOString(), title: '', description: '', image: 'https://placehold.co/600x400.png', tags: [], github: '', live: '', aiHint: '' });
   };
   
-  const handleRemove = (index: number) => {
-    const idToDelete = fields[index].id;
-    deleteProject(idToDelete);
-    remove(index);
+  const handleRemove = (id: string, index: number) => {
+    deleteProject(id);
     toast({ title: 'Project Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.projects.forEach(proj => {
-      const existing = portfolioData.projects.find(p => p.id === proj.id);
-      if (existing) {
-        updateProject(proj);
-      } else {
-        addProject(proj);
-      }
+      updateProject(proj);
     });
     toast({
       title: 'Projects Updated!',
@@ -86,7 +84,7 @@ export default function ProjectsEditor() {
                     <AccordionTrigger className="flex-1">
                       {form.watch(`projects.${index}.title`) || 'New Project'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

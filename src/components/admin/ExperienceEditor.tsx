@@ -1,5 +1,6 @@
+
 'use client';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -9,10 +10,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { PlusCircle, Trash2 } from 'lucide-react';
-import type { Experience } from '@/lib/types';
 
 const experienceSchema = z.object({
   id: z.string(),
@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export default function ExperienceEditor() {
-  const { portfolioData, updateExperience, addExperience, deleteExperience } = useAppState();
+  const { portfolioData, addExperience, updateExperience, deleteExperience } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,31 +37,34 @@ export default function ExperienceEditor() {
     },
   });
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "experience",
   });
+  
+  useEffect(() => {
+    // This effect synchronizes the form state with the global app state.
+    // It's crucial for reflecting deletions immediately in the UI.
+    form.reset({ experience: portfolioData.experience });
+  }, [portfolioData.experience, form.reset]);
+
 
   const handleAddNew = () => {
-    append({ id: new Date().toISOString(), role: '', company: '', period: '', description: '' });
+    const newExperience = { id: new Date().toISOString(), role: '', company: '', period: '', description: '' };
+    addExperience(newExperience);
   };
   
-  const handleRemove = (index: number) => {
-    const idToDelete = fields[index].id;
-    deleteExperience(idToDelete);
-    remove(index);
-     toast({ title: 'Experience Removed' });
+  const handleRemove = (id: string, index: number) => {
+    deleteExperience(id);
+    // No need to call remove(index) from useFieldArray because the useEffect will trigger a form reset.
+    toast({ title: 'Experience Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.experience.forEach(exp => {
-      // Find if it's a new one (by checking if it exists in original data)
-      const existing = portfolioData.experience.find(e => e.id === exp.id);
-      if (existing) {
-        updateExperience(exp);
-      } else {
-        addExperience(exp);
-      }
+      // The `addExperience` from handleAddNew already added it to the state.
+      // So we only need to update existing ones.
+      updateExperience(exp);
     });
     toast({
       title: 'Experience Updated!',
@@ -85,7 +88,7 @@ export default function ExperienceEditor() {
                     <AccordionTrigger className="flex-1">
                       {form.watch(`experience.${index}.role`) || 'New Experience'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
