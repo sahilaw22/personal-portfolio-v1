@@ -1,5 +1,6 @@
-'use client';
 
+'use client';
+import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -29,13 +30,13 @@ const formSchema = z.object({
 });
 
 export default function ProjectsEditor() {
-  const { portfolioData, addProject, updateProject, deleteProject } = useAppState();
+  const { portfolioData, deleteProject, updateAllProjects } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      projects: portfolioData.projects.map(p => ({...p, tags: p.tags || []})),
+      projects: portfolioData.projects || [],
     },
   });
 
@@ -44,29 +45,27 @@ export default function ProjectsEditor() {
     name: "projects",
   });
 
+  useEffect(() => {
+    form.reset({ projects: portfolioData.projects });
+  }, [portfolioData.projects]);
+
+
   const handleAddNew = () => {
-    append({ id: new Date().toISOString(), title: '', description: '', image: 'https://placehold.co/600x400.png', tags: [], github: '', live: '', aiHint: '' });
+    const newProject = { id: new Date().toISOString(), title: 'New Project', description: 'A brief description of this project.', image: 'https://placehold.co/600x400.png', tags: ['new-tag'], github: 'https://github.com', live: 'https://example.com', aiHint: 'new project' };
+    append(newProject);
   };
   
-  const handleRemove = (index: number) => {
-    const idToDelete = fields[index].id;
-    deleteProject(idToDelete);
+  const handleRemove = (id: string, index: number) => {
+    deleteProject(id);
     remove(index);
     toast({ title: 'Project Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    values.projects.forEach(proj => {
-      const existing = portfolioData.projects.find(p => p.id === proj.id);
-      if (existing) {
-        updateProject(proj);
-      } else {
-        addProject(proj);
-      }
-    });
+    updateAllProjects(values.projects);
     toast({
       title: 'Projects Updated!',
-      description: 'Your projects section has been successfully updated.',
+      description: 'Your projects section has been successfully updated and saved.',
     });
   }
 
@@ -79,14 +78,14 @@ export default function ProjectsEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
+            <Accordion type="multiple" value={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
                   <div className="flex items-center">
                     <AccordionTrigger className="flex-1">
                       {form.watch(`projects.${index}.title`) || 'New Project'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -105,7 +104,10 @@ export default function ProjectsEditor() {
                             <Input
                               {...field}
                               value={Array.isArray(field.value) ? field.value.join(', ') : ''}
-                              onChange={(e) => field.onChange(e.target.value.split(',').map(s => s.trim()))}
+                              onChange={(e) => {
+                                const newTags = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                                field.onChange(newTags);
+                              }}
                             />
                           </FormControl>
                           <FormMessage />

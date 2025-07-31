@@ -1,4 +1,6 @@
+
 'use client';
+import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -25,13 +27,13 @@ const formSchema = z.object({
 });
 
 export default function EducationEditor() {
-  const { portfolioData, updateEducation, addEducation, deleteEducation } = useAppState();
+  const { portfolioData, deleteEducation, updateAllEducation } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      education: portfolioData.education,
+      education: portfolioData.education || [],
     },
   });
 
@@ -39,30 +41,27 @@ export default function EducationEditor() {
     control: form.control,
     name: "education",
   });
+  
+  useEffect(() => {
+    form.reset({ education: portfolioData.education });
+  }, [portfolioData.education]);
 
   const handleAddNew = () => {
-    append({ id: new Date().toISOString(), institution: '', degree: '', period: '', description: '' });
+    const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
+    append(newEducation);
   };
   
-  const handleRemove = (index: number) => {
-    const idToDelete = fields[index].id;
-    deleteEducation(idToDelete);
+  const handleRemove = (id: string, index: number) => {
+    deleteEducation(id);
     remove(index);
     toast({ title: 'Education Entry Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    values.education.forEach(edu => {
-      const existing = portfolioData.education.find(e => e.id === edu.id);
-      if (existing) {
-        updateEducation(edu);
-      } else {
-        addEducation(edu);
-      }
-    });
+    updateAllEducation(values.education);
     toast({
       title: 'Education Updated!',
-      description: 'Your education section has been successfully updated.',
+      description: 'Your education section has been successfully updated and saved.',
     });
   }
   
@@ -75,14 +74,14 @@ export default function EducationEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
+            <Accordion type="multiple" value={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
                   <div className="flex items-center">
                     <AccordionTrigger className="flex-1">
                       {form.watch(`education.${index}.institution`) || 'New Education'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

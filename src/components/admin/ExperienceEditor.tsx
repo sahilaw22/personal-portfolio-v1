@@ -1,5 +1,6 @@
+
 'use client';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -9,10 +10,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { PlusCircle, Trash2 } from 'lucide-react';
-import type { Experience } from '@/lib/types';
 
 const experienceSchema = z.object({
   id: z.string(),
@@ -27,45 +27,42 @@ const formSchema = z.object({
 });
 
 export default function ExperienceEditor() {
-  const { portfolioData, updateExperience, addExperience, deleteExperience } = useAppState();
+  const { portfolioData, updateAllExperience, deleteExperience } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      experience: portfolioData.experience,
+      experience: portfolioData.experience || [],
     },
   });
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "experience",
   });
+  
+  useEffect(() => {
+    form.reset({ experience: portfolioData.experience });
+  }, [portfolioData.experience]);
+
 
   const handleAddNew = () => {
-    append({ id: new Date().toISOString(), role: '', company: '', period: '', description: '' });
+    const newExperience = { id: new Date().toISOString(), role: 'New Role', company: 'New Company', period: 'Year - Year', description: 'A brief description of your responsibilities.' };
+    append(newExperience);
   };
   
-  const handleRemove = (index: number) => {
-    const idToDelete = fields[index].id;
-    deleteExperience(idToDelete);
+  const handleRemove = (id: string, index: number) => {
+    deleteExperience(id);
     remove(index);
-     toast({ title: 'Experience Removed' });
+    toast({ title: 'Experience Entry Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    values.experience.forEach(exp => {
-      // Find if it's a new one (by checking if it exists in original data)
-      const existing = portfolioData.experience.find(e => e.id === exp.id);
-      if (existing) {
-        updateExperience(exp);
-      } else {
-        addExperience(exp);
-      }
-    });
+    updateAllExperience(values.experience);
     toast({
       title: 'Experience Updated!',
-      description: 'Your experience section has been successfully updated.',
+      description: 'Your experience section has been successfully updated and saved.',
     });
   }
   
@@ -78,14 +75,14 @@ export default function ExperienceEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
+            <Accordion type="multiple" value={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
                   <div className="flex items-center">
                     <AccordionTrigger className="flex-1">
                       {form.watch(`experience.${index}.role`) || 'New Experience'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

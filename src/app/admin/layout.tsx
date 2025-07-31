@@ -19,6 +19,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const navLinks = [
   { href: '/admin', label: 'General', icon: Home },
@@ -77,9 +78,9 @@ export default function AdminLayout({
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex-1">
+          <ScrollArea className="flex-1 py-4">
              <NavContent />
-          </div>
+          </ScrollArea>
            <div className="mt-auto p-4">
              <Button variant="outline" size="sm" asChild className="w-full mb-2">
                 <Link href="/">View Portfolio</Link>
@@ -91,7 +92,7 @@ export default function AdminLayout({
             </div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-hidden">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
@@ -104,8 +105,8 @@ export default function AdminLayout({
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col">
-              <SheetHeader>
+            <SheetContent side="left" className="flex flex-col p-0">
+              <SheetHeader className="p-6 pb-4">
                 <SheetTitle className="text-left">
                   <Link
                     href="/admin"
@@ -119,10 +120,10 @@ export default function AdminLayout({
                    Navigate through the different sections to customize your portfolio.
                 </SheetDescription>
               </SheetHeader>
-              <div className="flex-1 py-4">
+              <ScrollArea className="flex-1 px-6 py-4">
                 <NavContent />
-              </div>
-              <div className="mt-auto">
+              </ScrollArea>
+              <div className="mt-auto p-6 border-t">
                 <Button variant="outline" size="sm" asChild className="w-full mb-2">
                     <Link href="/">View Portfolio</Link>
                 </Button>
@@ -143,8 +144,10 @@ export default function AdminLayout({
                 <LogOut className="h-4 w-4" />
             </Button>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-          {children}
+        <main className="flex-1 overflow-auto p-4 lg:p-6">
+          <div className="flex flex-col gap-4 lg:gap-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>
