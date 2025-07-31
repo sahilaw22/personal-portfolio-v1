@@ -43,7 +43,9 @@ export default function ExperienceEditor() {
   });
   
   useEffect(() => {
-    form.reset({ experience: portfolioData.experience });
+    if (portfolioData.experience) {
+      form.reset({ experience: portfolioData.experience });
+    }
   }, [portfolioData.experience, form.reset]);
 
 
@@ -144,3 +146,5 @@ export default function ExperienceEditor() {
     </Card>
   );
 }
+
+    

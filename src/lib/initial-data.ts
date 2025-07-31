@@ -1,3 +1,4 @@
+
 import type { PortfolioData } from './types';
 import {
   FileCode, Server, Database, GitMerge, Unplug, Component, Wind, Globe, Bot, TerminalSquare, Cloud, Layers, MousePointer
@@ -29,6 +30,7 @@ export const initialData: PortfolioData = {
   contact: {
     image: "https://placehold.co/600x400.png"
   },
+   contactSubmissions: [],
   skills: [
     {
       title: "Languages",
@@ -163,3 +165,5 @@ export const initialData: PortfolioData = {
     },
   ]
 };
+
+    

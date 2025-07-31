@@ -34,6 +34,7 @@ interface AppState {
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
+const DATA_VERSION = 'v2'; // Increment this to force a reset
 
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -45,14 +46,21 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const pathname = usePathname();
   
   useEffect(() => {
-    // Load data from localStorage on the client side only
     try {
-        const item = window.localStorage.getItem('portfolioData');
-        if (item) {
-            setPortfolioData(JSON.parse(item));
+        const storedVersion = window.localStorage.getItem('dataVersion');
+        if (storedVersion !== DATA_VERSION) {
+             window.localStorage.removeItem('portfolioData');
+             window.localStorage.setItem('dataVersion', DATA_VERSION);
+             setPortfolioData(initialData);
+        } else {
+            const item = window.localStorage.getItem('portfolioData');
+            if (item) {
+                setPortfolioData(JSON.parse(item));
+            }
         }
     } catch (error) {
         console.error("Error reading from localStorage", error);
+        setPortfolioData(initialData); // Fallback to initial data on error
     } finally {
         setIsHydrated(true);
     }
@@ -61,15 +69,14 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   useEffect(() => {
     if (isHydrated) {
         try {
-        window.localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
+          window.localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
         } catch (error) {
-        console.error("Error writing to localStorage", error);
+          console.error("Error writing to localStorage", error);
         }
     }
   }, [portfolioData, isHydrated]);
 
   useEffect(() => {
-    // On initial load, check if we should be authenticated from session storage
     if (sessionStorage.getItem('isAdminAuthenticated') === 'true') {
       setIsAdminAuthenticated(true);
     }
@@ -98,7 +105,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   };
 
   const handleAddSubmission = (submission: Omit<ContactSubmission, 'submittedAt'>) => {
-    setContactSubmissions(prev => [...prev, { ...submission, submittedAt: new Date() }]);
+     setPortfolioData(prev => ({
+      ...prev,
+      contactSubmissions: [...(prev.contactSubmissions || []), { ...submission, submittedAt: new Date() }]
+    }));
   };
   
   const updateHeroContent = (hero: HeroContent) => {
@@ -195,7 +205,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
 
   const value = {
     isAdminAuthenticated,
-    contactSubmissions,
+    contactSubmissions: portfolioData.contactSubmissions || [],
     portfolioData,
     login,
     logout,
@@ -232,3 +242,5 @@ export const useAppState = (): AppState => {
   }
   return context;
 };
+
+    

@@ -1,13 +1,12 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { ContactSubmission } from "@/lib/types";
+import { useAppState } from "../AppStateProvider";
 
-type ContactSubmissionsProps = {
-  submissions: ContactSubmission[];
-};
-
-export default function ContactSubmissions({ submissions }: ContactSubmissionsProps) {
+export default function ContactSubmissions() {
+  const { contactSubmissions } = useAppState();
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
@@ -27,8 +26,8 @@ export default function ContactSubmissions({ submissions }: ContactSubmissionsPr
               </TableRow>
             </TableHeader>
             <TableBody>
-              {submissions.length > 0 ? (
-                submissions.slice().reverse().map((submission, index) => (
+              {contactSubmissions.length > 0 ? (
+                contactSubmissions.slice().reverse().map((submission, index) => (
                   <TableRow key={index}>
                     <TableCell>
                       <div className="font-medium">{submission.name}</div>
@@ -36,7 +35,7 @@ export default function ContactSubmissions({ submissions }: ContactSubmissionsPr
                     </TableCell>
                     <TableCell className="max-w-[200px] truncate">{submission.message}</TableCell>
                     <TableCell className="text-right text-xs">
-                      {submission.submittedAt.toLocaleString()}
+                      {new Date(submission.submittedAt).toLocaleString()}
                     </TableCell>
                   </TableRow>
                 ))
@@ -54,3 +53,5 @@ export default function ContactSubmissions({ submissions }: ContactSubmissionsPr
     </Card>
   );
 }
+
+    

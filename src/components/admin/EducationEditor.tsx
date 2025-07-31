@@ -37,13 +37,15 @@ export default function EducationEditor() {
     },
   });
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "education",
   });
   
   useEffect(() => {
-    form.reset({ education: portfolioData.education });
+    if (portfolioData.education) {
+      form.reset({ education: portfolioData.education });
+    }
   }, [portfolioData.education, form.reset]);
 
   const handleAddNew = () => {
@@ -103,3 +105,5 @@ export default function EducationEditor() {
     </Card>
   );
 }
+
+    

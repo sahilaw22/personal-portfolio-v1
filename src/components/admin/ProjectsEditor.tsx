@@ -46,7 +46,9 @@ export default function ProjectsEditor() {
   });
 
   useEffect(() => {
-    form.reset({ projects: portfolioData.projects });
+    if (portfolioData.projects) {
+        form.reset({ projects: portfolioData.projects });
+    }
   }, [portfolioData.projects, form.reset]);
 
 
@@ -128,3 +130,5 @@ export default function ProjectsEditor() {
     </Card>
   );
 }
+
+    

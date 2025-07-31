@@ -1,3 +1,4 @@
+
 export type ContactSubmission = {
   name: string;
   email: string;
@@ -83,4 +84,7 @@ export type PortfolioData = {
   experience: Experience[];
   education: Education[];
   projects: Project[];
+  contactSubmissions?: ContactSubmission[];
 };
+
+    
