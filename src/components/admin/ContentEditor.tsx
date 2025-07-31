@@ -17,7 +17,7 @@ const formSchema = z.object({
   title: z.string().min(5),
   availability: z.string().min(5),
   bio: z.string().min(20),
-  image: z.string().url('Must be a valid URL'),
+  image: z.string(),
 });
 
 export default function ContentEditor() {
@@ -125,19 +125,6 @@ export default function ContentEditor() {
                   <FormLabel>Biography</FormLabel>
                   <FormControl>
                     <Textarea rows={5} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Profile Image URL</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

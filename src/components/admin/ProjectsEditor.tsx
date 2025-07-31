@@ -17,7 +17,7 @@ const projectSchema = z.object({
   id: z.string(),
   title: z.string().min(2, 'Title is required'),
   description: z.string().min(10, 'Description is required'),
-  image: z.string().url('Must be a valid URL'),
+  image: z.string(),
   tags: z.array(z.string()).min(1, 'At least one tag is required'),
   github: z.string().url('Must be a valid URL'),
   live: z.string().url('Must be a valid URL'),
@@ -93,7 +93,6 @@ export default function ProjectsEditor() {
                   <AccordionContent className="space-y-4 p-2">
                     <FormField control={form.control} name={`projects.${index}.title`} render={({ field }) => ( <FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                     <FormField control={form.control} name={`projects.${index}.description`} render={({ field }) => ( <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name={`projects.${index}.image`} render={({ field }) => ( <FormItem><FormLabel>Image URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                     <FormField control={form.control} name={`projects.${index}.github`} render={({ field }) => ( <FormItem><FormLabel>GitHub URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                     <FormField control={form.control} name={`projects.${index}.live`} render={({ field }) => ( <FormItem><FormLabel>Live URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                     <FormField
