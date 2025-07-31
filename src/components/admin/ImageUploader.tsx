@@ -7,32 +7,42 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
-import { Loader2, Trash2 } from 'lucide-react';
+import { Loader2, Trash2, Upload } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
+import ImageCropper from './ImageCropper';
+
 
 export default function ImageUploader() {
   const { portfolioData, updateHeroContent, updateAboutContent, updateProject } = useAppState();
   const [target, setTarget] = useState<string>('');
-  const [preview, setPreview] = useState<string | null>(null);
+  const [lastUploadedImage, setLastUploadedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [cropperOpen, setCropperOpen] = useState(false);
 
   const { toast } = useToast();
-
-  const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!file) {
-      toast({ variant: 'destructive', title: 'No file selected.' });
-      return;
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      if (!target) {
+        toast({ variant: 'destructive', title: 'Please select a target section first.' });
+        e.target.value = ''; // Reset file input
+        return;
+      }
+      setSelectedFile(e.target.files[0]);
+      setCropperOpen(true);
     }
-     if (!target) {
+  };
+
+  const handleUpload = async (imageBlob: Blob) => {
+    if (!target) {
       toast({ variant: 'destructive', title: 'No target selected.' });
       return;
     }
 
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('cover', file);
+    formData.append('cover', imageBlob, selectedFile?.name || 'cropped-image.png');
 
     try {
       const res = await fetch('/api/upload', {
@@ -43,7 +53,7 @@ export default function ImageUploader() {
       const data = await res.json();
 
       if (res.ok) {
-        setPreview(data.url);
+        setLastUploadedImage(data.url);
 
         if (target === 'hero') {
             updateHeroContent({...portfolioData.hero, image: data.url});
@@ -76,6 +86,8 @@ export default function ImageUploader() {
         });
     } finally {
         setIsLoading(false);
+        setCropperOpen(false);
+        setSelectedFile(null);
     }
   };
 
@@ -104,6 +116,12 @@ export default function ImageUploader() {
         description: 'The image for the selected section has been reset to the default placeholder.'
     });
   }
+  
+  const getAspectRatio = () => {
+    if (target === 'hero' || target === 'about') return 1 / 1;
+    if (target.startsWith('project-')) return 3 / 2;
+    return 16 / 9;
+  }
 
   return (
     <Card>
@@ -112,11 +130,20 @@ export default function ImageUploader() {
         <CardDescription>Upload a new image or remove an existing one from a section of your portfolio.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='grid md:grid-cols-2 gap-4 mb-6'>
+        {cropperOpen && selectedFile && (
+          <ImageCropper 
+            imageSrc={URL.createObjectURL(selectedFile)}
+            onCropComplete={handleUpload}
+            onClose={() => setCropperOpen(false)}
+            aspect={getAspectRatio()}
+            isLoading={isLoading}
+          />
+        )}
+        <div className='grid md:grid-cols-2 gap-6'>
             <div className='space-y-2'>
                 <label className="text-sm font-medium">1. Select Target Section</label>
                 <Select onValueChange={setTarget} value={target}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select where to use this image..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -135,51 +162,58 @@ export default function ImageUploader() {
                 </Select>
             </div>
             <div className='space-y-2'>
-                <label className="text-sm font-medium">2. Choose New Image File</label>
-                <form onSubmit={handleUpload}>
-                    <div className="flex items-center gap-2">
-                         <Input 
-                            type="file" 
-                            name="cover" 
-                            accept="image/*" 
-                            onChange={(e) => setFile(e.target.files?.[0] || null)}
-                            className="flex-grow"
-                        />
-                         <Button type="submit" disabled={isLoading || !file || !target}>
-                            {isLoading ? <Loader2 className="animate-spin" /> : 'Upload'}
-                          </Button>
-                    </div>
-                </form>
+                <label className="text-sm font-medium">2. Choose & Upload New Image</label>
+                 <div className="flex items-center gap-2">
+                    <Input 
+                        id="file-upload"
+                        type="file" 
+                        name="cover" 
+                        accept="image/*" 
+                        onChange={handleFileChange}
+                        className="hidden"
+                        disabled={!target || isLoading}
+                    />
+                    <label htmlFor="file-upload" className={`w-full`}>
+                        <Button asChild className="w-full" disabled={!target || isLoading}>
+                          <span>
+                            <Upload className="mr-2 h-4 w-4" />
+                            {isLoading ? 'Uploading...' : 'Choose Image...'}
+                          </span>
+                        </Button>
+                    </label>
+                </div>
             </div>
           </div>
 
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={!target} className="w-full">
-                    <Trash2 className="mr-2 h-4 w-4" /> Remove Current Image
-                </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This action will remove the current image from the selected section and replace it with a default placeholder. This cannot be undone.
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleRemoveImage}>Continue</AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
+        <div className="mt-6">
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                    <Button variant="destructive" disabled={!target} className="w-full">
+                        <Trash2 className="mr-2 h-4 w-4" /> Remove Current Image
+                    </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action will remove the current image from the selected section and replace it with a default placeholder. This cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleRemoveImage}>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </div>
         
-        {preview && (
+        {lastUploadedImage && (
           <div className='mt-6'>
             <h3 className="text-lg font-medium">Last Uploaded Image Preview:</h3>
             <div className="relative mt-2 w-full max-w-md aspect-video">
-                 <Image src={preview} alt="Preview" fill className="object-contain rounded-md border" />
+                 <Image src={lastUploadedImage} alt="Preview" fill className="object-contain rounded-md border" />
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">Image URL: <code className="bg-muted p-1 rounded-sm">{preview}</code></p>
+            <p className="mt-2 text-sm text-muted-foreground">Image URL: <code className="bg-muted p-1 rounded-sm">{lastUploadedImage}</code></p>
           </div>
         )}
       </CardContent>
