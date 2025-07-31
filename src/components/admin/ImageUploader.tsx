@@ -12,6 +12,14 @@ import { Loader2, Trash2, Upload } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
 import ImageCropper from './ImageCropper';
 
+const blobToDataUrl = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+};
 
 export default function ImageUploader() {
   const { portfolioData, updateHeroContent, updateAboutContent, updateProject, updateContactContent } = useAppState();
@@ -35,57 +43,42 @@ export default function ImageUploader() {
     }
   };
 
-  const handleUpload = async (imageBlob: Blob) => {
+  const handleCropAndSave = async (imageBlob: Blob) => {
     if (!target) {
       toast({ variant: 'destructive', title: 'No target selected.' });
       return;
     }
 
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append('cover', imageBlob, selectedFile?.name || 'cropped-image.png');
 
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      const dataUrl = await blobToDataUrl(imageBlob);
+      setLastUploadedImage(dataUrl);
+
+      if (target === 'hero') {
+          updateHeroContent({...portfolioData.hero, image: dataUrl});
+      } else if (target === 'about') {
+          updateAboutContent({...portfolioData.about, image: dataUrl});
+      } else if (target === 'contact') {
+          updateContactContent({...portfolioData.contact, image: dataUrl});
+      } else if (target.startsWith('project-')) {
+          const projectId = target.replace('project-', '');
+          const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
+          if (projectToUpdate) {
+              updateProject({ ...projectToUpdate, image: dataUrl });
+          }
+      }
+
+      toast({
+        title: 'Image Updated!',
+        description: `The image has been saved for the selected section.`,
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        setLastUploadedImage(data.url);
-
-        if (target === 'hero') {
-            updateHeroContent({...portfolioData.hero, image: data.url});
-        } else if (target === 'about') {
-            updateAboutContent({...portfolioData.about, image: data.url});
-        } else if (target === 'contact') {
-            updateContactContent({...portfolioData.contact, image: data.url});
-        } else if (target.startsWith('project-')) {
-            const projectId = target.replace('project-', '');
-            const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
-            if (projectToUpdate) {
-                updateProject({ ...projectToUpdate, image: data.url });
-            }
-        }
-
-        toast({
-          title: 'Upload Successful!',
-          description: `Image has been updated for the selected section.`,
-        });
-      } else {
-         toast({
-          variant: 'destructive',
-          title: 'Upload Failed',
-          description: data.error || 'An unexpected error occurred.',
-        });
-      }
     } catch(err) {
          toast({
           variant: 'destructive',
-          title: 'Upload Failed',
-          description: (err as Error).message || 'An unknown error occurred. Check the server console.',
+          title: 'Update Failed',
+          description: (err as Error).message || 'An unknown error occurred.',
         });
     } finally {
         setIsLoading(false);
@@ -138,7 +131,7 @@ export default function ImageUploader() {
         {cropperOpen && selectedFile && (
           <ImageCropper 
             imageSrc={URL.createObjectURL(selectedFile)}
-            onCropComplete={handleUpload}
+            onCropComplete={handleCropAndSave}
             onClose={() => setCropperOpen(false)}
             aspect={getAspectRatio()}
             isLoading={isLoading}
@@ -168,7 +161,7 @@ export default function ImageUploader() {
                 </Select>
             </div>
             <div className='space-y-2'>
-                <label className="text-sm font-medium">2. Choose & Upload New Image</label>
+                <label className="text-sm font-medium">2. Choose & Save New Image</label>
                  <div className="flex items-center gap-2">
                     <Input 
                         id="file-upload"
@@ -183,7 +176,7 @@ export default function ImageUploader() {
                         <Button asChild className="w-full" disabled={!target || isLoading}>
                           <span>
                             <Upload className="mr-2 h-4 w-4" />
-                            {isLoading ? 'Uploading...' : 'Choose Image...'}
+                            {isLoading ? 'Saving...' : 'Choose Image...'}
                           </span>
                         </Button>
                     </label>
@@ -215,11 +208,10 @@ export default function ImageUploader() {
         
         {lastUploadedImage && (
           <div className='mt-6'>
-            <h3 className="text-lg font-medium">Last Uploaded Image Preview:</h3>
+            <h3 className="text-lg font-medium">Last Saved Image Preview:</h3>
             <div className="relative mt-2 w-full max-w-md aspect-video">
                  <Image src={lastUploadedImage} alt="Preview" fill className="object-contain rounded-md border" />
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">Image URL: <code className="bg-muted p-1 rounded-sm">{lastUploadedImage}</code></p>
           </div>
         )}
       </CardContent>

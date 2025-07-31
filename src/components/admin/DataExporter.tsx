@@ -48,10 +48,10 @@ export const initialData: PortfolioData = ${JSON.stringify(dataToExport, null, 2
                 <li>Click the "Download Data File" button below to download `initial-data.ts`.</li>
                 <li>In your project's code, navigate to the `src/lib/` folder.</li>
                 <li>Replace the existing `initial-data.ts` file with the one you just downloaded.</li>
-                <li className="font-semibold text-primary">
-                    If you uploaded any new images, you must also commit the new files located in the `public/uploads` directory to your Git repository.
+                 <li className="font-semibold text-primary">
+                    Since images are now embedded in the data file, you no longer need to manage the `public/uploads` directory.
                 </li>
-                <li>Commit both the updated `initial-data.ts` file and any new images in `public/uploads`, then redeploy your website. Your changes will now be permanent.</li>
+                <li>Commit the updated `initial-data.ts` file, then redeploy your website. Your changes will now be permanent.</li>
             </ol>
             <Button onClick={handleExport} className="w-full md:w-auto mt-4">
                 <Download className="mr-2 h-4 w-4" />

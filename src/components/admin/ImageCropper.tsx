@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useCallback } from 'react';
@@ -67,7 +68,7 @@ export default function ImageCropper({ imageSrc, onCropComplete, onClose, aspect
         <DialogFooter>
           <Button variant="outline" onClick={onClose} disabled={isLoading}>Cancel</Button>
           <Button onClick={handleCrop} disabled={isLoading}>
-            {isLoading ? <Loader2 className="animate-spin" /> : 'Crop & Upload'}
+            {isLoading ? <Loader2 className="animate-spin" /> : 'Crop & Save Image'}
           </Button>
         </DialogFooter>
       </DialogContent>
