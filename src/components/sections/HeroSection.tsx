@@ -25,6 +25,11 @@ export default function HeroSection({ content }: { content: HeroContent }) {
     if (tapTimeout) {
       clearTimeout(tapTimeout);
     }
+    
+    // Prefetch the admin page on the first tap to make it load faster
+    if (tapCount === 0) {
+      router.prefetch('/admin/login');
+    }
 
     const newTapCount = tapCount + 1;
     setTapCount(newTapCount);
