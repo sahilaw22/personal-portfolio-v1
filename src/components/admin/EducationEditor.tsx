@@ -44,7 +44,7 @@ export default function EducationEditor() {
   
   useEffect(() => {
     form.reset({ education: portfolioData.education });
-  }, [portfolioData.education, form]);
+  }, [portfolioData.education]);
 
   const handleAddNew = () => {
     const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
@@ -54,7 +54,7 @@ export default function EducationEditor() {
   const handleRemove = (id: string, index: number) => {
     deleteEducation(id);
     remove(index);
-    toast({ title: 'Education Entry Removed', description: 'The change is local. Click "Save All Changes" to make it permanent.' });
+    toast({ title: 'Education Entry Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {

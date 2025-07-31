@@ -47,7 +47,7 @@ export default function ProjectsEditor() {
 
   useEffect(() => {
     form.reset({ projects: portfolioData.projects });
-  }, [portfolioData.projects, form]);
+  }, [portfolioData.projects]);
 
 
   const handleAddNew = () => {
@@ -58,7 +58,7 @@ export default function ProjectsEditor() {
   const handleRemove = (id: string, index: number) => {
     deleteProject(id);
     remove(index);
-    toast({ title: 'Project Removed', description: 'The change is local. Click "Save All Changes" to make it permanent.' });
+    toast({ title: 'Project Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
