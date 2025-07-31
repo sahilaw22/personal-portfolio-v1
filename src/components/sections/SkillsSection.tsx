@@ -47,7 +47,7 @@ export default function SkillsSection({ skillsData }: { skillsData: SkillCategor
         <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
           {skillsData.map((category) => (
             <div key={category.title} className="grid gap-4 rounded-lg p-6 transition-all hover:shadow-lg hover:shadow-primary/10 border border-border bg-card">
-              <SectionTitle className="text-primary">{category.title}</SectionTitle>
+              <SectionTitle className="text-portfolio-brown">{category.title}</SectionTitle>
               <div className="flex flex-wrap gap-2">
                 {category.skills.map((skill, index) => {
                   const Icon = iconMap[skill.icon as keyof typeof iconMap] || FileCode;
