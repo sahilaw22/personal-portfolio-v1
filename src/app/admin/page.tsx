@@ -19,7 +19,7 @@ export default function AdminPage() {
     <div className="flex flex-col">
       <h1 className="text-3xl font-bold tracking-tight text-gradient-primary-accent mb-6">Portfolio Customization</h1>
       <Tabs defaultValue="content" className="flex-1 flex flex-col md:flex-row md:gap-8" orientation="vertical">
-          <TabsList className="w-full md:w-48 shrink-0 grid-cols-2 grid sm:grid-cols-4 md:grid-cols-1 h-auto">
+          <TabsList className="w-full md:w-48 shrink-0 grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-col md:h-auto">
             <TabsTrigger value="content">Content</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="experience">Experience</TabsTrigger>
