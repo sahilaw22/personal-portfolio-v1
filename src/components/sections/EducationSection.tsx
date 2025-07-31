@@ -1,6 +1,5 @@
 import type { Education } from '@/lib/types';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GraduationCap } from 'lucide-react';
 
 export default function EducationSection({ education }: { education: Education[] }) {
@@ -15,40 +14,24 @@ export default function EducationSection({ education }: { education: Education[]
             </p>
           </div>
         </div>
-        <div className="mt-12">
-          <div className="relative mx-auto max-w-5xl">
-            {/* Vertical Line */}
-            <div className="absolute left-6 h-full w-0.5 bg-border md:left-1/2 md:-translate-x-1/2"></div>
-            
-            {education.map((edu, index) => (
-              <div key={edu.id} className="relative mb-10 pl-12 md:grid md:grid-cols-2 md:gap-x-12 md:pl-0 group/card">
-                {/* Timeline Dot */}
-                <div className="absolute left-6 top-1 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-primary bg-background md:left-1/2"></div>
-                
-                {/* Content Card */}
-                <div className={cn(
-                  'w-full md:max-w-md',
-                  index % 2 === 0 
-                    ? 'md:col-start-1 md:text-right md:justify-self-end' 
-                    : 'md:col-start-2 md:text-left'
-                )}>
-                  <div className="rounded-md bg-card p-6 shadow-lg h-full border">
-                    <p className="text-sm text-muted-foreground">{edu.period}</p>
-                    <h3 className="text-xl font-bold text-primary">{edu.institution}</h3>
-                    <p className="mb-2 text-lg font-semibold flex items-center gap-2">
-                        <GraduationCap className="h-5 w-5" />
-                        {edu.degree}
-                    </p>
-                    <p className="text-muted-foreground">{edu.description}</p>
-                  </div>
+        <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 sm:grid-cols-1 md:grid-cols-2">
+          {education.map((edu) => (
+            <Card key={edu.id} className="h-full bg-background/50 hover:shadow-primary/10 transition-shadow duration-300">
+              <CardHeader className="grid grid-cols-[auto,1fr] items-start gap-4 space-y-0">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <GraduationCap className="h-8 w-8 text-primary" />
                 </div>
-
-                {/* Empty div for spacing on desktop */}
-                <div className={cn('hidden md:block', index % 2 === 0 ? 'md:col-start-2' : 'md:col-start-1')}></div>
-
-              </div>
-            ))}
-          </div>
+                <div className="space-y-1">
+                  <CardTitle className="text-xl">{edu.institution}</CardTitle>
+                  <p className="font-semibold text-primary">{edu.degree}</p>
+                </div>
+              </CardHeader>
+              <CardContent>
+                 <p className="text-sm text-muted-foreground mb-2">{edu.period}</p>
+                <p className="text-muted-foreground">{edu.description}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>
