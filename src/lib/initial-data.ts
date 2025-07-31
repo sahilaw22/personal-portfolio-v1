@@ -8,7 +8,7 @@ export const initialData: PortfolioData = {
     greeting: "Hello, I'm",
     name: "Sahil Ahmed Wani",
     title: "Full-Stack Developer & Tech Enthusiast",
-    availability: "I am available for Internship",
+    availability: "Available for Internship",
     bio: "I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a strong focus on clean code and scalable architecture.",
     image: "/profile.jpg"
   },
@@ -95,6 +95,20 @@ export const initialData: PortfolioData = {
       company: "Web Solutions Co.",
       period: "2021-2022",
       description: "Built responsive and interactive user interfaces for client websites using HTML, CSS, and JavaScript. Collaborated with designers to translate mockups into functional web pages."
+    },
+    {
+      id: "exp4",
+      role: "Open Source Contributor",
+      company: "Community Project",
+      period: "2022 - Present",
+      description: "Actively contributed to a popular open-source library, focusing on bug fixes, documentation improvements, and feature implementation."
+    },
+    {
+      id: "exp5",
+      role: "Teaching Assistant",
+      company: "University of Technology",
+      period: "2023",
+      description: "Assisted professors with grading, holding office hours, and tutoring undergraduate students in introductory computer science courses."
     }
   ],
   education: [
