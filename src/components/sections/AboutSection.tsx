@@ -42,7 +42,7 @@ export default function AboutSection({ content }: { content: AboutContent }) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t">
             {content.stats.map((stat) => (
               <div key={stat.id} className="text-center">
-                <p className="text-4xl font-bold text-portfolio-brown">{stat.value}</p>
+                <p className="text-4xl font-bold text-primary">{stat.value}</p>
                 <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
               </div>
             ))}
