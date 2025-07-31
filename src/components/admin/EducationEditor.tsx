@@ -50,17 +50,26 @@ export default function EducationEditor() {
 
   const handleAddNew = () => {
     const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
-    addEducation(newEducation);
+    append(newEducation);
   };
   
   const handleRemove = (id: string, index: number) => {
-    deleteEducation(id);
-    toast({ title: 'Education Entry Removed' });
+    remove(index);
+    toast({ title: 'Education Entry Marked for Deletion', description: 'Click "Save All Changes" to confirm.' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const currentIds = portfolioData.education.map(edu => edu.id);
+    const formIds = values.education.map(edu => edu.id);
+
     values.education.forEach(edu => {
       updateEducation(edu);
+    });
+    
+    currentIds.forEach(id => {
+      if (!formIds.includes(id)) {
+        deleteEducation(id);
+      }
     });
     
     toast({

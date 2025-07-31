@@ -51,17 +51,30 @@ export default function ExperienceEditor() {
 
   const handleAddNew = () => {
     const newExperience = { id: new Date().toISOString(), role: 'New Role', company: 'New Company', period: 'Year - Year', description: 'A brief description of your responsibilities.' };
-    addExperience(newExperience);
+    append(newExperience); // Instantly updates the form UI
   };
   
   const handleRemove = (id: string, index: number) => {
-    deleteExperience(id);
-    toast({ title: 'Experience Entry Removed' });
+    remove(index); // Instantly updates the form UI
+    toast({ title: 'Experience Entry Marked for Deletion', description: 'Click "Save All Changes" to confirm.' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    // The `values.experience` from the form is now the source of truth.
+    // We can iterate through it to update or add, and anything not present is effectively deleted.
+    const currentIds = portfolioData.experience.map(exp => exp.id);
+    const formIds = values.experience.map(exp => exp.id);
+
+    // Update existing or add new
     values.experience.forEach(exp => {
         updateExperience(exp);
+    });
+
+    // Delete experiences that are no longer in the form
+    currentIds.forEach(id => {
+      if (!formIds.includes(id)) {
+        deleteExperience(id);
+      }
     });
 
     toast({

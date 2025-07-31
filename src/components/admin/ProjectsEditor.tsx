@@ -54,17 +54,26 @@ export default function ProjectsEditor() {
 
   const handleAddNew = () => {
     const newProject = { id: new Date().toISOString(), title: 'New Project', description: 'A brief description of this project.', image: 'https://placehold.co/600x400.png', tags: ['new-tag'], github: 'https://github.com', live: 'https://example.com', aiHint: 'new project' };
-    addProject(newProject);
+    append(newProject);
   };
   
   const handleRemove = (id: string, index: number) => {
-    deleteProject(id);
-    toast({ title: 'Project Removed' });
+    remove(index);
+    toast({ title: 'Project Marked for Deletion', description: 'Click "Save All Changes" to confirm.' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const currentIds = portfolioData.projects.map(p => p.id);
+    const formIds = values.projects.map(p => p.id);
+
     values.projects.forEach(proj => {
       updateProject(proj);
+    });
+    
+    currentIds.forEach(id => {
+      if (!formIds.includes(id)) {
+        deleteProject(id);
+      }
     });
     
     toast({
