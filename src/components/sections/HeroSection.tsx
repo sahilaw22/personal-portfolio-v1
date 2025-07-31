@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useAppState } from '@/components/AppStateProvider';
 import type { HeroContent } from '@/lib/types';
 import { useRouter } from 'next/navigation';
+import { Badge } from '../ui/badge';
 
 const OrangeGlowBackground = () => (
     <div className="absolute inset-0 flex items-center justify-center">
@@ -75,6 +76,13 @@ export default function HeroSection({ content }: { content: HeroContent }) {
           <p className="mt-4 text-2xl md:text-3xl font-medium text-muted-foreground">
             <span className="text-gradient-primary-accent">{content.title}</span>
           </p>
+          <Badge variant="outline" className="mt-4 text-sm font-medium border-green-500/50 text-green-400 bg-green-500/10 py-1 px-3">
+             <span className="relative flex h-2 w-2 mr-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            {content.availability}
+          </Badge>
           <p className="mt-4 text-lg text-muted-foreground max-w-xl">
             {content.bio}
           </p>

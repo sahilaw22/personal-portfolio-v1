@@ -8,6 +8,7 @@ export const initialData: PortfolioData = {
     greeting: "Hello, I'm",
     name: "Sahil Ahmed Wani",
     title: "Full-Stack Developer & Tech Enthusiast",
+    availability: "I am available for Interviews or Work",
     bio: "I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a strong focus on clean code and scalable architecture.",
     image: "/profile.jpg"
   },

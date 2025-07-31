@@ -9,6 +9,7 @@ export type HeroContent = {
   greeting: string;
   name: string;
   title: string;
+  availability: string;
   bio: string;
   image: string;
 };

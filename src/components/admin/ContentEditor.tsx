@@ -15,6 +15,7 @@ const formSchema = z.object({
   greeting: z.string().min(2),
   name: z.string().min(2),
   title: z.string().min(5),
+  availability: z.string().min(5),
   bio: z.string().min(20),
   image: z.string().url('Must be a valid URL'),
 });
@@ -77,6 +78,19 @@ export default function ContentEditor() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Title / Tagline</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="availability"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Availability Status</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
