@@ -92,7 +92,7 @@ export default function AdminLayout({
             </div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-hidden">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
@@ -144,8 +144,10 @@ export default function AdminLayout({
                 <LogOut className="h-4 w-4" />
             </Button>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-auto">
-          {children}
+        <main className="flex-1 overflow-auto p-4 lg:p-6">
+          <div className="flex flex-col gap-4 lg:gap-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>
