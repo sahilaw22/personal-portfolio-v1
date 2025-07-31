@@ -45,43 +45,25 @@ export default function ProjectsEditor() {
     name: "projects",
   });
   
-  // This effect synchronizes the form with the global state when the component first loads
-  // or if the global state is updated from an external source.
   useEffect(() => {
-     if (JSON.stringify(fields) !== JSON.stringify(portfolioData.projects)) {
-        form.reset({ projects: portfolioData.projects });
-    }
-  }, [portfolioData.projects, form.reset, fields]);
+    form.reset({ projects: portfolioData.projects });
+  }, [portfolioData.projects, form.reset]);
 
   const handleAddNew = () => {
     const newProject = { id: new Date().toISOString(), title: 'New Project', description: 'A brief description of this project.', image: 'https://placehold.co/600x400.png', tags: ['new-tag'], github: 'https://github.com', live: 'https://example.com', aiHint: 'new project' };
+    addProject(newProject);
     append(newProject);
   };
   
-  const handleRemove = (index: number) => {
+  const handleRemove = (id: string, index: number) => {
+    deleteProject(id);
     remove(index);
-    toast({ title: 'Project Marked for Deletion' });
+    toast({ title: 'Project Removed' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // This function now becomes the single source of truth for updating the global state.
-    const initialIds = portfolioData.projects.map(p => p.id);
-    const formIds = values.projects.map(p => p.id);
-
-    // Find and delete removed items
-    initialIds.forEach(id => {
-      if (!formIds.includes(id)) {
-        deleteProject(id);
-      }
-    });
-
-    // Find and add/update items
     values.projects.forEach(proj => {
-      if (initialIds.includes(proj.id)) {
-        updateProject(proj);
-      } else {
-        addProject(proj);
-      }
+      updateProject(proj);
     });
     
     toast({
@@ -106,7 +88,7 @@ export default function ProjectsEditor() {
                     <AccordionTrigger className="flex-1">
                       {form.watch(`projects.${index}.title`) || 'New Project'}
                     </AccordionTrigger>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => handleRemove(field.id, index)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
