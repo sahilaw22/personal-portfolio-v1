@@ -19,7 +19,7 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
         <div 
           className={cn(
             "mt-12",
-            shouldScroll && "max-h-[750px] overflow-y-auto"
+            shouldScroll && "overflow-y-auto max-h-[750px]"
           )}
         >
           <div className="relative mx-auto max-w-5xl pr-4">
