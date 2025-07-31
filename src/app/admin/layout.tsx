@@ -19,6 +19,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const navLinks = [
   { href: '/admin', label: 'General', icon: Home },
@@ -143,7 +144,7 @@ export default function AdminLayout({
                 <LogOut className="h-4 w-4" />
             </Button>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-auto">
           {children}
         </main>
       </div>
