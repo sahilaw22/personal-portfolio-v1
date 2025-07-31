@@ -47,12 +47,14 @@ export default function HeroSection({ content }: { content: HeroContent }) {
   };
 
   useEffect(() => {
+    // This function is the cleanup function for the effect.
+    // It runs when the component unmounts or before the effect runs again.
     return () => {
       if (tapTimeout) {
         clearTimeout(tapTimeout);
       }
     };
-  }, [tapTimeout]);
+  }, [tapTimeout]); // Adding tapTimeout to the dependency array
 
   return (
     <section id="hero" className="container min-h-[calc(100vh-4rem)] flex items-center justify-center">
