@@ -32,27 +32,26 @@ const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
 
-const getInitialPortfolioData = (): PortfolioData => {
-    if (typeof window === 'undefined') {
-        return initialData;
-    }
-    try {
-        const item = window.localStorage.getItem('portfolioData');
-        return item ? JSON.parse(item) : initialData;
-    } catch (error) {
-        console.error("Error reading from localStorage", error);
-        return initialData;
-    }
-};
-
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
-  const [portfolioData, setPortfolioData] = useState<PortfolioData>(getInitialPortfolioData());
+  const [portfolioData, setPortfolioData] = useState<PortfolioData>(initialData);
 
   const router = useRouter();
   const pathname = usePathname();
   
+  useEffect(() => {
+    // Load data from localStorage on the client side only
+    try {
+        const item = window.localStorage.getItem('portfolioData');
+        if (item) {
+            setPortfolioData(JSON.parse(item));
+        }
+    } catch (error) {
+        console.error("Error reading from localStorage", error);
+    }
+  }, []);
+
   useEffect(() => {
     try {
       window.localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
