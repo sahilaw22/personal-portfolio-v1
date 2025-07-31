@@ -19,12 +19,15 @@ interface AppState {
   addExperience: (experience: Omit<Experience, 'id'>) => void;
   updateExperience: (experience: Experience) => void;
   deleteExperience: (id: string) => void;
+  updateAllExperience: (experiences: Experience[]) => void;
   addEducation: (education: Omit<Education, 'id'>) => void;
   updateEducation: (education: Education) => void;
   deleteEducation: (id: string) => void;
+  updateAllEducation: (education: Education[]) => void;
   addProject: (project: Omit<Project, 'id'>) => void;
   updateProject: (project: Project) => void;
   deleteProject: (id: string) => void;
+  updateAllProjects: (projects: Project[]) => void;
   updateSkills: (skills: SkillCategory[]) => void;
 }
 
@@ -36,6 +39,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(initialData);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -49,16 +53,20 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
         }
     } catch (error) {
         console.error("Error reading from localStorage", error);
+    } finally {
+        setIsHydrated(true);
     }
   }, []);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
-    } catch (error) {
-      console.error("Error writing to localStorage", error);
+    if (isHydrated) {
+        try {
+        window.localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
+        } catch (error) {
+        console.error("Error writing to localStorage", error);
+        }
     }
-  }, [portfolioData]);
+  }, [portfolioData, isHydrated]);
 
   useEffect(() => {
     // On initial load, check if we should be authenticated from session storage
@@ -126,6 +134,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     }));
   };
   
+  const updateAllExperience = (experiences: Experience[]) => {
+    setPortfolioData(prev => ({...prev, experience: experiences }));
+  };
+
   const addEducation = (education: Omit<Education, 'id'>) => {
     setPortfolioData(prev => ({
       ...prev,
@@ -147,10 +159,14 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     }));
   };
 
+  const updateAllEducation = (education: Education[]) => {
+    setPortfolioData(prev => ({...prev, education: education }));
+  };
+
   const addProject = (project: Omit<Project, 'id'>) => {
     setPortfolioData(prev => ({
       ...prev,
-      projects: [...prev.projects, { ...project, id: new Date().toISOString() }]
+      projects: [{ ...project, id: new Date().toISOString() }, ...prev.projects ]
     }));
   };
 
@@ -166,6 +182,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
       ...prev,
       projects: prev.projects.filter(p => p.id !== id)
     }));
+  };
+
+  const updateAllProjects = (projects: Project[]) => {
+    setPortfolioData(prev => ({...prev, projects: projects }));
   };
   
   const updateSkills = (skills: SkillCategory[]) => {
@@ -186,18 +206,21 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     addExperience,
     updateExperience,
     deleteExperience,
+    updateAllExperience,
     addEducation,
     updateEducation,
     deleteEducation,
+    updateAllEducation,
     addProject,
     updateProject,
     deleteProject,
+    updateAllProjects,
     updateSkills,
   };
 
   return (
     <AppStateContext.Provider value={value}>
-      {children}
+      {isHydrated ? children : null}
     </AppStateContext.Provider>
   );
 }

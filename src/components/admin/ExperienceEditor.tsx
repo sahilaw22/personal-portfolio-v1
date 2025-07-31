@@ -27,59 +27,42 @@ const formSchema = z.object({
 });
 
 export default function ExperienceEditor() {
-  const { portfolioData, updateExperience, addExperience, deleteExperience } = useAppState();
+  const { portfolioData, deleteExperience, updateAllExperience } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      experience: [],
+      experience: portfolioData.experience || [],
     },
   });
 
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "experience",
   });
   
   useEffect(() => {
-    if (portfolioData.experience) {
-      replace(portfolioData.experience);
-    }
-  }, [portfolioData.experience, replace]);
+    form.reset({ experience: portfolioData.experience });
+  }, [portfolioData.experience, form]);
 
 
   const handleAddNew = () => {
     const newExperience = { id: new Date().toISOString(), role: 'New Role', company: 'New Company', period: 'Year - Year', description: 'A brief description of your responsibilities.' };
-    append(newExperience); // Instantly updates the form UI
+    append(newExperience);
   };
   
   const handleRemove = (id: string, index: number) => {
-    remove(index); // Instantly updates the form UI
-    toast({ title: 'Experience Entry Marked for Deletion', description: 'Click "Save All Changes" to confirm.' });
+    deleteExperience(id);
+    remove(index);
+    toast({ title: 'Experience Entry Removed', description: 'The change is local. Click "Save All Changes" to make it permanent.' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // The `values.experience` from the form is now the source of truth.
-    // We can iterate through it to update or add, and anything not present is effectively deleted.
-    const currentIds = portfolioData.experience.map(exp => exp.id);
-    const formIds = values.experience.map(exp => exp.id);
-
-    // Update existing or add new
-    values.experience.forEach(exp => {
-        updateExperience(exp);
-    });
-
-    // Delete experiences that are no longer in the form
-    currentIds.forEach(id => {
-      if (!formIds.includes(id)) {
-        deleteExperience(id);
-      }
-    });
-
+    updateAllExperience(values.experience);
     toast({
       title: 'Experience Updated!',
-      description: 'Your experience section has been successfully updated.',
+      description: 'Your experience section has been successfully updated and saved.',
     });
   }
   

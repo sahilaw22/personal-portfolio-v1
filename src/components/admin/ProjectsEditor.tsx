@@ -30,26 +30,24 @@ const formSchema = z.object({
 });
 
 export default function ProjectsEditor() {
-  const { portfolioData, updateProject, addProject, deleteProject } = useAppState();
+  const { portfolioData, deleteProject, updateAllProjects } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      projects: [],
+      projects: portfolioData.projects || [],
     },
   });
 
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "projects",
   });
 
   useEffect(() => {
-    if (portfolioData.projects) {
-      replace(portfolioData.projects);
-    }
-  }, [portfolioData.projects, replace]);
+    form.reset({ projects: portfolioData.projects });
+  }, [portfolioData.projects, form]);
 
 
   const handleAddNew = () => {
@@ -58,27 +56,16 @@ export default function ProjectsEditor() {
   };
   
   const handleRemove = (id: string, index: number) => {
+    deleteProject(id);
     remove(index);
-    toast({ title: 'Project Marked for Deletion', description: 'Click "Save All Changes" to confirm.' });
+    toast({ title: 'Project Removed', description: 'The change is local. Click "Save All Changes" to make it permanent.' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const currentIds = portfolioData.projects.map(p => p.id);
-    const formIds = values.projects.map(p => p.id);
-
-    values.projects.forEach(proj => {
-      updateProject(proj);
-    });
-    
-    currentIds.forEach(id => {
-      if (!formIds.includes(id)) {
-        deleteProject(id);
-      }
-    });
-    
+    updateAllProjects(values.projects);
     toast({
       title: 'Projects Updated!',
-      description: 'Your projects section has been successfully updated.',
+      description: 'Your projects section has been successfully updated and saved.',
     });
   }
 

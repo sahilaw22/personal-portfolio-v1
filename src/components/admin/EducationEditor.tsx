@@ -27,26 +27,24 @@ const formSchema = z.object({
 });
 
 export default function EducationEditor() {
-  const { portfolioData, addEducation, updateEducation, deleteEducation } = useAppState();
+  const { portfolioData, deleteEducation, updateAllEducation } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      education: [],
+      education: portfolioData.education || [],
     },
   });
 
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "education",
   });
   
   useEffect(() => {
-    if (portfolioData.education) {
-        replace(portfolioData.education);
-    }
-  }, [portfolioData.education, replace]);
+    form.reset({ education: portfolioData.education });
+  }, [portfolioData.education, form]);
 
   const handleAddNew = () => {
     const newEducation = { id: new Date().toISOString(), institution: 'New University/School', degree: 'Degree or Certificate', period: 'Year - Year', description: 'A brief description of your studies.' };
@@ -54,27 +52,16 @@ export default function EducationEditor() {
   };
   
   const handleRemove = (id: string, index: number) => {
+    deleteEducation(id);
     remove(index);
-    toast({ title: 'Education Entry Marked for Deletion', description: 'Click "Save All Changes" to confirm.' });
+    toast({ title: 'Education Entry Removed', description: 'The change is local. Click "Save All Changes" to make it permanent.' });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const currentIds = portfolioData.education.map(edu => edu.id);
-    const formIds = values.education.map(edu => edu.id);
-
-    values.education.forEach(edu => {
-      updateEducation(edu);
-    });
-    
-    currentIds.forEach(id => {
-      if (!formIds.includes(id)) {
-        deleteEducation(id);
-      }
-    });
-    
+    updateAllEducation(values.education);
     toast({
       title: 'Education Updated!',
-      description: 'Your education section has been successfully updated.',
+      description: 'Your education section has been successfully updated and saved.',
     });
   }
   
