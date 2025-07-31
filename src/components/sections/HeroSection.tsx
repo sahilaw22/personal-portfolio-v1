@@ -76,10 +76,10 @@ export default function HeroSection({ content }: { content: HeroContent }) {
           <p className="mt-4 text-2xl md:text-3xl font-medium text-muted-foreground">
             <span className="text-gradient-primary-accent">{content.title}</span>
           </p>
-          <Badge variant="outline" className="mt-4 text-sm font-medium border-green-500/50 text-green-400 bg-green-500/10 py-1 px-3">
-             <span className="relative flex h-2 w-2 mr-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          <Badge variant="outline" className="mt-4 text-sm font-medium border-chart-3/50 text-chart-3 bg-chart-3/10 py-2 px-4">
+             <span className="relative flex h-3 w-3 mr-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-destructive"></span>
             </span>
             {content.availability}
           </Badge>
