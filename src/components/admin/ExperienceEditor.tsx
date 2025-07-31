@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export default function ExperienceEditor() {
-  const { portfolioData, deleteExperience, updateAllExperience } = useAppState();
+  const { portfolioData, addExperience, deleteExperience, updateAllExperience } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,7 +53,6 @@ export default function ExperienceEditor() {
   };
   
   const handleRemove = (id: string, index: number) => {
-    deleteExperience(id);
     remove(index);
     toast({ title: 'Experience Entry Removed', description: 'The change is local. Click "Save All Changes" to make it permanent.' });
   };

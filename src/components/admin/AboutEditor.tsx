@@ -13,6 +13,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { iconMap } from '@/lib/icon-map';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { useEffect } from 'react';
 
 const serviceSchema = z.object({
   id: z.string(),
@@ -42,6 +43,10 @@ export default function AboutEditor() {
     resolver: zodResolver(formSchema),
     defaultValues: portfolioData.about,
   });
+
+  useEffect(() => {
+    form.reset(portfolioData.about);
+  }, [portfolioData.about, form]);
 
   const { fields: serviceFields, append: appendService, remove: removeService } = useFieldArray({
     control: form.control,
