@@ -53,7 +53,7 @@ export default function Header() {
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
         <a href="#hero" className="flex items-center gap-2" onClick={() => handleLinkClick('#hero')}>
           <Terminal className="h-8 w-8 text-primary" />
-          <span className="font-bold text-xl">Nerdfolio</span>
+          <span className="font-bold text-xl">Portfolio</span>
         </a>
         <nav className="hidden md:flex items-center gap-6 text-base">
           {navItems.map((item) => (

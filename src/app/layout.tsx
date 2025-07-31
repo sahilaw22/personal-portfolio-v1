@@ -5,7 +5,7 @@ import AppStateProvider from '@/components/AppStateProvider';
 
 
 export const metadata: Metadata = {
-  title: 'Nerdfolio - Sahil Ahmed Wani',
+  title: 'Portfolio - Sahil Ahmed Wani',
   description: 'A futuristic portfolio for Sahil Ahmed Wani, built with Next.js and AI.',
 };
 
