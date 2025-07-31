@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent } from '@/lib/types';
+import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 
 
@@ -17,6 +17,9 @@ interface AppState {
   addExperience: (experience: Omit<Experience, 'id'>) => void;
   updateExperience: (experience: Experience) => void;
   deleteExperience: (id: string) => void;
+  addEducation: (education: Omit<Education, 'id'>) => void;
+  updateEducation: (education: Education) => void;
+  deleteEducation: (id: string) => void;
   addProject: (project: Omit<Project, 'id'>) => void;
   updateProject: (project: Project) => void;
   deleteProject: (id: string) => void;
@@ -96,6 +99,27 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
       experience: prev.experience.filter(exp => exp.id !== id)
     }));
   };
+  
+  const addEducation = (education: Omit<Education, 'id'>) => {
+    setPortfolioData(prev => ({
+      ...prev,
+      education: [{ ...education, id: new Date().toISOString() }, ...prev.education]
+    }));
+  };
+
+  const updateEducation = (updatedEducation: Education) => {
+    setPortfolioData(prev => ({
+      ...prev,
+      education: prev.education.map(edu => edu.id === updatedEducation.id ? updatedEducation : edu)
+    }));
+  };
+
+  const deleteEducation = (id: string) => {
+    setPortfolioData(prev => ({
+      ...prev,
+      education: prev.education.filter(edu => edu.id !== id)
+    }));
+  };
 
   const addProject = (project: Omit<Project, 'id'>) => {
     setPortfolioData(prev => ({
@@ -135,6 +159,9 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     addExperience,
     updateExperience,
     deleteExperience,
+    addEducation,
+    updateEducation,
+    deleteEducation,
     addProject,
     updateProject,
     deleteProject,

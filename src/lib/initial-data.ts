@@ -97,6 +97,22 @@ export const initialData: PortfolioData = {
       description: "Built responsive and interactive user interfaces for client websites using HTML, CSS, and JavaScript. Collaborated with designers to translate mockups into functional web pages."
     }
   ],
+  education: [
+    {
+      id: "edu1",
+      institution: "University of Technology",
+      degree: "Bachelor of Science in Computer Science",
+      period: "2020 - 2024",
+      description: "Focused on software engineering, algorithms, and data structures. Completed a final year project on machine learning applications in finance."
+    },
+    {
+      id: "edu2",
+      institution: "Online Learning Platform",
+      degree: "Advanced Full-Stack Web Development Bootcamp",
+      period: "2023",
+      description: "Intensive training program covering the MERN stack (MongoDB, Express, React, Node.js), RESTful APIs, and cloud deployment."
+    }
+  ],
   projects: [
     {
       id: "proj1",

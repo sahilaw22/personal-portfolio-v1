@@ -52,6 +52,14 @@ export type Experience = {
   description: string;
 };
 
+export type Education = {
+  id: string;
+  institution: string;
+  degree: string;
+  period: string;
+  description: string;
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -68,5 +76,6 @@ export type PortfolioData = {
   about: AboutContent;
   skills: SkillCategory[];
   experience: Experience[];
+  education: Education[];
   projects: Project[];
 };

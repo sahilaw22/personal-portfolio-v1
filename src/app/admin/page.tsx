@@ -7,6 +7,7 @@ import ContactSubmissions from '@/components/admin/ContactSubmissions';
 import ContentEditor from '@/components/admin/ContentEditor';
 import AboutEditor from '@/components/admin/AboutEditor';
 import ExperienceEditor from '@/components/admin/ExperienceEditor';
+import EducationEditor from '@/components/admin/EducationEditor';
 import ProjectsEditor from '@/components/admin/ProjectsEditor';
 import SkillsEditor from '@/components/admin/SkillsEditor';
 import { useAppState } from '@/components/AppStateProvider';
@@ -23,6 +24,7 @@ export default function AdminPage() {
             <TabsTrigger value="content">Content</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="experience">Experience</TabsTrigger>
+            <TabsTrigger value="education">Education</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="skills-editor">Skills</TabsTrigger>
             <TabsTrigger value="ai-tools">AI Tools</TabsTrigger>
@@ -38,6 +40,9 @@ export default function AdminPage() {
             </TabsContent>
             <TabsContent value="experience">
                 <ExperienceEditor />
+            </TabsContent>
+            <TabsContent value="education">
+                <EducationEditor />
             </TabsContent>
             <TabsContent value="projects">
                 <ProjectsEditor />
