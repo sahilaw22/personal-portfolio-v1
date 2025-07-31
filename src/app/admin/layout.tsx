@@ -2,7 +2,7 @@
 
 import { useAppState } from '@/components/AppStateProvider';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
   Briefcase,
   GraduationCap,
@@ -103,7 +103,23 @@ export default function AdminLayout({
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
-              <NavContent />
+              <SheetHeader>
+                <SheetTitle className="text-left">
+                  <Link
+                    href="/admin"
+                    className="flex items-center gap-2 text-lg font-semibold"
+                  >
+                    <Sparkles className="h-6 w-6" />
+                    <span>Admin Panel</span>
+                  </Link>
+                </SheetTitle>
+                <SheetDescription className="text-left">
+                   Navigate through the different sections to customize your portfolio.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="flex-1 py-4">
+                <NavContent />
+              </div>
               <div className="mt-auto">
                 <Button variant="outline" size="sm" asChild className="w-full mb-2">
                     <Link href="/">View Portfolio</Link>
