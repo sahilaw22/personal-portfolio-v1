@@ -43,9 +43,7 @@ export default function EducationEditor() {
   });
   
   useEffect(() => {
-    if (portfolioData.education) {
-      form.reset({ education: portfolioData.education });
-    }
+    form.reset({ education: portfolioData.education });
   }, [portfolioData.education, form.reset]);
 
   const handleAddNew = () => {
@@ -105,5 +103,3 @@ export default function EducationEditor() {
     </Card>
   );
 }
-
-    

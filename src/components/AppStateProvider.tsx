@@ -16,17 +16,8 @@ interface AppState {
   updateHeroContent: (hero: HeroContent) => void;
   updateAboutContent: (about: AboutContent) => void;
   updateContactContent: (contact: ContactContent) => void;
-  addExperience: (experience: Omit<Experience, 'id'>) => void;
-  updateExperience: (experience: Experience) => void;
-  deleteExperience: (id: string) => void;
   updateAllExperience: (experiences: Experience[]) => void;
-  addEducation: (education: Omit<Education, 'id'>) => void;
-  updateEducation: (education: Education) => void;
-  deleteEducation: (id: string) => void;
-  updateAllEducation: (education: Education[]) => void;
-  addProject: (project: Omit<Project, 'id'>) => void;
-  updateProject: (project: Project) => void;
-  deleteProject: (id: string) => void;
+  updateAllEducation: (educationItems: Education[]) => void;
   updateAllProjects: (projects: Project[]) => void;
   updateSkills: (skills: SkillCategory[]) => void;
 }
@@ -34,11 +25,10 @@ interface AppState {
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
-const DATA_VERSION = 'v2'; // Increment this to force a reset
+const DATA_VERSION = 'v3'; // Increment this to force a reset
 
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-  const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(initialData);
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -49,6 +39,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     try {
         const storedVersion = window.localStorage.getItem('dataVersion');
         if (storedVersion !== DATA_VERSION) {
+             console.log('Data version mismatch, resetting portfolio data.');
              window.localStorage.removeItem('portfolioData');
              window.localStorage.setItem('dataVersion', DATA_VERSION);
              setPortfolioData(initialData);
@@ -122,78 +113,15 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const updateContactContent = (contact: ContactContent) => {
     setPortfolioData(prev => ({ ...prev, contact }));
   }
-
-  const addExperience = (experience: Omit<Experience, 'id'>) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      experience: [{ ...experience, id: new Date().toISOString() }, ...prev.experience]
-    }));
-  };
-
-  const updateExperience = (updatedExperience: Experience) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      experience: prev.experience.map(exp => exp.id === updatedExperience.id ? updatedExperience : exp)
-    }));
-  };
-
-  const deleteExperience = (id: string) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      experience: prev.experience.filter(exp => exp.id !== id)
-    }));
-  };
   
   const updateAllExperience = (experiences: Experience[]) => {
     setPortfolioData(prev => ({...prev, experience: experiences }));
   };
 
-  const addEducation = (education: Omit<Education, 'id'>) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      education: [{ ...education, id: new Date().toISOString() }, ...prev.education]
-    }));
+  const updateAllEducation = (educationItems: Education[]) => {
+    setPortfolioData(prev => ({...prev, education: educationItems }));
   };
-
-  const updateEducation = (updatedEducation: Education) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      education: prev.education.map(edu => edu.id === updatedEducation.id ? updatedEducation : edu)
-    }));
-  };
-
-  const deleteEducation = (id: string) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      education: prev.education.filter(edu => edu.id !== id)
-    }));
-  };
-
-  const updateAllEducation = (education: Education[]) => {
-    setPortfolioData(prev => ({...prev, education: education }));
-  };
-
-  const addProject = (project: Omit<Project, 'id'>) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      projects: [{ ...project, id: new Date().toISOString() }, ...prev.projects ]
-    }));
-  };
-
-  const updateProject = (updatedProject: Project) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      projects: prev.projects.map(p => p.id === updatedProject.id ? updatedProject : p)
-    }));
-  };
-
-  const deleteProject = (id: string) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      projects: prev.projects.filter(p => p.id !== id)
-    }));
-  };
-
+  
   const updateAllProjects = (projects: Project[]) => {
     setPortfolioData(prev => ({...prev, projects: projects }));
   };
@@ -213,17 +141,8 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     updateHeroContent,
     updateAboutContent,
     updateContactContent,
-    addExperience,
-    updateExperience,
-    deleteExperience,
     updateAllExperience,
-    addEducation,
-    updateEducation,
-    deleteEducation,
     updateAllEducation,
-    addProject,
-    updateProject,
-    deleteProject,
     updateAllProjects,
     updateSkills,
   };
@@ -242,5 +161,3 @@ export const useAppState = (): AppState => {
   }
   return context;
 };
-
-    
