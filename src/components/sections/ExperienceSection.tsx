@@ -3,8 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
 export default function ExperienceSection({ experiences }: { experiences: Experience[] }) {
-  const mobileScroll = experiences.length > 2;
-  const desktopScroll = experiences.length > 4;
+  const shouldScroll = experiences.length > 3;
 
   return (
     <section id="experience" className="w-full py-12 md:py-24 lg:py-32">
@@ -20,8 +19,7 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
         <div className="mt-12">
             <ScrollArea className={cn(
               'w-full',
-              mobileScroll && 'max-h-[600px]',
-              desktopScroll && 'md:max-h-[750px]'
+              shouldScroll && 'max-h-[750px]'
             )}>
               <div className="relative mx-auto max-w-5xl pr-4">
                 {/* Vertical Line */}
