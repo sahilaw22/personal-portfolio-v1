@@ -1,8 +1,5 @@
 
 import type { PortfolioData } from './types';
-import {
-  FileCode, Server, Database, GitMerge, Unplug, Component, Wind, Globe, Bot, TerminalSquare, Cloud, Layers, MousePointer
-} from 'lucide-react';
 
 export const initialData: PortfolioData = {
   hero: {
@@ -165,5 +162,3 @@ export const initialData: PortfolioData = {
     },
   ]
 };
-
-    
