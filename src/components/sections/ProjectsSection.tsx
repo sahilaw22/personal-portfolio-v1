@@ -67,25 +67,27 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                       <Card 
                         className="group/card overflow-hidden transition-all hover:-translate-y-1 relative focus-within:ring-0 focus-within:ring-offset-0 bg-card border-transparent h-full flex flex-col"
                       >
-                        <CardHeader className="p-0">
+                        <CardHeader className="p-0 relative h-60">
                           <Image
                             src={project.image}
                             alt={project.title}
-                            width={600}
-                            height={400}
-                            className="rounded-t-lg object-cover"
+                            fill
+                            className="object-cover"
                             data-ai-hint={project.aiHint}
                           />
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         </CardHeader>
-                        <CardContent className="flex-1 p-6">
-                          <CardTitle className="mb-2 text-2xl text-card-foreground">{project.title}</CardTitle>
-                          <CardDescription>{project.description}</CardDescription>
-                          <div className="mt-4 flex flex-wrap gap-2">
-                            {project.tags.map((tag) => (
-                              <Badge key={tag} variant="secondary">{tag}</Badge>
-                            ))}
-                          </div>
-                        </CardContent>
+                        <div className="flex-1 p-6 flex flex-col justify-between">
+                            <div>
+                                <CardTitle className="mb-2 text-2xl text-card-foreground">{project.title}</CardTitle>
+                                <CardDescription>{project.description}</CardDescription>
+                            </div>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {project.tags.map((tag) => (
+                                <Badge key={tag} variant="secondary">{tag}</Badge>
+                                ))}
+                            </div>
+                        </div>
                         <CardFooter className="flex justify-end gap-2 p-6 pt-0">
                           <Button variant="ghost" size="icon" asChild>
                             <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
