@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { ColorInput } from '@/components/ui/color-input';
 
 const colorsSchema = z.object({
   background: z.string(),
@@ -96,7 +97,7 @@ function ColorForm() {
 
   useEffect(() => {
     form.reset(portfolioData.theme.colors);
-  }, [portfolioData.theme.colors, form]);
+  }, [portfolioData.theme.colors]);
 
   function onSubmit(values: z.infer<typeof colorsSchema>) {
     updateColorTheme(values);
@@ -165,24 +166,12 @@ function ColorForm() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>{label}</FormLabel>
-                            <div className="flex items-center gap-2">
-                                <FormControl>
-                                    <Input 
-                                        type="color" 
-                                        className="w-12 h-10 p-1"
-                                        value={hslToHex(hslStringToObj(field.value))}
-                                        onChange={(e) => {
-                                            const newHsl = objToHslString(hexToHsl(e.target.value));
-                                            field.onChange(newHsl);
-                                        }}
-                                    />
-                                </FormControl>
-                                <Input 
-                                    className="font-mono text-sm"
-                                    value={field.value}
-                                    onChange={(e) => field.onChange(e.target.value)}
+                            <FormControl>
+                                <ColorInput 
+                                    hslValue={field.value}
+                                    onChange={field.onChange}
                                 />
-                            </div>
+                            </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -217,7 +206,7 @@ function BackgroundForm() {
             backgroundImageOpacity: portfolioData.theme.backgroundImageOpacity || 0.1,
             backgroundImageBlur: portfolioData.theme.backgroundImageBlur || 5,
         });
-    }, [portfolioData.theme, form]);
+    }, [portfolioData.theme]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
