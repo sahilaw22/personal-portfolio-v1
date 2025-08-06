@@ -2,7 +2,7 @@
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent, ThemeSettings, ColorTheme } from '@/lib/types';
+import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent, ThemeSettings, ColorTheme, HeroBackground } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 
 
@@ -18,17 +18,19 @@ interface AppState {
   updateContactContent: (contact: ContactContent) => void;
   updateThemeSettings: (theme: ThemeSettings) => void;
   updateColorTheme: (colors: ColorTheme) => void;
+  updateHeroBackground: (heroBackground: HeroBackground) => void;
   updateAllExperience: (experiences: Experience[]) => void;
   updateAllEducation: (educationItems: Education[]) => void;
   updateAllProjects: (projects: Project[]) => void;
   updateProject: (project: Project) => void;
   updateSkills: (skillCategories: SkillCategory[]) => void;
+  saveData: () => void;
 }
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
-const DATA_VERSION = 'v8'; // Increment this to force a reset
+const DATA_VERSION = 'v9'; // Increment this to force a reset
 
 export function AppStateSync() {
   const { portfolioData } = useAppState();
@@ -38,14 +40,12 @@ export function AppStateSync() {
       const root = document.documentElement;
       const theme = portfolioData.theme;
 
-      // Set colors
       const colors = theme.colors;
       root.style.setProperty('--background', colors.background);
       root.style.setProperty('--foreground', colors.foreground);
       root.style.setProperty('--primary', colors.primary);
       root.style.setProperty('--accent', colors.accent);
 
-      // Set derived colors
       const bgHsl = colors.background.split(' ').map(s => parseFloat(s.replace('%','')));
       const fgHsl = colors.foreground.split(' ').map(s => parseFloat(s.replace('%','')));
       
@@ -65,7 +65,6 @@ export function AppStateSync() {
         root.style.setProperty('--destructive-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
       }
 
-      // Set body background image
       const body = document.body;
       if (theme.backgroundImage) {
         body.style.setProperty('--background-image', `url(${theme.backgroundImage})`);
@@ -104,7 +103,6 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
             const item = window.localStorage.getItem('portfolioData');
             if (item) {
                 const parsedData = JSON.parse(item);
-                // Deep merge to ensure all new fields from initialData are present
                 const mergedData = { 
                     ...initialData, 
                     ...parsedData, 
@@ -126,21 +124,24 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
         }
     } catch (error) {
         console.error("Error reading from localStorage", error);
-        setPortfolioData(initialData); // Fallback to initial data on error
+        setPortfolioData(initialData);
     } finally {
         setIsHydrated(true);
     }
   }, []);
 
-  useEffect(() => {
+  const saveData = () => {
     if (isHydrated) {
         try {
           window.localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
+          return true;
         } catch (error) {
           console.error("Error writing to localStorage", error);
+          return false;
         }
     }
-  }, [portfolioData, isHydrated]);
+    return false;
+  };
 
   useEffect(() => {
     if (sessionStorage.getItem('isAdminAuthenticated') === 'true') {
@@ -202,6 +203,16 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
       }
     }));
   };
+  
+  const updateHeroBackground = (heroBackground: HeroBackground) => {
+      setPortfolioData(prev => ({
+          ...prev,
+          theme: {
+              ...prev.theme,
+              heroBackground,
+          }
+      }));
+  }
 
   const updateAllExperience = (experience: Experience[]) => {
     setPortfolioData(prev => ({...prev, experience }));
@@ -239,11 +250,13 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     updateContactContent,
     updateThemeSettings,
     updateColorTheme,
+    updateHeroBackground,
     updateAllExperience,
     updateAllEducation,
     updateAllProjects,
     updateProject,
     updateSkills,
+    saveData,
   };
 
   return (

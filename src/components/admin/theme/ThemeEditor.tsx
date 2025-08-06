@@ -11,10 +11,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Input } from '@/components/ui/input';
 import { generatePalette } from '@/ai/flows/palette-generator';
 import { BrainCircuit, Loader2, UploadCloud, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
+import { ThemeSettings } from '@/lib/types';
 
 const colorsSchema = z.object({
   background: z.string(),
@@ -84,7 +85,7 @@ const fileToDataUrl = (file: File): Promise<string> => {
 };
 
 function ColorForm() {
-  const { portfolioData, updateColorTheme } = useAppState();
+  const { portfolioData, updateColorTheme, saveData } = useAppState();
   const { toast } = useToast();
   const [aiTheme, setAiTheme] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -94,12 +95,23 @@ function ColorForm() {
     defaultValues: portfolioData.theme.colors,
   });
 
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+        updateColorTheme(value as z.infer<typeof colorsSchema>);
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch, updateColorTheme]);
+
   function onSubmit(values: z.infer<typeof colorsSchema>) {
     updateColorTheme(values);
-    toast({
-      title: 'Theme Updated!',
-      description: 'Your new color palette has been saved.',
-    });
+    if(saveData()) {
+        toast({
+          title: 'Theme Updated!',
+          description: 'Your new color palette has been saved.',
+        });
+    } else {
+        toast({ variant: 'destructive', title: 'Save failed' });
+    }
   }
 
   async function handleAiGenerate() {
@@ -110,10 +122,10 @@ function ColorForm() {
     setIsLoading(true);
     try {
         const palette = await generatePalette({ theme: aiTheme });
-        form.setValue('background', palette.background);
-        form.setValue('foreground', palette.foreground);
-        form.setValue('primary', palette.primary);
-        form.setValue('accent', palette.accent);
+        form.setValue('background', palette.background, { shouldDirty: true });
+        form.setValue('foreground', palette.foreground, { shouldDirty: true });
+        form.setValue('primary', palette.primary, { shouldDirty: true });
+        form.setValue('accent', palette.accent, { shouldDirty: true });
         toast({
             title: 'Palette Generated!',
             description: `A new color palette for "${aiTheme}" has been applied.`,
@@ -189,7 +201,7 @@ function ColorForm() {
 }
 
 function BackgroundForm() {
-    const { portfolioData, updateThemeSettings } = useAppState();
+    const { portfolioData, updateThemeSettings, saveData } = useAppState();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -204,13 +216,24 @@ function BackgroundForm() {
 
     const watchFields = form.watch();
 
+    useEffect(() => {
+        const subscription = form.watch((value) => {
+            updateThemeSettings({
+                ...portfolioData.theme,
+                ...value,
+            });
+        });
+        return () => subscription.unsubscribe();
+    }, [form.watch, updateThemeSettings, portfolioData.theme]);
+
+
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
             setIsLoading(true);
             try {
                 const dataUrl = await fileToDataUrl(file);
-                form.setValue('backgroundImage', dataUrl);
+                form.setValue('backgroundImage', dataUrl, { shouldDirty: true });
                 toast({ title: 'Image ready to be saved.' });
             } catch (err) {
                 toast({ variant: 'destructive', title: 'Error reading file.' });
@@ -221,7 +244,7 @@ function BackgroundForm() {
     };
 
     function handleRemoveImage() {
-        form.setValue('backgroundImage', '');
+        form.setValue('backgroundImage', '', { shouldDirty: true });
         toast({ title: 'Background image removed.'});
     }
 
@@ -230,10 +253,12 @@ function BackgroundForm() {
             ...portfolioData.theme,
             ...values,
         });
-        toast({
-            title: 'Background Updated!',
-            description: 'Your new background settings have been saved.',
-        });
+        if(saveData()){
+            toast({
+                title: 'Background Updated!',
+                description: 'Your new background settings have been saved.',
+            });
+        }
     }
     
     return (
@@ -309,7 +334,7 @@ export default function ThemeEditor() {
     <Card>
       <CardHeader>
         <CardTitle>Theme Customizer</CardTitle>
-        <CardDescription>Customize the colors and background of your portfolio.</CardDescription>
+        <CardDescription>Customize the colors and background of your portfolio. Changes are reflected live.</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="colors" className="w-full">
