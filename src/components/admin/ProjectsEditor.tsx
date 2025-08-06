@@ -30,7 +30,7 @@ const formSchema = z.object({
 });
 
 export default function ProjectsEditor() {
-  const { portfolioData, updateAllProjects } = useAppState();
+  const { portfolioData, updateAllProjects, saveData } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,6 +52,7 @@ export default function ProjectsEditor() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateAllProjects(values.projects);
+    saveData();
     toast({
       title: 'Projects Updated!',
       description: 'Your projects section has been successfully updated and saved.',
