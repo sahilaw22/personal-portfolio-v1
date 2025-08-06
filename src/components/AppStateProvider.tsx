@@ -24,7 +24,6 @@ interface AppState {
   updateAllProjects: (projects: Project[]) => void;
   updateProject: (project: Project) => void;
   updateSkills: (skillCategories: SkillCategory[]) => void;
-  saveData: () => void;
 }
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
@@ -130,18 +129,24 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     }
   }, []);
 
-  const saveData = () => {
+  const saveData = (data: PortfolioData) => {
     if (isHydrated) {
-        try {
-          window.localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
-          return true;
-        } catch (error) {
-          console.error("Error writing to localStorage", error);
-          return false;
-        }
+      try {
+        window.localStorage.setItem('portfolioData', JSON.stringify(data));
+        return true;
+      } catch (error) {
+        console.error("Error writing to localStorage", error);
+        return false;
+      }
     }
     return false;
   };
+  
+  useEffect(() => {
+    if (isHydrated) {
+        saveData(portfolioData);
+    }
+  }, [portfolioData, isHydrated]);
 
   useEffect(() => {
     if (sessionStorage.getItem('isAdminAuthenticated') === 'true') {
@@ -256,7 +261,6 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     updateAllProjects,
     updateProject,
     updateSkills,
-    saveData,
   };
 
   return (

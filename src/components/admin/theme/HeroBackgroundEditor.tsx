@@ -64,7 +64,7 @@ const GlowPreview = ({ background }: { background: HeroBackground }) => {
 
 
 export default function HeroBackgroundEditor() {
-  const { portfolioData, updateHeroBackground, saveData } = useAppState();
+  const { portfolioData, updateHeroBackground } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,18 +76,10 @@ export default function HeroBackgroundEditor() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateHeroBackground(values);
-    if(saveData()) {
-        toast({
-          title: 'Theme Updated!',
-          description: 'Your hero section background has been saved.',
-        });
-    } else {
-         toast({
-          variant: 'destructive',
-          title: 'Save Failed',
-          description: 'Could not save hero background settings.',
-        });
-    }
+    toast({
+      title: 'Theme Updated!',
+      description: 'Your hero section background has been saved.',
+    });
   }
 
   return (

@@ -84,7 +84,7 @@ const fileToDataUrl = (file: File): Promise<string> => {
 };
 
 function ColorForm() {
-  const { portfolioData, updateColorTheme, saveData } = useAppState();
+  const { portfolioData, updateColorTheme } = useAppState();
   const { toast } = useToast();
   const [aiTheme, setAiTheme] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -100,14 +100,10 @@ function ColorForm() {
 
   function onSubmit(values: z.infer<typeof colorsSchema>) {
     updateColorTheme(values);
-    if(saveData()) {
-        toast({
-          title: 'Theme Updated!',
-          description: 'Your new color palette has been saved.',
-        });
-    } else {
-        toast({ variant: 'destructive', title: 'Save failed' });
-    }
+    toast({
+        title: 'Theme Updated!',
+        description: 'Your new color palette has been saved.',
+    });
   }
 
   async function handleAiGenerate() {
@@ -122,7 +118,6 @@ function ColorForm() {
         form.setValue('foreground', palette.foreground, { shouldDirty: true });
         form.setValue('primary', palette.primary, { shouldDirty: true });
         form.setValue('accent', palette.accent, { shouldDirty: true });
-        // No longer updating global state here for live preview
         toast({
             title: 'Palette Generated!',
             description: `A new color palette for "${aiTheme}" has been applied. Press save to keep it.`,
@@ -201,7 +196,7 @@ function ColorForm() {
 }
 
 function BackgroundForm() {
-    const { portfolioData, updateThemeSettings, saveData } = useAppState();
+    const { portfolioData, updateThemeSettings } = useAppState();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -250,12 +245,10 @@ function BackgroundForm() {
             ...portfolioData.theme,
             ...values,
         });
-        if(saveData()){
-            toast({
-                title: 'Background Updated!',
-                description: 'Your new background settings have been saved.',
-            });
-        }
+        toast({
+            title: 'Background Updated!',
+            description: 'Your new background settings have been saved.',
+        });
     }
     
     return (
@@ -337,7 +330,7 @@ const backgroundPatterns = [
 ];
 
 function PatternForm() {
-    const { portfolioData, updateThemeSettings, saveData } = useAppState();
+    const { portfolioData, updateThemeSettings } = useAppState();
     const { toast } = useToast();
     const [selectedPattern, setSelectedPattern] = useState(portfolioData.theme.backgroundImage || '');
 
@@ -350,12 +343,10 @@ function PatternForm() {
             ...portfolioData.theme,
             backgroundImage: selectedPattern,
         });
-        if(saveData()){
-            toast({
-                title: 'Pattern Saved!',
-                description: 'Your new background pattern has been saved.',
-            });
-        }
+        toast({
+            title: 'Pattern Saved!',
+            description: 'Your new background pattern has been saved.',
+        });
     }
 
     return (

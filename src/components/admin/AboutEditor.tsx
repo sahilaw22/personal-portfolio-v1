@@ -37,7 +37,7 @@ const formSchema = z.object({
 });
 
 export default function AboutEditor() {
-  const { portfolioData, updateAboutContent, saveData } = useAppState();
+  const { portfolioData, updateAboutContent } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -61,7 +61,6 @@ export default function AboutEditor() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateAboutContent(values);
-    saveData();
     toast({
       title: 'About Section Updated!',
       description: 'Your "About Me" section has been successfully updated.',

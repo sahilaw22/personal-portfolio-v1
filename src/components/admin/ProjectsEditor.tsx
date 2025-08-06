@@ -13,6 +13,7 @@ import { useAppState } from '@/components/AppStateProvider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { PlusCircle, Trash2 } from 'lucide-react';
+import { ScrollArea } from '../ui/scroll-area';
 
 const projectSchema = z.object({
   id: z.string(),
@@ -30,7 +31,7 @@ const formSchema = z.object({
 });
 
 export default function ProjectsEditor() {
-  const { portfolioData, updateAllProjects, saveData } = useAppState();
+  const { portfolioData, updateAllProjects } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,7 +53,6 @@ export default function ProjectsEditor() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateAllProjects(values.projects);
-    saveData();
     toast({
       title: 'Projects Updated!',
       description: 'Your projects section has been successfully updated and saved.',
@@ -68,6 +68,7 @@ export default function ProjectsEditor() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <ScrollArea className="h-[500px] pr-4">
             <Accordion type="multiple" defaultValue={fields.map(f => f.id)} className="w-full">
               {fields.map((field, index) => (
                 <AccordionItem key={field.id} value={field.id}>
@@ -109,6 +110,7 @@ export default function ProjectsEditor() {
                 </AccordionItem>
               ))}
             </Accordion>
+            </ScrollArea>
             <Button type="button" variant="outline" onClick={() => append({ id: new Date().toISOString(), title: 'New Project', description: 'A brief description of this project.', image: 'https://placehold.co/600x400.png', tags: ['new-tag'], github: 'https://github.com', live: 'https://example.com', aiHint: 'new project' })} className="mt-4">
               <PlusCircle className="mr-2 h-4 w-4" /> Add New Project
             </Button>

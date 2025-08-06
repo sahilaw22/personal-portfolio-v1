@@ -1,3 +1,4 @@
+
 'use client';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,7 +29,7 @@ const formSchema = z.object({
 });
 
 export default function SkillsEditor() {
-  const { portfolioData, updateSkills, saveData } = useAppState();
+  const { portfolioData, updateSkills } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,7 +46,6 @@ export default function SkillsEditor() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateSkills(values.categories);
-    saveData();
     toast({
       title: 'Skills Updated!',
       description: 'Your skills section has been successfully updated.',
