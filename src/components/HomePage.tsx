@@ -1,3 +1,4 @@
+
 'use client';
 
 import HeroSection from '@/components/sections/HeroSection';
@@ -13,7 +14,7 @@ export default function HomePage() {
   const { handleAddSubmission, portfolioData } = useAppState();
   return (
     <>
-      <HeroSection content={portfolioData.hero} />
+      <HeroSection content={portfolioData.hero} background={portfolioData.theme.heroBackground} />
       <AboutSection content={portfolioData.about} />
       <SkillsSection skillsData={portfolioData.skills} />
       <ExperienceSection experiences={portfolioData.experience} />

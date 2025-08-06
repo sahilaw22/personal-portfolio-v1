@@ -1,22 +1,34 @@
+
 'use client';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useAppState } from '@/components/AppStateProvider';
-import type { HeroContent } from '@/lib/types';
+import type { HeroContent, HeroBackground } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { Badge } from '../ui/badge';
 
-const OrangeGlowBackground = () => (
-    <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute w-full h-full bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(255,121,44,0.15),rgba(255,255,255,0))]"></div>
+const GlowBackground = ({ background }: { background: HeroBackground }) => {
+  const glowStyle: React.CSSProperties = {};
+  if (background.type === 'solid') {
+    glowStyle.background = background.from;
+  } else {
+    glowStyle.background = `radial-gradient(ellipse 40% 40% at 50% 50%, ${background.from}, transparent 70%), radial-gradient(ellipse 30% 30% at 40% 60%, ${background.to}, transparent 70%)`;
+  }
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center -z-10">
+      <div 
+        className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] rounded-full blur-3xl opacity-30" 
+        style={glowStyle}
+      />
     </div>
-);
+  );
+};
   
 
-export default function HeroSection({ content }: { content: HeroContent }) {
+export default function HeroSection({ content, background }: { content: HeroContent, background: HeroBackground }) {
   const { isAdminAuthenticated } = useAppState();
   const router = useRouter();
   const [tapCount, setTapCount] = useState(0);
@@ -104,7 +116,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
         </div>
 
         <div className="relative flex justify-center items-center order-1 md:order-2">
-           <OrangeGlowBackground />
+           <GlowBackground background={background} />
            <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10 p-4">
             <Image
               src={content.image}

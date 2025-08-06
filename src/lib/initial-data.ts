@@ -10,6 +10,13 @@ export const initialData: PortfolioData = {
     bio: "I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a strong focus on clean code and scalable architecture.",
     image: "/profile.jpg"
   },
+  theme: {
+    heroBackground: {
+      type: 'gradient',
+      from: 'hsl(var(--primary))',
+      to: 'hsl(var(--accent))'
+    }
+  },
   about: {
     bio: "As a dedicated Computer Science student, I've embarked on a journey from theoretical concepts to tangible creations. My passion lies in transforming complex problems into elegant software solutions. I thrive on learning new technologies and applying my skills to build meaningful and impactful projects.",
     services: [

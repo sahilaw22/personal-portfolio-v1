@@ -137,7 +137,7 @@ export default function ImageUploader() {
             isLoading={isLoading}
           />
         )}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+        <div className='grid grid-cols-1 gap-6'>
             <div className='space-y-2'>
                 <label className="text-sm font-medium">1. Select Target Section</label>
                 <Select onValueChange={setTarget} value={target}>
@@ -166,7 +166,7 @@ export default function ImageUploader() {
                     <Input 
                         id="file-upload"
                         type="file" 
-                        name="cover" 
+                        name="file" 
                         accept="image/*" 
                         onChange={handleFileChange}
                         className="hidden"

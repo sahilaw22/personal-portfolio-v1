@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
@@ -15,14 +16,28 @@ try {
 export async function POST(req: NextRequest) {
   try {
     const data = await req.formData();
-    const file: File | null = data.get('cover') as unknown as File;
+    const file: File | null = data.get('file') as unknown as File;
+    const type: 'image' | 'resume' | null = data.get('type') as 'image' | 'resume' | null;
 
     if (!file) {
       return NextResponse.json({ error: 'No file uploaded.' }, { status: 400 });
     }
+    if (!type) {
+        return NextResponse.json({ error: 'Upload type not specified.' }, { status: 400 });
+    }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+
+    if (type === 'resume') {
+        if (file.type !== 'application/pdf') {
+            return NextResponse.json({ error: 'Invalid file type for resume. Only PDF is allowed.' }, { status: 400 });
+        }
+        const resumePath = join(process.cwd(), '/public/resume.pdf');
+        await writeFile(resumePath, buffer);
+        return NextResponse.json({ message: 'Resume uploaded successfully', url: '/resume.pdf' });
+    }
+
 
     // Sanitize filename to prevent directory traversal
     const sanitizedFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, '');

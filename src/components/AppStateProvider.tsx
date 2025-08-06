@@ -2,7 +2,7 @@
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent } from '@/lib/types';
+import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent, ThemeSettings } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 
 
@@ -16,6 +16,7 @@ interface AppState {
   updateHeroContent: (hero: HeroContent) => void;
   updateAboutContent: (about: AboutContent) => void;
   updateContactContent: (contact: ContactContent) => void;
+  updateThemeSettings: (theme: ThemeSettings) => void;
   updateAllExperience: (experiences: Experience[]) => void;
   updateAllEducation: (educationItems: Education[]) => void;
   updateAllProjects: (projects: Project[]) => void;
@@ -26,7 +27,7 @@ interface AppState {
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
-const DATA_VERSION = 'v4'; // Increment this to force a reset
+const DATA_VERSION = 'v5'; // Increment this to force a reset
 
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -47,7 +48,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
         } else {
             const item = window.localStorage.getItem('portfolioData');
             if (item) {
-                setPortfolioData(JSON.parse(item));
+                const parsedData = JSON.parse(item);
+                // Merge initialData with parsedData to ensure new fields are present
+                const mergedData = { ...initialData, ...parsedData, theme: { ...initialData.theme, ...parsedData.theme } };
+                setPortfolioData(mergedData);
             }
         }
     } catch (error) {
@@ -114,6 +118,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const updateContactContent = (contact: ContactContent) => {
     setPortfolioData(prev => ({ ...prev, contact }));
   }
+
+  const updateThemeSettings = (theme: ThemeSettings) => {
+    setPortfolioData(prev => ({...prev, theme}));
+  };
   
   const updateAllExperience = (experience: Experience[]) => {
     setPortfolioData(prev => ({...prev, experience }));
@@ -149,6 +157,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     updateHeroContent,
     updateAboutContent,
     updateContactContent,
+    updateThemeSettings,
     updateAllExperience,
     updateAllEducation,
     updateAllProjects,

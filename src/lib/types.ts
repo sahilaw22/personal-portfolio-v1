@@ -15,6 +15,16 @@ export type HeroContent = {
   image: string;
 };
 
+export type HeroBackground = {
+  type: 'solid' | 'gradient';
+  from: string;
+  to: string;
+};
+
+export type ThemeSettings = {
+  heroBackground: HeroBackground;
+}
+
 export type Service = {
   id: string;
   icon: string;
@@ -23,7 +33,7 @@ export type Service = {
 };
 
 export type Stat = {
-  id: string;
+  id:string;
   value: string;
   label: string;
 };
@@ -80,11 +90,10 @@ export type PortfolioData = {
   hero: HeroContent;
   about: AboutContent;
   contact: ContactContent;
+  theme: ThemeSettings;
   skills: SkillCategory[];
   experience: Experience[];
   education: Education[];
   projects: Project[];
   contactSubmissions?: ContactSubmission[];
 };
-
-    

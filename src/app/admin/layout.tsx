@@ -17,6 +17,7 @@ import {
   Wrench,
   User,
   LogOut,
+  Palette
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -30,6 +31,7 @@ const navLinks = [
   { href: '/admin/education', label: 'Education', icon: GraduationCap },
   { href: '/admin/projects', label: 'Projects', icon: LayoutGrid },
   { href: '/admin/skills', label: 'Skills', icon: Wrench },
+  { href: '/admin/theme', label: 'Theme', icon: Palette },
   { href: '/admin/ai-tools', label: 'AI Tools', icon: Sparkles },
   { href: '/admin/messages', label: 'Messages', icon: Mail },
   { href: '/admin/uploads', label: 'Uploads', icon: ImageIcon },
