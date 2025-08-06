@@ -136,16 +136,17 @@ export default function HeroSection({ content, background }: { content: HeroCont
 
         <div className="relative flex justify-center items-center order-1 md:order-2">
            <GlowBackground background={background} />
-           <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10 p-4">
-            <Image
-              src={content.image}
-              alt={content.name}
-              width={400}
-              height={400}
-              className="object-cover w-full h-full rounded-full"
-              data-ai-hint="profile picture"
-              priority
-            />
+           <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10 p-4 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 shadow-2xl shadow-primary/20 border-2 border-white/10">
+             <div className="relative w-full h-full rounded-full overflow-hidden">
+                <Image
+                  src={content.image}
+                  alt={content.name}
+                  fill
+                  className="object-cover"
+                  data-ai-hint="profile picture"
+                  priority
+                />
+            </div>
           </div>
         </div>
 
