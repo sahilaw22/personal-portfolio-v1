@@ -136,7 +136,7 @@ export default function HeroSection({ content, background }: { content: HeroCont
 
         <div className="relative flex justify-center items-center order-1 md:order-2">
            <GlowBackground background={background} />
-           <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10 p-4 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 shadow-2xl shadow-primary/20 border-2 border-white/10">
+            <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10 p-2 rounded-full bg-card/10 backdrop-blur-sm shadow-2xl shadow-primary/10 border border-white/10">
              <div className="relative w-full h-full rounded-full overflow-hidden">
                 <Image
                   src={content.image}
