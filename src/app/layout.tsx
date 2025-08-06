@@ -5,8 +5,8 @@ import AppStateProvider, { AppStateSync } from '@/components/AppStateProvider';
 
 
 export const metadata: Metadata = {
-  title: 'Portfolio - Sahil Ahmed Wani',
-  description: 'A futuristic portfolio for Sahil Ahmed Wani, built with Next.js and AI.',
+  title: 'AI-Powered Portfolio',
+  description: 'A futuristic portfolio built with Next.js and AI.',
 };
 
 export default function RootLayout({
