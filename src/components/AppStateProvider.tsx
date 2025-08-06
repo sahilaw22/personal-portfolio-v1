@@ -28,7 +28,7 @@ interface AppState {
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
-const DATA_VERSION = 'v6'; // Increment this to force a reset
+const DATA_VERSION = 'v7'; // Increment this to force a reset
 
 export function AppStateSync() {
   const { portfolioData } = useAppState();
@@ -43,14 +43,15 @@ export function AppStateSync() {
       root.style.setProperty('--accent', colors.accent);
 
       // Also update card, border, input, muted as shades of background/foreground
-      const bgHsl = colors.background.split(' ').map(Number);
-      const fgHsl = colors.foreground.split(' ').map(Number);
+      const bgHsl = colors.background.split(' ').map(s => parseFloat(s.replace('%','')));
+      const fgHsl = colors.foreground.split(' ').map(s => parseFloat(s.replace('%','')));
       
       if (bgHsl.length === 3) {
         root.style.setProperty('--card', `${bgHsl[0]} ${bgHsl[1]}% ${bgHsl[2] + 3}%`);
-        root.style.setProperty('--muted', `${bgHsl[0]} ${bgHsl[1]}% ${bgHsl[2] + 12}%`);
-        root.style.setProperty('--border', `${bgHsl[0]} ${bgHsl[1]}% ${bgHsl[2] + 12}%`);
-        root.style.setProperty('--input', `${bgHsl[0]} ${bgHsl[1]}% ${bgHsl[2] + 12}%`);
+        const mutedLightness = bgHsl[2] > 50 ? bgHsl[2] - 10 : bgHsl[2] + 12;
+        root.style.setProperty('--muted', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
+        root.style.setProperty('--border', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
+        root.style.setProperty('--input', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
       }
        if (fgHsl.length === 3) {
         root.style.setProperty('--card-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);

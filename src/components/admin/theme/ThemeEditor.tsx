@@ -9,9 +9,10 @@ import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { Input } from '@/components/ui/input';
-import { generatePalette, PaletteGeneratorOutput } from '@/ai/flows/palette-generator';
+import { generatePalette } from '@/ai/flows/palette-generator';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { Label } from '@/components/ui/label';
 
 const formSchema = z.object({
   background: z.string(),
@@ -23,7 +24,7 @@ const formSchema = z.object({
 type HSLColor = { h: number, s: number, l: number };
 
 function hslStringToObj(hslStr: string): HSLColor {
-  const [h, s, l] = hslStr.split(' ').map(parseFloat);
+  const [h, s, l] = hslStr.replace(/%/g, '').split(' ').map(parseFloat);
   return { h, s, l };
 }
 
