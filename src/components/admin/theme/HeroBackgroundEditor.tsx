@@ -12,7 +12,7 @@ import { HeroBackground } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const formSchema = z.object({
   type: z.enum(['solid', 'gradient']),
@@ -58,7 +58,8 @@ const hexToRgba = (hex: string, opacity: number) => {
         c= '0x'+c.join('');
         return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+opacity+')';
     }
-    throw new Error('Bad Hex');
+    // Fallback for invalid hex
+    return `rgba(255, 255, 255, ${opacity})`;
 }
 
 
@@ -71,7 +72,12 @@ export default function HeroBackgroundEditor() {
     defaultValues: portfolioData.theme.heroBackground,
   });
 
-  const watchFields = form.watch();
+  const [previewBackground, setPreviewBackground] = useState<HeroBackground>(portfolioData.theme.heroBackground);
+  const watchedFormValues = form.watch();
+
+  useEffect(() => {
+      setPreviewBackground(watchedFormValues);
+  }, [watchedFormValues]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateHeroBackground(values);
@@ -91,7 +97,7 @@ export default function HeroBackgroundEditor() {
 
   return (
     <>
-    <GlowPreview background={watchFields as HeroBackground} />
+    <GlowPreview background={previewBackground} />
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-6">
         <FormField
@@ -124,7 +130,7 @@ export default function HeroBackgroundEditor() {
         <div className="space-y-4">
             <FormField control={form.control} name="from" render={({ field }) => (
                 <FormItem>
-                    <FormLabel>{watchFields.type === 'gradient' ? 'Gradient Color 1' : 'Color'}</FormLabel>
+                    <FormLabel>{watchedFormValues.type === 'gradient' ? 'Gradient Color 1' : 'Color'}</FormLabel>
                     <FormControl><Input type="color" {...field} /></FormControl>
                     <FormMessage />
                 </FormItem>
@@ -144,7 +150,7 @@ export default function HeroBackgroundEditor() {
         </div>
         
 
-        <div className={cn("space-y-4", watchFields.type !== 'gradient' && "hidden")}>
+        <div className={cn("space-y-4", watchedFormValues.type !== 'gradient' && "hidden")}>
              <FormField control={form.control} name="to" render={({ field }) => (
                 <FormItem>
                     <FormLabel>Gradient Color 2</FormLabel>
