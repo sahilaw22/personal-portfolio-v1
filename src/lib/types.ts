@@ -1,4 +1,9 @@
 
+
+export type PageView = {
+  timestamp: number;
+};
+
 export type ContactSubmission = {
   name: string;
   email: string;
@@ -118,6 +123,8 @@ export type PortfolioData = {
   experience: Experience[];
   education: Education[];
   projects: Project[];
+  pageViews: PageView[];
   contactSubmissions?: ContactSubmission[];
 };
+
 

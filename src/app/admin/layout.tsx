@@ -18,6 +18,7 @@ import {
   LogOut,
   Palette,
   Settings,
+  LineChart,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -29,6 +30,7 @@ import { Badge } from '@/components/ui/badge';
 
 const navLinks = [
   { href: '/admin', label: 'General', icon: Home },
+  { href: '/admin/analytics', label: 'Analytics', icon: LineChart },
   { href: '/admin/about', label: 'About', icon: User },
   { href: '/admin/experience', label: 'Experience', icon: Briefcase },
   { href: '/admin/education', label: 'Education', icon: GraduationCap },

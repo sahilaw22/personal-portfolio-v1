@@ -2,7 +2,7 @@
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent, ThemeSettings, ColorTheme, HeroBackground, AppSettings } from '@/lib/types';
+import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent, ThemeSettings, ColorTheme, HeroBackground, AppSettings, PageView } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 import { useToast } from '@/hooks/use-toast';
 
@@ -28,11 +28,12 @@ interface AppState {
   updateAppSettings: (settings: Partial<AppSettings>) => void;
   changeAdminPassword: (password: string) => void;
   markAllMessagesAsRead: () => void;
+  addPageView: () => void;
 }
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
-const DATA_VERSION = 'v12'; // Increment this to force a reset
+const DATA_VERSION = 'v13'; // Increment this to force a reset
 
 export function AppStateSync() {
   const { portfolioData } = useAppState();
@@ -148,7 +149,8 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
                     settings: {
                         ...initialData.settings,
                         ...(parsedData.settings || {}),
-                    }
+                    },
+                    pageViews: parsedData.pageViews || [],
                 };
                 setPortfolioData(mergedData);
             }
@@ -161,23 +163,16 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     }
   }, []);
 
-  const saveData = (data: PortfolioData) => {
-    if (isHydrated) {
-      try {
-        window.localStorage.setItem('portfolioData', JSON.stringify(data));
-        return true;
-      } catch (error) {
-        console.error("Error writing to localStorage", error);
-        return false;
-      }
-    }
-    return false;
-  };
-  
   const updateAndSave = (updater: (prev: PortfolioData) => PortfolioData) => {
     setPortfolioData(prev => {
         const newData = updater(prev);
-        saveData(newData);
+        if (isHydrated) {
+          try {
+            window.localStorage.setItem('portfolioData', JSON.stringify(newData));
+          } catch (error) {
+            console.error("Error writing to localStorage", error);
+          }
+        }
         return newData;
     });
   };
@@ -306,6 +301,13 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
       contactSubmissions: prev.contactSubmissions?.map(s => ({ ...s, isRead: true })) || [],
     }));
   }
+  
+  const addPageView = () => {
+    updateAndSave(prev => ({
+      ...prev,
+      pageViews: [...(prev.pageViews || []), { timestamp: Date.now() }]
+    }));
+  }
 
   const value = {
     isAdminAuthenticated,
@@ -328,6 +330,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     updateAppSettings,
     changeAdminPassword,
     markAllMessagesAsRead,
+    addPageView,
   };
 
   return (
