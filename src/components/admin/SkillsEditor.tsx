@@ -13,6 +13,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { PlusCircle, Trash2, GripVertical } from 'lucide-react';
 import { iconMap } from '@/lib/icon-map';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { useEffect } from 'react';
 
 const skillSchema = z.object({
   name: z.string().min(1, 'Skill name is required'),
@@ -43,6 +44,12 @@ export default function SkillsEditor() {
     control: form.control,
     name: "categories",
   });
+
+  useEffect(() => {
+    form.reset({
+      categories: portfolioData.skills,
+    });
+  }, [portfolioData.skills, form.reset]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateSkills(values.categories);
