@@ -19,6 +19,8 @@ export default {
       fontFamily: {
         body: ['"Space Grotesk"', 'sans-serif'],
         headline: ['"Poppins"', 'sans-serif'],
+        slab: ['"Roboto Slab"', 'serif'],
+        serif: ['"Playfair Display"', 'serif'],
         code: ['monospace'],
       },
       colors: {

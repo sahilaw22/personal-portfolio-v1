@@ -8,7 +8,8 @@ export const initialData: PortfolioData = {
     title: "Full-Stack Developer & Tech Enthusiast",
     availability: "Available for Internship",
     bio: "I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a strong focus on clean code and scalable architecture.",
-    image: "/profile.jpg"
+    image: "/profile.jpg",
+    nameFont: "font-headline",
   },
   theme: {
     heroBackground: {

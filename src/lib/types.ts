@@ -19,6 +19,7 @@ export type HeroContent = {
   availability: string;
   bio: string;
   image: string;
+  nameFont?: string;
 };
 
 export type HeroBackground = {

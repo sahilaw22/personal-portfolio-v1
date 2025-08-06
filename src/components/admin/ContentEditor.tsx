@@ -11,6 +11,14 @@ import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { cn } from '@/lib/utils';
+
+const fontOptions = [
+    { label: 'Poppins (Headline)', value: 'font-headline' },
+    { label: 'Space Grotesk (Body)', value: 'font-body' },
+    { label: 'Roboto Slab', value: 'font-slab' },
+    { label: 'Playfair Display', value: 'font-serif' },
+];
 
 const formSchema = z.object({
   greeting: z.string().min(2),
@@ -19,6 +27,7 @@ const formSchema = z.object({
   availability: z.string().min(5),
   bio: z.string().min(20),
   image: z.string(),
+  nameFont: z.string().optional(),
 });
 
 export default function ContentEditor() {
@@ -27,8 +36,11 @@ export default function ContentEditor() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: portfolioData.hero,
+    defaultValues: { ...portfolioData.hero, nameFont: portfolioData.hero.nameFont || 'font-headline' },
   });
+
+  const watchName = form.watch('name');
+  const watchFont = form.watch('nameFont');
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateHeroContent(values);
@@ -57,19 +69,6 @@ export default function ContentEditor() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="greeting"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Greeting</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
@@ -81,6 +80,50 @@ export default function ContentEditor() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="nameFont"
+              render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Name Font Style</FormLabel>
+                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select a font style for your name" />
+                            </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            {fontOptions.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {watchName && watchFont && (
+                        <div className="mt-4 rounded-lg border bg-background p-4">
+                            <p className="text-sm text-muted-foreground mb-2">Font Preview:</p>
+                            <p className={cn("text-3xl font-bold", watchFont)}>{watchName}</p>
+                        </div>
+                    )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="greeting"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Greeting</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="title"

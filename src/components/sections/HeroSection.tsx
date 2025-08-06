@@ -8,6 +8,7 @@ import { useAppState } from '@/components/AppStateProvider';
 import type { HeroContent, HeroBackground } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { Badge } from '../ui/badge';
+import { cn } from '@/lib/utils';
 
 const hexToRgba = (hex: string, opacity: number) => {
     let c: any;
@@ -102,7 +103,10 @@ export default function HeroSection({ content, background }: { content: HeroCont
             aria-label="Tap five times to open admin panel"
             className="inline-block cursor-pointer"
           >
-            <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight">
+            <h1 className={cn(
+                "text-4xl md:text-6xl font-bold tracking-tight",
+                content.nameFont || 'font-headline'
+            )}>
               {content.name}
             </h1>
           </div>
@@ -154,6 +158,4 @@ export default function HeroSection({ content, background }: { content: HeroCont
     </section>
   );
 }
-
-
 
