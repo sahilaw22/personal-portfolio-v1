@@ -27,7 +27,6 @@ const themeSettingsSchema = z.object({
     backgroundImage: z.string().optional(),
     backgroundImageOpacity: z.number().min(0).max(1).optional(),
     backgroundImageBlur: z.number().min(0).max(50).optional(),
-    resumeUrl: z.string().optional(),
 });
 
 type HSLColor = { h: number, s: number, l: number };
@@ -123,10 +122,10 @@ function ColorForm() {
         form.setValue('foreground', palette.foreground, { shouldDirty: true });
         form.setValue('primary', palette.primary, { shouldDirty: true });
         form.setValue('accent', palette.accent, { shouldDirty: true });
-        updateColorTheme(form.getValues());
+        // No longer updating global state here for live preview
         toast({
             title: 'Palette Generated!',
-            description: `A new color palette for "${aiTheme}" has been applied.`,
+            description: `A new color palette for "${aiTheme}" has been applied. Press save to keep it.`,
         });
     } catch(err) {
         console.error(err);
@@ -180,17 +179,13 @@ function ColorForm() {
                                         onChange={(e) => {
                                             const newHsl = objToHslString(hexToHsl(e.target.value));
                                             field.onChange(newHsl);
-                                            updateColorTheme({...form.getValues(), [name]: newHsl });
                                         }}
                                     />
                                 </FormControl>
                                 <Input 
                                     className="font-mono text-sm"
                                     value={field.value}
-                                    onChange={(e) => {
-                                        field.onChange(e.target.value);
-                                        updateColorTheme({...form.getValues(), [name]: e.target.value });
-                                    }}
+                                    onChange={(e) => field.onChange(e.target.value)}
                                 />
                             </div>
                             <FormMessage />
@@ -220,18 +215,6 @@ function BackgroundForm() {
     });
 
     const watchFields = form.watch();
-
-    useEffect(() => {
-        const subscription = form.watch((value) => {
-            updateThemeSettings({
-                ...portfolioData.theme,
-                backgroundImage: value.backgroundImage,
-                backgroundImageOpacity: value.backgroundImageOpacity,
-                backgroundImageBlur: value.backgroundImageBlur,
-            });
-        });
-        return () => subscription.unsubscribe();
-    }, [form.watch, updateThemeSettings, portfolioData.theme]);
     
     useEffect(() => {
         form.reset({
@@ -356,15 +339,17 @@ const backgroundPatterns = [
 function PatternForm() {
     const { portfolioData, updateThemeSettings, saveData } = useAppState();
     const { toast } = useToast();
+    const [selectedPattern, setSelectedPattern] = useState(portfolioData.theme.backgroundImage || '');
 
     const handleSelectPattern = (url: string) => {
-        updateThemeSettings({
-            ...portfolioData.theme,
-            backgroundImage: url,
-        });
+        setSelectedPattern(url);
     };
     
     function onSave() {
+        updateThemeSettings({
+            ...portfolioData.theme,
+            backgroundImage: selectedPattern,
+        });
         if(saveData()){
             toast({
                 title: 'Pattern Saved!',
@@ -385,6 +370,7 @@ function PatternForm() {
                         key={pattern.name} 
                         className="border rounded-lg p-2 cursor-pointer transition-all hover:border-primary"
                         onClick={() => handleSelectPattern(pattern.url)}
+                        data-active={selectedPattern === pattern.url}
                     >
                         <div 
                             className="h-24 rounded-md bg-card flex items-center justify-center"

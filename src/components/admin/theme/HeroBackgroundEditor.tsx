@@ -72,12 +72,7 @@ export default function HeroBackgroundEditor() {
     defaultValues: portfolioData.theme.heroBackground,
   });
 
-  const [previewBackground, setPreviewBackground] = useState<HeroBackground>(portfolioData.theme.heroBackground);
   const watchedFormValues = form.watch();
-
-  useEffect(() => {
-      setPreviewBackground(watchedFormValues);
-  }, [watchedFormValues]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateHeroBackground(values);
@@ -97,7 +92,7 @@ export default function HeroBackgroundEditor() {
 
   return (
     <>
-    <GlowPreview background={previewBackground} />
+    <GlowPreview background={watchedFormValues} />
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-6">
         <FormField
