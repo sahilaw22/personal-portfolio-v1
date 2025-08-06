@@ -25,17 +25,22 @@ interface AppState {
   updateAllProjects: (projects: Project[]) => void;
   updateProject: (project: Project) => void;
   updateSkills: (skillCategories: SkillCategory[]) => void;
-  updateAppSettings: (settings: AppSettings) => void;
+  updateAppSettings: (settings: Partial<AppSettings>) => void;
   changeAdminPassword: (password: string) => void;
   markAllMessagesAsRead: () => void;
 }
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
-const DATA_VERSION = 'v11'; // Increment this to force a reset
+const DATA_VERSION = 'v12'; // Increment this to force a reset
 
 export function AppStateSync() {
   const { portfolioData } = useAppState();
+
+  useEffect(() => {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(portfolioData.settings.themeMode);
+  }, [portfolioData.settings.themeMode]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -43,29 +48,46 @@ export function AppStateSync() {
       const theme = portfolioData.theme;
 
       const colors = theme.colors;
-      root.style.setProperty('--background', colors.background);
-      root.style.setProperty('--foreground', colors.foreground);
       root.style.setProperty('--primary', colors.primary);
       root.style.setProperty('--accent', colors.accent);
-
+      
       const bgHsl = colors.background.split(' ').map(s => parseFloat(s.replace('%','')));
       const fgHsl = colors.foreground.split(' ').map(s => parseFloat(s.replace('%','')));
       
-      if (bgHsl.length === 3) {
-        root.style.setProperty('--card', `${bgHsl[0]} ${bgHsl[1]}% ${bgHsl[2] + 3}%`);
-        const mutedLightness = bgHsl[2] > 50 ? bgHsl[2] - 10 : bgHsl[2] + 12;
-        root.style.setProperty('--muted', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
-        root.style.setProperty('--border', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
-        root.style.setProperty('--input', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
+      if (portfolioData.settings.themeMode === 'dark') {
+          root.style.setProperty('--background', colors.background);
+          root.style.setProperty('--foreground', colors.foreground);
+          if (bgHsl.length === 3) {
+            root.style.setProperty('--card', `${bgHsl[0]} ${bgHsl[1]}% ${bgHsl[2] + 3}%`);
+            const mutedLightness = bgHsl[2] > 50 ? bgHsl[2] - 10 : bgHsl[2] + 12;
+            root.style.setProperty('--muted', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
+            root.style.setProperty('--border', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
+            root.style.setProperty('--input', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
+          }
+           if (fgHsl.length === 3) {
+            root.style.setProperty('--card-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
+            root.style.setProperty('--popover-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
+            root.style.setProperty('--secondary-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
+            root.style.setProperty('--muted-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2] - 30}%`);
+            root.style.setProperty('--accent-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
+            root.style.setProperty('--destructive-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
+          }
+      } else {
+        // Reset to default light mode values from globals.css
+        root.style.removeProperty('--background');
+        root.style.removeProperty('--foreground');
+        root.style.removeProperty('--card');
+        root.style.removeProperty('--card-foreground');
+        root.style.removeProperty('--popover-foreground');
+        root.style.removeProperty('--secondary-foreground');
+        root.style.removeProperty('--muted');
+        root.style.removeProperty('--muted-foreground');
+        root.style.removeProperty('--border');
+        root.style.removeProperty('--input');
+        root.style.removeProperty('--accent-foreground');
+        root.style.removeProperty('--destructive-foreground');
       }
-       if (fgHsl.length === 3) {
-        root.style.setProperty('--card-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
-        root.style.setProperty('--popover-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
-        root.style.setProperty('--secondary-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
-        root.style.setProperty('--muted-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2] - 30}%`);
-        root.style.setProperty('--accent-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
-        root.style.setProperty('--destructive-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
-      }
+
 
       const body = document.body;
       if (theme.backgroundImage) {
@@ -80,7 +102,7 @@ export function AppStateSync() {
         body.classList.remove('with-background-image');
       }
     }
-  }, [portfolioData.theme]);
+  }, [portfolioData.theme, portfolioData.settings.themeMode]);
 
   return null;
 }
@@ -254,7 +276,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     setPortfolioData(prev => ({ ...prev, skills }));
   };
 
-  const updateAppSettings = (settings: AppSettings) => {
+  const updateAppSettings = (settings: Partial<AppSettings>) => {
     setPortfolioData(prev => ({
         ...prev,
         settings: {

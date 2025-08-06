@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 
 const formSchema = z.object({
   autoSave: z.boolean(),
+  themeMode: z.enum(['light', 'dark']),
 });
 
 export default function SettingsEditor() {
@@ -32,7 +33,7 @@ export default function SettingsEditor() {
   
   useEffect(() => {
     const subscription = form.watch((value) => {
-        updateAppSettings(value as z.infer<typeof formSchema>);
+        updateAppSettings(value as Partial<z.infer<typeof formSchema>>);
     });
     return () => subscription.unsubscribe();
   }, [form.watch, updateAppSettings]);
@@ -46,6 +47,28 @@ export default function SettingsEditor() {
       <CardContent>
         <Form {...form}>
           <form className="space-y-4">
+            <FormField
+              control={form.control}
+              name="themeMode"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      Theme
+                    </FormLabel>
+                    <FormDescription>
+                        Toggle between light and dark mode.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value === 'dark'}
+                      onCheckedChange={(checked) => field.onChange(checked ? 'dark' : 'light')}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="autoSave"

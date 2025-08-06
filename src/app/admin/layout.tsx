@@ -25,7 +25,7 @@ import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SidebarProvider, Sidebar, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Badge } from '../ui/badge';
+import { Badge } from '@/components/ui/badge';
 
 const navLinks = [
   { href: '/admin', label: 'General', icon: Home },
