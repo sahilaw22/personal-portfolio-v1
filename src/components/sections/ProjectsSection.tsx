@@ -75,11 +75,13 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                             className="object-cover"
                             data-ai-hint={project.aiHint}
                           />
-                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                           <div className="absolute bottom-0 p-6">
+                             <CardTitle className="text-2xl text-white">{project.title}</CardTitle>
+                           </div>
                         </CardHeader>
                         <div className="flex-1 p-6 flex flex-col justify-between">
                             <div>
-                                <CardTitle className="mb-2 text-2xl text-card-foreground">{project.title}</CardTitle>
                                 <CardDescription>{project.description}</CardDescription>
                             </div>
                             <div className="mt-4 flex flex-wrap gap-2">

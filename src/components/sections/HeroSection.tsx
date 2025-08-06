@@ -106,13 +106,13 @@ export default function HeroSection({ content, background }: { content: HeroCont
               {content.name}
             </h1>
           </div>
-          <p className="mt-4 text-2xl md:text-3xl font-medium text-muted-foreground">
+          <p className="mt-4 text-2xl md:text-3xl font-medium">
             <span className="text-gradient-primary-accent">{content.title}</span>
           </p>
-          <Badge variant="outline" className="mt-4 text-sm font-medium border-chart-3/50 text-chart-3 bg-chart-3/10 py-2 px-4">
+          <Badge variant="outline" className="mt-4 text-sm font-medium border-green-500/50 text-green-700 bg-green-500/10 py-2 px-4 dark:border-chart-3/50 dark:text-chart-3 dark:bg-chart-3/10">
              <span className="relative flex h-3 w-3 mr-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-destructive"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 dark:bg-destructive opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 dark:bg-destructive"></span>
             </span>
             {content.availability}
           </Badge>

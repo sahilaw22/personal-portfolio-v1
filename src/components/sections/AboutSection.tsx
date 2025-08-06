@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default function AboutSection({ content }: { content: AboutContent }) {
   return (
-    <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-card/50">
+    <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-muted/50 dark:bg-card/50">
       <div className="container grid md:grid-cols-2 gap-10 md:gap-16 items-center">
         <div className="space-y-8 relative">
           <div className="absolute left-0 h-full w-px bg-border -translate-x-4 md:-translate-x-8"></div>
@@ -42,7 +42,7 @@ export default function AboutSection({ content }: { content: AboutContent }) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t">
             {content.stats.map((stat) => (
               <div key={stat.id} className="text-center">
-                <p className="text-4xl font-bold text-portfolio-silver">{stat.value}</p>
+                <p className="text-4xl font-bold text-foreground/80 dark:text-portfolio-silver">{stat.value}</p>
                 <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
               </div>
             ))}

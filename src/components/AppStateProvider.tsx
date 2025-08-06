@@ -47,16 +47,15 @@ export function AppStateSync() {
       const root = document.documentElement;
       const theme = portfolioData.theme;
 
-      const colors = theme.colors;
-      root.style.setProperty('--primary', colors.primary);
-      root.style.setProperty('--accent', colors.accent);
-      
-      const bgHsl = colors.background.split(' ').map(s => parseFloat(s.replace('%','')));
-      const fgHsl = colors.foreground.split(' ').map(s => parseFloat(s.replace('%','')));
-      
+      // Only set these custom properties for dark mode
       if (portfolioData.settings.themeMode === 'dark') {
+          const colors = theme.colors;
+          root.style.setProperty('--primary', colors.primary);
+          root.style.setProperty('--accent', colors.accent);
           root.style.setProperty('--background', colors.background);
           root.style.setProperty('--foreground', colors.foreground);
+          
+          const bgHsl = colors.background.split(' ').map(s => parseFloat(s.replace('%','')));
           if (bgHsl.length === 3) {
             root.style.setProperty('--card', `${bgHsl[0]} ${bgHsl[1]}% ${bgHsl[2] + 3}%`);
             const mutedLightness = bgHsl[2] > 50 ? bgHsl[2] - 10 : bgHsl[2] + 12;
@@ -64,6 +63,8 @@ export function AppStateSync() {
             root.style.setProperty('--border', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
             root.style.setProperty('--input', `${bgHsl[0]} ${bgHsl[1]}% ${mutedLightness}%`);
           }
+
+          const fgHsl = colors.foreground.split(' ').map(s => parseFloat(s.replace('%','')));
            if (fgHsl.length === 3) {
             root.style.setProperty('--card-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
             root.style.setProperty('--popover-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
@@ -73,7 +74,9 @@ export function AppStateSync() {
             root.style.setProperty('--destructive-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
           }
       } else {
-        // Reset to default light mode values from globals.css
+        // For light mode, remove all custom properties to fall back to the defaults in globals.css
+        root.style.removeProperty('--primary');
+        root.style.removeProperty('--accent');
         root.style.removeProperty('--background');
         root.style.removeProperty('--foreground');
         root.style.removeProperty('--card');
@@ -87,7 +90,6 @@ export function AppStateSync() {
         root.style.removeProperty('--accent-foreground');
         root.style.removeProperty('--destructive-foreground');
       }
-
 
       const body = document.body;
       if (theme.backgroundImage) {
