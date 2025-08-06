@@ -10,14 +10,13 @@ import { useAppState } from '@/components/AppStateProvider';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
 import { Loader2, Trash2, Upload } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
-import ImageCropper from './ImageCropper';
 
-const blobToDataUrl = (blob: Blob): Promise<string> => {
+const fileToDataUrl = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result as string);
         reader.onerror = reject;
-        reader.readAsDataURL(blob);
+        reader.readAsDataURL(file);
     });
 };
 
@@ -27,7 +26,6 @@ export default function ImageUploader() {
   const [lastUploadedImage, setLastUploadedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [cropperOpen, setCropperOpen] = useState(false);
 
   const { toast } = useToast();
   
@@ -39,20 +37,23 @@ export default function ImageUploader() {
         return;
       }
       setSelectedFile(e.target.files[0]);
-      setCropperOpen(true);
     }
   };
 
-  const handleCropAndSave = async (imageBlob: Blob) => {
+  const handleSave = async () => {
     if (!target) {
       toast({ variant: 'destructive', title: 'No target selected.' });
+      return;
+    }
+    if (!selectedFile) {
+      toast({ variant: 'destructive', title: 'No file selected.' });
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const dataUrl = await blobToDataUrl(imageBlob);
+      const dataUrl = await fileToDataUrl(selectedFile);
       setLastUploadedImage(dataUrl);
 
       if (target === 'hero') {
@@ -82,7 +83,6 @@ export default function ImageUploader() {
         });
     } finally {
         setIsLoading(false);
-        setCropperOpen(false);
         setSelectedFile(null);
     }
   };
@@ -115,12 +115,6 @@ export default function ImageUploader() {
     });
   }
   
-  const getAspectRatio = () => {
-    if (target === 'hero' || target === 'about') return 1 / 1;
-    if (target.startsWith('project-')) return 3 / 2;
-    return 3 / 2;
-  }
-
   return (
     <Card>
       <CardHeader>
@@ -128,15 +122,6 @@ export default function ImageUploader() {
         <CardDescription>Upload a new image or remove an existing one from a section of your portfolio.</CardDescription>
       </CardHeader>
       <CardContent>
-        {cropperOpen && selectedFile && (
-          <ImageCropper 
-            imageSrc={URL.createObjectURL(selectedFile)}
-            onCropComplete={handleCropAndSave}
-            onClose={() => setCropperOpen(false)}
-            aspect={getAspectRatio()}
-            isLoading={isLoading}
-          />
-        )}
         <div className='grid grid-cols-1 gap-6'>
             <div className='space-y-2'>
                 <label className="text-sm font-medium">1. Select Target Section</label>
@@ -161,7 +146,7 @@ export default function ImageUploader() {
                 </Select>
             </div>
             <div className='space-y-2'>
-                <label className="text-sm font-medium">2. Choose & Save New Image</label>
+                <label className="text-sm font-medium">2. Choose New Image</label>
                  <div className="flex items-center gap-2">
                     <Input 
                         id="file-upload"
@@ -169,19 +154,25 @@ export default function ImageUploader() {
                         name="file" 
                         accept="image/*" 
                         onChange={handleFileChange}
-                        className="hidden"
                         disabled={!target || isLoading}
                     />
-                    <label htmlFor="file-upload" className={`w-full`}>
-                        <Button asChild className="w-full" disabled={!target || isLoading}>
-                          <span>
-                            <Upload className="mr-2 h-4 w-4" />
-                            {isLoading ? 'Saving...' : 'Choose Image...'}
-                          </span>
-                        </Button>
-                    </label>
                 </div>
+                {selectedFile && <p className="text-sm text-muted-foreground mt-2">Selected: {selectedFile.name}</p>}
             </div>
+
+            <Button onClick={handleSave} disabled={isLoading || !selectedFile} className="w-full">
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Save Image
+                </>
+              )}
+            </Button>
           </div>
 
         <div className="mt-6">
