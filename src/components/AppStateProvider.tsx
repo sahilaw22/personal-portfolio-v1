@@ -2,8 +2,9 @@
 'use client';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent, ThemeSettings, ColorTheme, HeroBackground } from '@/lib/types';
+import type { ContactSubmission, PortfolioData, Experience, Project, SkillCategory, AboutContent, HeroContent, Education, ContactContent, ThemeSettings, ColorTheme, HeroBackground, AppSettings } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
+import { useToast } from '@/hooks/use-toast';
 
 
 interface AppState {
@@ -24,12 +25,14 @@ interface AppState {
   updateAllProjects: (projects: Project[]) => void;
   updateProject: (project: Project) => void;
   updateSkills: (skillCategories: SkillCategory[]) => void;
+  updateAppSettings: (settings: AppSettings) => void;
+  changeAdminPassword: (password: string) => void;
+  markAllMessagesAsRead: () => void;
 }
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
-const UNLOCK_PASSWORD = 'IamNerd';
-const DATA_VERSION = 'v10'; // Increment this to force a reset
+const DATA_VERSION = 'v11'; // Increment this to force a reset
 
 export function AppStateSync() {
   const { portfolioData } = useAppState();
@@ -86,6 +89,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(initialData);
   const [isHydrated, setIsHydrated] = useState(false);
+  const { toast } = useToast();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -116,7 +120,11 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
                            ...initialData.theme.heroBackground,
                            ...(parsedData.theme?.heroBackground || {})
                         }
-                    } 
+                    },
+                    settings: {
+                        ...initialData.settings,
+                        ...(parsedData.settings || {}),
+                    }
                 };
                 setPortfolioData(mergedData);
             }
@@ -143,7 +151,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   };
   
   useEffect(() => {
-    if (isHydrated) {
+    if (isHydrated && portfolioData.settings.autoSave) {
         saveData(portfolioData);
     }
   }, [portfolioData, isHydrated]);
@@ -161,7 +169,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   }, [pathname, isAdminAuthenticated, router]);
   
   const login = (password: string) => {
-    if (password === UNLOCK_PASSWORD) {
+    if (password === portfolioData.settings.adminPassword) {
       setIsAdminAuthenticated(true);
       sessionStorage.setItem('isAdminAuthenticated', 'true');
       router.push('/admin');
@@ -179,8 +187,12 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const handleAddSubmission = (submission: Omit<ContactSubmission, 'submittedAt'>) => {
      setPortfolioData(prev => ({
       ...prev,
-      contactSubmissions: [...(prev.contactSubmissions || []), { ...submission, submittedAt: new Date() }]
+      contactSubmissions: [...(prev.contactSubmissions || []), { ...submission, submittedAt: new Date(), isRead: false }]
     }));
+     toast({
+        title: 'New Message Received!',
+        description: `From: ${submission.name}`,
+      });
   };
   
   const updateHeroContent = (hero: HeroContent) => {
@@ -242,6 +254,32 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     setPortfolioData(prev => ({ ...prev, skills }));
   };
 
+  const updateAppSettings = (settings: AppSettings) => {
+    setPortfolioData(prev => ({
+        ...prev,
+        settings: {
+            ...prev.settings,
+            ...settings,
+        }
+    }))
+  };
+
+  const changeAdminPassword = (password: string) => {
+    setPortfolioData(prev => ({
+        ...prev,
+        settings: {
+            ...prev.settings,
+            adminPassword: password,
+        }
+    }))
+  }
+
+  const markAllMessagesAsRead = () => {
+    setPortfolioData(prev => ({
+      ...prev,
+      contactSubmissions: prev.contactSubmissions?.map(s => ({ ...s, isRead: true })) || [],
+    }));
+  }
 
   const value = {
     isAdminAuthenticated,
@@ -261,6 +299,9 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     updateAllProjects,
     updateProject,
     updateSkills,
+    updateAppSettings,
+    changeAdminPassword,
+    markAllMessagesAsRead,
   };
 
   return (

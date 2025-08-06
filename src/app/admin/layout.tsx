@@ -17,7 +17,7 @@ import {
   User,
   LogOut,
   Palette,
-  PanelLeft,
+  Settings,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -25,6 +25,7 @@ import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SidebarProvider, Sidebar, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Badge } from '../ui/badge';
 
 const navLinks = [
   { href: '/admin', label: 'General', icon: Home },
@@ -35,13 +36,17 @@ const navLinks = [
   { href: '/admin/skills', label: 'Skills', icon: Wrench },
   { href: '/admin/theme', label: 'Theme', icon: Palette },
   { href: '/admin/ai-tools', label: 'AI Tools', icon: Sparkles },
-  { href: '/admin/messages', label: 'Messages', icon: Mail },
+  { href: '/admin/messages', label: 'Messages', icon: Mail, notificationKey: 'unreadMessages' },
   { href: '/admin/uploads', label: 'Uploads', icon: ImageIcon },
+  { href: '/admin/settings', label: 'Settings', icon: Settings },
   { href: '/admin/export', label: 'Export Data', icon: Download },
 ];
 
 function NavContent() {
   const pathname = usePathname();
+  const { portfolioData } = useAppState();
+  const unreadMessages = portfolioData.contactSubmissions?.filter(s => !s.isRead).length || 0;
+
   return (
     <>
       <div className="p-4">
@@ -55,12 +60,17 @@ function NavContent() {
         </Link>
       </div>
       <SidebarMenu>
-        {navLinks.map(({ href, label, icon: Icon }) => (
+        {navLinks.map(({ href, label, icon: Icon, notificationKey }) => (
            <SidebarMenuItem key={href}>
             <SidebarMenuButton asChild isActive={pathname === href}>
-              <Link href={href} prefetch={true}>
+              <Link href={href} prefetch={true} className="relative">
                 <Icon className="h-4 w-4" />
                 <span>{label}</span>
+                 {notificationKey === 'unreadMessages' && unreadMessages > 0 && (
+                    <Badge className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 p-0 flex items-center justify-center">
+                        {unreadMessages}
+                    </Badge>
+                 )}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -75,7 +85,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAdminAuthenticated, logout } = useAppState();
+  const { isAdminAuthenticated, logout, portfolioData } = useAppState();
 
   if (!isAdminAuthenticated) {
     return <>{children}</>;
@@ -90,7 +100,7 @@ export default function AdminLayout({
               <NavContent />
             </ScrollArea>
             <div className="mt-auto p-4 border-t">
-              <Button variant="outline" size="sm" asChild className="w-full mb-2">
+              <Button disabled={!portfolioData.settings.autoSave} variant="outline" size="sm" asChild className="w-full mb-2">
                 <Link href="/">View Portfolio</Link>
               </Button>
               <Button variant="ghost" size="sm" onClick={logout} className="w-full">
@@ -121,8 +131,8 @@ export default function AdminLayout({
                     <NavContent />
                   </ScrollArea>
                 <div className="mt-auto p-4 border-t">
-                  <Button variant="outline" size="sm" asChild className="w-full mb-2">
-                    <Link href="/">View Portfolio</Link>
+                   <Button disabled={!portfolioData.settings.autoSave} variant="outline" size="sm" asChild className="w-full mb-2">
+                     <Link href="/">View Portfolio</Link>
                   </Button>
                   <Button variant="ghost" size="sm" onClick={logout} className="w-full">
                     <LogOut className="mr-2 h-4 w-4" />

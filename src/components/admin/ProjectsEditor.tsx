@@ -63,7 +63,10 @@ export default function ProjectsEditor() {
     <Card>
       <CardHeader>
         <CardTitle>Projects Editor</CardTitle>
-        <CardDescription>Manage the projects showcased in your portfolio.</CardDescription>
+        <CardDescription>
+          Manage the projects showcased in your portfolio.
+          {!portfolioData.settings.autoSave && <span className="text-destructive font-semibold block mt-2">Auto-saving is off. Remember to save your changes.</span>}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -114,7 +117,9 @@ export default function ProjectsEditor() {
             <Button type="button" variant="outline" onClick={() => append({ id: new Date().toISOString(), title: 'New Project', description: 'A brief description of this project.', image: 'https://placehold.co/600x400.png', tags: ['new-tag'], github: 'https://github.com', live: 'https://example.com', aiHint: 'new project' })} className="mt-4">
               <PlusCircle className="mr-2 h-4 w-4" /> Add New Project
             </Button>
-            <Button type="submit" className="w-full mt-6">Save All Changes</Button>
+            <Button type="submit" className="w-full mt-6" disabled={portfolioData.settings.autoSave}>
+              {portfolioData.settings.autoSave ? "Changes Saved Automatically" : "Save All Changes"}
+            </Button>
           </form>
         </Form>
       </CardContent>

@@ -31,6 +31,10 @@ export const initialData: PortfolioData = {
     backgroundImageBlur: 10,
     resumeUrl: '/resume.pdf'
   },
+  settings: {
+    autoSave: true,
+    adminPassword: 'IamNerd',
+  },
   about: {
     bio: "As a dedicated Computer Science student, I've embarked on a journey from theoretical concepts to tangible creations. My passion lies in transforming complex problems into elegant software solutions. I thrive on learning new technologies and applying my skills to build meaningful and impactful projects.",
     services: [

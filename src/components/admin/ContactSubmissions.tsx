@@ -4,6 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { ContactSubmission } from "@/lib/types";
 import { useAppState } from "../AppStateProvider";
+import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
 
 export default function ContactSubmissions() {
   const { contactSubmissions } = useAppState();
@@ -12,7 +14,7 @@ export default function ContactSubmissions() {
       <CardHeader>
         <CardTitle>Contact Messages</CardTitle>
         <CardDescription>
-          Messages received from the contact form.
+          Messages received from the contact form. Unread messages are highlighted.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col p-0">
@@ -28,9 +30,12 @@ export default function ContactSubmissions() {
             <TableBody>
               {contactSubmissions.length > 0 ? (
                 contactSubmissions.slice().reverse().map((submission, index) => (
-                  <TableRow key={index}>
+                  <TableRow key={index} className={cn(!submission.isRead && "bg-primary/10")}>
                     <TableCell>
-                      <div className="font-medium">{submission.name}</div>
+                      <div className="font-medium flex items-center gap-2">
+                        {submission.name}
+                        {!submission.isRead && <Badge variant="destructive" className="h-4 px-1.5 py-0">New</Badge>}
+                      </div>
                       <div className="text-xs text-muted-foreground">{submission.email}</div>
                     </TableCell>
                     <TableCell className="max-w-[200px] truncate">{submission.message}</TableCell>
@@ -53,5 +58,3 @@ export default function ContactSubmissions() {
     </Card>
   );
 }
-
-    

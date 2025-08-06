@@ -1,10 +1,10 @@
 
-
 export type ContactSubmission = {
   name: string;
   email: string;
   message: string;
   submittedAt: Date;
+  isRead: boolean;
 };
 
 export type HeroContent = {
@@ -103,11 +103,17 @@ export type Project = {
   aiHint: string;
 };
 
+export type AppSettings = {
+    autoSave: boolean;
+    adminPassword: string;
+}
+
 export type PortfolioData = {
   hero: HeroContent;
   about: AboutContent;
   contact: ContactContent;
   theme: ThemeSettings;
+  settings: AppSettings;
   skills: SkillCategory[];
   experience: Experience[];
   education: Education[];
