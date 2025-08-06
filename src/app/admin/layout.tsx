@@ -114,6 +114,9 @@ export default function AdminLayout({
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="flex flex-col p-0">
+                  <SheetHeader>
+                    <SheetTitle className="sr-only">Admin Menu</SheetTitle>
+                  </SheetHeader>
                   <ScrollArea className="flex-1 py-2">
                     <NavContent />
                   </ScrollArea>
