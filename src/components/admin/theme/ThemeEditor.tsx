@@ -9,14 +9,12 @@ import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Input } from '@/components/ui/input';
 import { generatePalette } from '@/ai/flows/palette-generator';
-import { BrainCircuit, Loader2, UploadCloud, Trash2 } from 'lucide-react';
+import { BrainCircuit, Loader2, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
-import { ThemeSettings } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import Image from 'next/image';
 
 const colorsSchema = z.object({
   background: z.string(),

@@ -30,7 +30,7 @@ interface AppState {
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
-const DATA_VERSION = 'v9'; // Increment this to force a reset
+const DATA_VERSION = 'v10'; // Increment this to force a reset
 
 export function AppStateSync() {
   const { portfolioData } = useAppState();

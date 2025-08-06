@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import HeroBackgroundEditor from '@/components/admin/theme/HeroBackgroundEditor';
 import ThemeEditor from '@/components/admin/theme/ThemeEditor';
-import { Sidebar, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from '@/components/ui/sidebar';
+import { Sidebar, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Palette, Image as ImageIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 type View = 'palette' | 'heroBackground';
 
@@ -24,7 +23,7 @@ export default function ThemeAdminPage() {
                     <SidebarMenuItem>
                         <SidebarMenuButton onClick={() => setView('palette')} isActive={view === 'palette'}>
                             <Palette />
-                            <span>Color Palette</span>
+                            <span>Color &amp; Background</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
