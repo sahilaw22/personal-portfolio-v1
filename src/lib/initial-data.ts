@@ -1,4 +1,3 @@
-
 import type { PortfolioData } from './types';
 
 export const initialData: PortfolioData = {
@@ -7,7 +6,7 @@ export const initialData: PortfolioData = {
     name: "Sahil Ahmed Wani",
     title: "Full-Stack Developer & Tech Enthusiast",
     availability: "Available for Internship",
-    bio: "I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a strong focus on clean code and scalable architecture.",
+    bio: "I'm a passionate developer with a love for building modern, responsive, and intuitive web applications. My expertise lies in creating seamless user experiences from front to back, with a focus on quality and continuous learning.",
     image: "/profile.jpg",
     nameFont: "font-headline",
   },
@@ -37,7 +36,7 @@ export const initialData: PortfolioData = {
     themeMode: 'dark',
   },
   about: {
-    bio: "As a dedicated Computer Science student, I've embarked on a journey from theoretical concepts to tangible creations. My passion lies in transforming complex problems into elegant software solutions. I thrive on learning new technologies and applying my skills to build meaningful and impactful projects.",
+    bio: "As a dedicated Computer Science student, I've embarked on a journey from theoretical concepts to tangible creations. My passion lies in transforming complex problems into elegant software solutions, and I'm always eager to embrace new technologies and challenges.",
     services: [
       { id: 's1', icon: 'FileCode', title: 'Web Development', color: 'text-primary' },
       { id: 's2', icon: 'Component', title: 'App Development', color: 'text-chart-2' },
@@ -109,14 +108,14 @@ export const initialData: PortfolioData = {
       role: "Freelance Web Developer",
       company: "Upwork",
       period: "2023 - Present",
-      description: "Developed and maintained full-stack web applications for various clients. Specialized in React, Node.js, and modern Jamstack architecture. Consistently delivered high-quality, scalable solutions on time."
+      description: "Developed and maintained full-stack web applications for various clients. Specialized in React, Node.js, and modern Jamstack architecture. Consistently delivered high-quality, scalable solutions."
     },
     {
       id: "exp2",
       role: "Software Development Intern",
       company: "Tech Innovators Inc.",
       period: "Summer 2022",
-      description: "Contributed to the development of a large-scale e-commerce platform. Worked with a team of senior engineers on both frontend and backend tasks, gaining hands-on experience with agile methodologies."
+      description: "Contributed to the development of a large-scale e-commerce platform. Worked with a team of senior engineers on both frontend and backend tasks, gaining hands-on experience with industry best practices."
     },
      {
       id: "exp3",
