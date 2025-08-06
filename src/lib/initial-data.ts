@@ -29,6 +29,7 @@ export const initialData: PortfolioData = {
     backgroundImage: '',
     backgroundImageOpacity: 0.05,
     backgroundImageBlur: 10,
+    resumeUrl: '/resume.pdf'
   },
   about: {
     bio: "As a dedicated Computer Science student, I've embarked on a journey from theoretical concepts to tangible creations. My passion lies in transforming complex problems into elegant software solutions. I thrive on learning new technologies and applying my skills to build meaningful and impactful projects.",

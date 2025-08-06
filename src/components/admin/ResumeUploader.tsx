@@ -7,8 +7,19 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, Loader2, Download, Eye } from 'lucide-react';
+import { useAppState } from '../AppStateProvider';
+
+const fileToDataUrl = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+};
 
 export default function ResumeUploader() {
+  const { portfolioData, updateThemeSettings } = useAppState();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { toast } = useToast();
@@ -35,31 +46,19 @@ export default function ResumeUploader() {
     }
 
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('type', 'resume');
-
+    
     try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Upload failed');
-      }
+        const dataUrl = await fileToDataUrl(selectedFile);
+        updateThemeSettings({
+            ...portfolioData.theme,
+            resumeUrl: dataUrl,
+        });
       
       toast({
-        title: 'Resume Uploaded!',
-        description: 'Your new resume is now live.',
+        title: 'Resume Updated!',
+        description: 'Your new resume has been saved.',
       });
       setSelectedFile(null);
-      // Force refresh preview if it's open
-      const previewWindow = window.open('/resume.pdf', 'resume_preview');
-      previewWindow?.location.reload();
-
 
     } catch (err) {
       toast({
@@ -71,6 +70,8 @@ export default function ResumeUploader() {
       setIsLoading(false);
     }
   };
+
+  const currentResumeUrl = portfolioData.theme?.resumeUrl || '/resume.pdf';
 
   return (
     <Card>
@@ -113,13 +114,13 @@ export default function ResumeUploader() {
              <h3 className="text-sm font-medium">2. Manage Current Resume</h3>
             <div className="flex gap-2">
                 <Button variant="outline" asChild className="flex-1">
-                    <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                    <a href={currentResumeUrl} target="_blank" rel="noopener noreferrer">
                         <Eye className="mr-2 h-4 w-4" />
                         View Current
                     </a>
                 </Button>
                 <Button variant="outline" asChild className="flex-1">
-                    <a href="/resume.pdf" download="Sahil_Ahmed_Wani_Resume.pdf">
+                    <a href={currentResumeUrl} download="Sahil_Ahmed_Wani_Resume.pdf">
                         <Download className="mr-2 h-4 w-4" />
                         Download
                     </a>

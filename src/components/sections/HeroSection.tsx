@@ -46,7 +46,7 @@ const GlowBackground = ({ background }: { background: HeroBackground }) => {
   
 
 export default function HeroSection({ content, background }: { content: HeroContent, background: HeroBackground }) {
-  const { isAdminAuthenticated } = useAppState();
+  const { portfolioData, isAdminAuthenticated } = useAppState();
   const router = useRouter();
   const [tapCount, setTapCount] = useState(0);
   const [tapTimeout, setTapTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -84,6 +84,8 @@ export default function HeroSection({ content, background }: { content: HeroCont
       }
     };
   }, [tapTimeout]); // Adding tapTimeout to the dependency array
+
+  const resumeUrl = portfolioData.theme?.resumeUrl || '/resume.pdf';
 
   return (
     <section id="hero" className="container min-h-[calc(100vh-4rem)] flex items-center justify-center">
@@ -125,7 +127,7 @@ export default function HeroSection({ content, background }: { content: HeroCont
                 </a>
               </Button>
             <Button variant="outline" size="lg" asChild>
-              <a href="/resume.pdf" download="Sahil_Ahmed_Wani_Resume.pdf">
+              <a href={resumeUrl} download="Sahil_Ahmed_Wani_Resume.pdf">
                 My Resume
               </a>
             </Button>

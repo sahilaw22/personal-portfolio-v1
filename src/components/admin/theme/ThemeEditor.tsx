@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { Input } from '@/components/ui/input';
 import { generatePalette } from '@/ai/flows/palette-generator';
 import { BrainCircuit, Loader2, UploadCloud, Trash2 } from 'lucide-react';
@@ -16,6 +15,8 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
 import { ThemeSettings } from '@/lib/types';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import Image from 'next/image';
 
 const colorsSchema = z.object({
   background: z.string(),
@@ -28,6 +29,7 @@ const themeSettingsSchema = z.object({
     backgroundImage: z.string().optional(),
     backgroundImageOpacity: z.number().min(0).max(1).optional(),
     backgroundImageBlur: z.number().min(0).max(50).optional(),
+    resumeUrl: z.string().optional(),
 });
 
 type HSLColor = { h: number, s: number, l: number };
@@ -101,6 +103,10 @@ function ColorForm() {
     });
     return () => subscription.unsubscribe();
   }, [form.watch, updateColorTheme]);
+
+  useEffect(() => {
+    form.reset(portfolioData.theme.colors);
+  }, [portfolioData.theme.colors, form]);
 
   function onSubmit(values: z.infer<typeof colorsSchema>) {
     updateColorTheme(values);
@@ -220,12 +226,21 @@ function BackgroundForm() {
         const subscription = form.watch((value) => {
             updateThemeSettings({
                 ...portfolioData.theme,
-                ...value,
+                backgroundImage: value.backgroundImage,
+                backgroundImageOpacity: value.backgroundImageOpacity,
+                backgroundImageBlur: value.backgroundImageBlur,
             });
         });
         return () => subscription.unsubscribe();
     }, [form.watch, updateThemeSettings, portfolioData.theme]);
-
+    
+    useEffect(() => {
+        form.reset({
+            backgroundImage: portfolioData.theme.backgroundImage || '',
+            backgroundImageOpacity: portfolioData.theme.backgroundImageOpacity || 0.1,
+            backgroundImageBlur: portfolioData.theme.backgroundImageBlur || 5,
+        });
+    }, [portfolioData.theme, form]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -329,18 +344,81 @@ function BackgroundForm() {
     )
 }
 
+const backgroundPatterns = [
+    { name: 'None', url: '' },
+    { name: 'Subtle Prisms', url: '/patterns/subtle-prisms.svg' },
+    { name: 'Circuit Board', url: '/patterns/circuit-board.svg' },
+    { name: 'Hexagons', url: '/patterns/hexagons.svg' },
+    { name: 'Polka Dots', url: '/patterns/polka-dots.svg' },
+    { name: 'Tic Tac Toe', url: '/patterns/tic-tac-toe.svg' },
+    { name: 'Wiggle', url: '/patterns/wiggle.svg' },
+];
+
+function PatternForm() {
+    const { portfolioData, updateThemeSettings, saveData } = useAppState();
+    const { toast } = useToast();
+
+    const handleSelectPattern = (url: string) => {
+        updateThemeSettings({
+            ...portfolioData.theme,
+            backgroundImage: url,
+        });
+    };
+    
+    function onSave() {
+        if(saveData()){
+            toast({
+                title: 'Pattern Saved!',
+                description: 'Your new background pattern has been saved.',
+            });
+        }
+    }
+
+    return (
+        <div className="space-y-4">
+             <p className="text-sm text-muted-foreground">
+                Select a pattern to apply as your portfolio's background. These are optimized for dark themes.
+            </p>
+            <ScrollArea className="h-96">
+            <div className="grid grid-cols-2 gap-4">
+                {backgroundPatterns.map(pattern => (
+                    <div 
+                        key={pattern.name} 
+                        className="border rounded-lg p-2 cursor-pointer transition-all hover:border-primary"
+                        onClick={() => handleSelectPattern(pattern.url)}
+                    >
+                        <div 
+                            className="h-24 rounded-md bg-card flex items-center justify-center"
+                            style={{ backgroundImage: pattern.url ? `url(${pattern.url})` : 'none' }}
+                        >
+                           {!pattern.url && <span className="text-muted-foreground text-sm">Solid Color</span>}
+                        </div>
+                        <p className="text-sm font-medium text-center mt-2">{pattern.name}</p>
+                    </div>
+                ))}
+            </div>
+            </ScrollArea>
+             <Button onClick={onSave} className="w-full mt-4">Save Pattern</Button>
+        </div>
+    )
+}
+
 export default function ThemeEditor() {
   return (
     <Tabs defaultValue="colors" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="colors">Color Palette</TabsTrigger>
-            <TabsTrigger value="background">Background Image</TabsTrigger>
+            <TabsTrigger value="background">Image</TabsTrigger>
+            <TabsTrigger value="patterns">Patterns</TabsTrigger>
         </TabsList>
         <TabsContent value="colors" className="pt-6">
             <ColorForm />
         </TabsContent>
         <TabsContent value="background" className="pt-6">
             <BackgroundForm />
+        </TabsContent>
+        <TabsContent value="patterns" className="pt-6">
+            <PatternForm />
         </TabsContent>
     </Tabs>
   );

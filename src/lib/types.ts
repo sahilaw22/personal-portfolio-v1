@@ -39,6 +39,7 @@ export type ThemeSettings = {
   backgroundImage?: string;
   backgroundImageOpacity?: number;
   backgroundImageBlur?: number;
+  resumeUrl?: string;
 }
 
 export type Service = {
