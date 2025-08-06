@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,8 +8,12 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
-import { Loader2, Trash2, Upload } from 'lucide-react';
+import { Crop, Loader2, Trash2, Upload, X } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '../ui/dialog';
+import ReactCrop, { type Crop as CropType, centerCrop, makeAspectCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+
 
 const fileToDataUrl = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -20,12 +24,49 @@ const fileToDataUrl = (file: File): Promise<string> => {
     });
 };
 
+function getCroppedImg(image: HTMLImageElement, crop: CropType, fileName: string): Promise<string> {
+    const canvas = document.createElement('canvas');
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    canvas.width = crop.width * scaleX;
+    canvas.height = crop.height * scaleY;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+        return Promise.reject(new Error('Failed to get canvas context'));
+    }
+
+    ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    return new Promise((resolve) => {
+        resolve(canvas.toDataURL('image/jpeg'));
+    });
+}
+
+
 export default function ImageUploader() {
   const { portfolioData, updateHeroContent, updateAboutContent, updateProject, updateContactContent } = useAppState();
   const [target, setTarget] = useState<string>('');
   const [lastUploadedImage, setLastUploadedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
+  // Cropping state
+  const [isCropModalOpen, setIsCropModalOpen] = useState(false);
+  const [imgSrc, setImgSrc] = useState('');
+  const [crop, setCrop] = useState<CropType>();
+  const [aspect, setAspect] = useState<number | undefined>(16 / 9);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const [croppedImageUrl, setCroppedImageUrl] = useState('');
 
   const { toast } = useToast();
   
@@ -33,46 +74,48 @@ export default function ImageUploader() {
     if (e.target.files && e.target.files.length > 0) {
       if (!target) {
         toast({ variant: 'destructive', title: 'Please select a target section first.' });
-        e.target.value = ''; // Reset file input
+        e.target.value = ''; 
         return;
       }
-      setSelectedFile(e.target.files[0]);
+      
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.addEventListener('load', () => setImgSrc(reader.result?.toString() || ''));
+      reader.readAsDataURL(file);
+      setIsCropModalOpen(true);
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (croppedDataUrl: string) => {
     if (!target) {
       toast({ variant: 'destructive', title: 'No target selected.' });
-      return;
-    }
-    if (!selectedFile) {
-      toast({ variant: 'destructive', title: 'No file selected.' });
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const dataUrl = await fileToDataUrl(selectedFile);
-      setLastUploadedImage(dataUrl);
+      setLastUploadedImage(croppedDataUrl);
 
-      if (target === 'hero') {
-          updateHeroContent({...portfolioData.hero, image: dataUrl});
-      } else if (target === 'about') {
-          updateAboutContent({...portfolioData.about, image: dataUrl});
-      } else if (target === 'contact') {
-          updateContactContent({...portfolioData.contact, image: dataUrl});
+      if (target === 'hero' || target === 'about' || target === 'contact') {
+          const content = portfolioData[target];
+          const updateFunction = {
+              'hero': updateHeroContent,
+              'about': updateAboutContent,
+              'contact': updateContactContent,
+          }[target];
+          updateFunction({...content, image: croppedDataUrl});
       } else if (target.startsWith('project-')) {
           const projectId = target.replace('project-', '');
           const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
           if (projectToUpdate) {
-              updateProject({ ...projectToUpdate, image: dataUrl });
+              updateProject({ ...projectToUpdate, image: croppedDataUrl });
           }
       }
 
       toast({
         title: 'Image Updated!',
-        description: `The image has been saved for the selected section.`,
+        description: `The cropped image has been saved.`,
       });
 
     } catch(err) {
@@ -83,10 +126,46 @@ export default function ImageUploader() {
         });
     } finally {
         setIsLoading(false);
-        setSelectedFile(null);
+        setIsCropModalOpen(false);
     }
   };
 
+  const handleTargetChange = (value: string) => {
+    setTarget(value);
+    if (value === 'hero' || value === 'about') {
+        setAspect(1 / 1); // Square for profile pics
+    } else {
+        setAspect(16 / 9); // Widescreen for projects/contact
+    }
+  };
+  
+  const handleCropComplete = async (c: CropType) => {
+    if (imgRef.current && c.width && c.height) {
+        const croppedDataUrl = await getCroppedImg(imgRef.current, c, 'cropped.jpg');
+        setCroppedImageUrl(croppedDataUrl);
+    }
+  };
+
+  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    imgRef.current = e.currentTarget;
+    const { width, height } = e.currentTarget;
+    const newCrop = centerCrop(
+      makeAspectCrop(
+        {
+          unit: '%',
+          width: 90,
+        },
+        aspect || 16/9,
+        width,
+        height
+      ),
+      width,
+      height
+    );
+    setCrop(newCrop);
+    handleCropComplete(newCrop);
+  };
+  
   const handleRemoveImage = () => {
     if (!target) {
         toast({ variant: 'destructive', title: 'Please select a target section first.'});
@@ -95,12 +174,14 @@ export default function ImageUploader() {
     
     const placeholderUrl = 'https://placehold.co/600x400.png';
 
-    if (target === 'hero') {
-        updateHeroContent({...portfolioData.hero, image: placeholderUrl});
-    } else if (target === 'about') {
-        updateAboutContent({...portfolioData.about, image: placeholderUrl});
-    } else if (target === 'contact') {
-        updateContactContent({...portfolioData.contact, image: placeholderUrl});
+    if (target === 'hero' || target === 'about' || target === 'contact') {
+          const content = portfolioData[target];
+          const updateFunction = {
+              'hero': updateHeroContent,
+              'about': updateAboutContent,
+              'contact': updateContactContent,
+          }[target];
+          updateFunction({...content, image: placeholderUrl});
     } else if (target.startsWith('project-')) {
         const projectId = target.replace('project-', '');
         const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
@@ -116,28 +197,29 @@ export default function ImageUploader() {
   }
   
   return (
+    <>
     <Card>
       <CardHeader>
         <CardTitle>Portfolio Image Manager</CardTitle>
-        <CardDescription>Upload a new image or remove an existing one from a section of your portfolio.</CardDescription>
+        <CardDescription>Upload, crop, and assign images to different sections of your portfolio.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className='grid grid-cols-1 gap-6'>
             <div className='space-y-2'>
                 <label className="text-sm font-medium">1. Select Target Section</label>
-                <Select onValueChange={setTarget} value={target}>
+                <Select onValueChange={handleTargetChange} value={target}>
                 <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select where to use this image..." />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
                         <SelectLabel>Main Sections</SelectLabel>
-                        <SelectItem value="hero">Hero Profile Image</SelectItem>
-                        <SelectItem value="about">About Section Image</SelectItem>
-                        <SelectItem value="contact">Contact Section Image</SelectItem>
+                        <SelectItem value="hero">Hero Profile Image (1:1)</SelectItem>
+                        <SelectItem value="about">About Section Image (1:1)</SelectItem>
+                        <SelectItem value="contact">Contact Section Image (16:9)</SelectItem>
                     </SelectGroup>
                     <SelectGroup>
-                        <SelectLabel>Projects</SelectLabel>
+                        <SelectLabel>Projects (16:9)</SelectLabel>
                         {portfolioData.projects.map(project => (
                             <SelectItem key={project.id} value={`project-${project.id}`}>{project.title}</SelectItem>
                         ))}
@@ -155,24 +237,10 @@ export default function ImageUploader() {
                         accept="image/*" 
                         onChange={handleFileChange}
                         disabled={!target || isLoading}
+                        value=""
                     />
                 </div>
-                {selectedFile && <p className="text-sm text-muted-foreground mt-2">Selected: {selectedFile.name}</p>}
             </div>
-
-            <Button onClick={handleSave} disabled={isLoading || !selectedFile} className="w-full">
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Upload className="mr-2 h-4 w-4" />
-                  Save Image
-                </>
-              )}
-            </Button>
           </div>
 
         <div className="mt-6">
@@ -207,5 +275,48 @@ export default function ImageUploader() {
         )}
       </CardContent>
     </Card>
+
+    <Dialog open={isCropModalOpen} onOpenChange={setIsCropModalOpen}>
+        <DialogContent className="max-w-4xl">
+            <DialogHeader>
+                <DialogTitle>Crop Image</DialogTitle>
+                <p className="text-sm text-muted-foreground">Adjust the selection to crop the image. Aspect ratio is locked to {aspect === 1 ? '1:1' : '16:9'}.</p>
+            </DialogHeader>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-h-[70vh] overflow-y-auto">
+                <div className="md:col-span-2">
+                    {imgSrc && (
+                        <ReactCrop
+                            crop={crop}
+                            onChange={c => setCrop(c)}
+                            onComplete={handleCropComplete}
+                            aspect={aspect}
+                            minWidth={100}
+                            minHeight={100}
+                        >
+                            <img ref={imgRef} alt="Crop me" src={imgSrc} onLoad={onImageLoad} className="w-full" />
+                        </ReactCrop>
+                    )}
+                </div>
+                <div>
+                    <h3 className="text-lg font-semibold mb-2">Preview</h3>
+                    {croppedImageUrl && (
+                        <div className="overflow-hidden rounded-md border">
+                            <Image src={croppedImageUrl} alt="Cropped Preview" width={400} height={400 * (aspect === 1 ? 1 : 9/16)} className="w-full object-contain" />
+                        </div>
+                    )}
+                </div>
+            </div>
+            <DialogFooter>
+                 <DialogClose asChild>
+                    <Button type="button" variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button onClick={() => handleSave(croppedImageUrl)} disabled={isLoading || !croppedImageUrl}>
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Crop className="mr-2 h-4 w-4" />}
+                    Save Cropped Image
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
+    </>
   );
 }
