@@ -96,13 +96,6 @@ function ColorForm() {
   });
 
   useEffect(() => {
-    const subscription = form.watch((value) => {
-        updateColorTheme(value as z.infer<typeof colorsSchema>);
-    });
-    return () => subscription.unsubscribe();
-  }, [form.watch, updateColorTheme]);
-
-  useEffect(() => {
     form.reset(portfolioData.theme.colors);
   }, [portfolioData.theme.colors, form]);
 
@@ -130,6 +123,7 @@ function ColorForm() {
         form.setValue('foreground', palette.foreground, { shouldDirty: true });
         form.setValue('primary', palette.primary, { shouldDirty: true });
         form.setValue('accent', palette.accent, { shouldDirty: true });
+        updateColorTheme(form.getValues());
         toast({
             title: 'Palette Generated!',
             description: `A new color palette for "${aiTheme}" has been applied.`,
@@ -183,13 +177,20 @@ function ColorForm() {
                                         type="color" 
                                         className="w-12 h-10 p-1"
                                         value={hslToHex(hslStringToObj(field.value))}
-                                        onChange={(e) => field.onChange(objToHslString(hexToHsl(e.target.value)))}
+                                        onChange={(e) => {
+                                            const newHsl = objToHslString(hexToHsl(e.target.value));
+                                            field.onChange(newHsl);
+                                            updateColorTheme({...form.getValues(), [name]: newHsl });
+                                        }}
                                     />
                                 </FormControl>
                                 <Input 
                                     className="font-mono text-sm"
                                     value={field.value}
-                                    onChange={field.onChange}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value);
+                                        updateColorTheme({...form.getValues(), [name]: e.target.value });
+                                    }}
                                 />
                             </div>
                             <FormMessage />

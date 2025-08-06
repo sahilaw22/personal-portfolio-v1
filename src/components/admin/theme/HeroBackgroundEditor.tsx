@@ -24,6 +24,20 @@ const formSchema = z.object({
   toOpacity: z.number().min(0).max(1),
 });
 
+const hexToRgba = (hex: string, opacity: number) => {
+    let c: any;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+        c= hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+opacity+')';
+    }
+    // Fallback for invalid hex
+    return `rgba(255, 255, 255, ${opacity})`;
+}
+
 const GlowPreview = ({ background }: { background: HeroBackground }) => {
     const fromColorWithOpacity = hexToRgba(background.from, background.fromOpacity);
     const toColorWithOpacity = hexToRgba(background.to, background.toOpacity);
@@ -47,20 +61,6 @@ const GlowPreview = ({ background }: { background: HeroBackground }) => {
       </div>
     );
 };
-
-const hexToRgba = (hex: string, opacity: number) => {
-    let c: any;
-    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
-        c= hex.substring(1).split('');
-        if(c.length== 3){
-            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-        }
-        c= '0x'+c.join('');
-        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+opacity+')';
-    }
-    // Fallback for invalid hex
-    return `rgba(255, 255, 255, ${opacity})`;
-}
 
 
 export default function HeroBackgroundEditor() {
