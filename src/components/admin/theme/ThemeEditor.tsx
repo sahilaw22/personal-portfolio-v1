@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
@@ -137,7 +137,7 @@ export default function ThemeEditor() {
                     {isLoading ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
                 </Button>
             </div>
-            <FormDescription>Describe a theme and let AI generate a palette for you.</FormDescription>
+            <p className="text-sm text-muted-foreground">Describe a theme and let AI generate a palette for you.</p>
         </div>
 
         <Form {...form}>
