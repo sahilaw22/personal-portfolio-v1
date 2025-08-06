@@ -21,6 +21,11 @@ export default {
         headline: ['"Poppins"', 'sans-serif'],
         slab: ['"Roboto Slab"', 'serif'],
         serif: ['"Playfair Display"', 'serif'],
+        inter: ['"Inter"', 'sans-serif'],
+        lexend: ['"Lexend"', 'sans-serif'],
+        'source-code-pro': ['"Source Code Pro"', 'monospace'],
+        'jetbrains-mono': ['"JetBrains Mono"', 'monospace'],
+        'ibm-plex-mono': ['"IBM Plex Mono"', 'monospace'],
         code: ['monospace'],
       },
       colors: {

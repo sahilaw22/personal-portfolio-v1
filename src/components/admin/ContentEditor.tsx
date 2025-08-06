@@ -14,10 +14,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { cn } from '@/lib/utils';
 
 const fontOptions = [
-    { label: 'Poppins (Headline)', value: 'font-headline' },
-    { label: 'Space Grotesk (Body)', value: 'font-body' },
-    { label: 'Roboto Slab', value: 'font-slab' },
-    { label: 'Playfair Display', value: 'font-serif' },
+    { label: 'Poppins (Stylish)', value: 'font-headline' },
+    { label: 'Space Grotesk (Techy)', value: 'font-body' },
+    { label: 'Roboto Slab (Modern Serif)', value: 'font-slab' },
+    { label: 'Playfair Display (Elegant Serif)', value: 'font-serif' },
+    { label: 'Inter (Clean Sans-Serif)', value: 'font-inter' },
+    { label: 'Lexend (Readable Sans-Serif)', value: 'font-lexend' },
+    { label: 'JetBrains Mono (Developer Mono)', value: 'font-jetbrains-mono' },
+    { label: 'Source Code Pro (Coding Mono)', value: 'font-source-code-pro' },
+    { label: 'IBM Plex Mono (IBM Mono)', value: 'font-ibm-plex-mono' },
 ];
 
 const formSchema = z.object({
@@ -95,7 +100,7 @@ export default function ContentEditor() {
                         <SelectContent>
                             {fontOptions.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
+                                    <span className={cn(option.value)}>{option.label}</span>
                                 </SelectItem>
                             ))}
                         </SelectContent>
