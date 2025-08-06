@@ -32,7 +32,6 @@ export const initialData: PortfolioData = {
     resumeUrl: '/resume.pdf'
   },
   settings: {
-    autoSave: true,
     adminPassword: 'IamNerd',
     themeMode: 'dark',
   },

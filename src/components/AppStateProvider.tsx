@@ -174,11 +174,13 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     return false;
   };
   
-  useEffect(() => {
-    if (isHydrated && portfolioData.settings.autoSave) {
-        saveData(portfolioData);
-    }
-  }, [portfolioData, isHydrated]);
+  const updateAndSave = (updater: (prev: PortfolioData) => PortfolioData) => {
+    setPortfolioData(prev => {
+        const newData = updater(prev);
+        saveData(newData);
+        return newData;
+    });
+  };
 
   useEffect(() => {
     if (sessionStorage.getItem('isAdminAuthenticated') === 'true') {
@@ -209,7 +211,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   };
 
   const handleAddSubmission = (submission: Omit<ContactSubmission, 'submittedAt'>) => {
-     setPortfolioData(prev => ({
+     updateAndSave(prev => ({
       ...prev,
       contactSubmissions: [...(prev.contactSubmissions || []), { ...submission, submittedAt: new Date(), isRead: false }]
     }));
@@ -220,23 +222,23 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   };
   
   const updateHeroContent = (hero: HeroContent) => {
-    setPortfolioData(prev => ({ ...prev, hero }));
+    updateAndSave(prev => ({ ...prev, hero }));
   }
 
   const updateAboutContent = (about: AboutContent) => {
-    setPortfolioData(prev => ({ ...prev, about }));
+    updateAndSave(prev => ({ ...prev, about }));
   };
 
   const updateContactContent = (contact: ContactContent) => {
-    setPortfolioData(prev => ({ ...prev, contact }));
+    updateAndSave(prev => ({ ...prev, contact }));
   }
 
   const updateThemeSettings = (theme: ThemeSettings) => {
-    setPortfolioData(prev => ({...prev, theme}));
+    updateAndSave(prev => ({...prev, theme}));
   };
   
   const updateColorTheme = (colors: ColorTheme) => {
-    setPortfolioData(prev => ({
+    updateAndSave(prev => ({
       ...prev,
       theme: {
         ...prev.theme,
@@ -246,7 +248,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   };
   
   const updateHeroBackground = (heroBackground: HeroBackground) => {
-      setPortfolioData(prev => ({
+      updateAndSave(prev => ({
           ...prev,
           theme: {
               ...prev.theme,
@@ -256,30 +258,30 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   }
 
   const updateAllExperience = (experience: Experience[]) => {
-    setPortfolioData(prev => ({...prev, experience }));
+    updateAndSave(prev => ({...prev, experience }));
   };
 
   const updateAllEducation = (education: Education[]) => {
-    setPortfolioData(prev => ({...prev, education }));
+    updateAndSave(prev => ({...prev, education }));
   };
   
   const updateAllProjects = (projects: Project[]) => {
-    setPortfolioData(prev => ({...prev, projects }));
+    updateAndSave(prev => ({...prev, projects }));
   };
 
   const updateProject = (updatedProject: Project) => {
-    setPortfolioData(prev => ({
+    updateAndSave(prev => ({
       ...prev,
       projects: prev.projects.map(p => p.id === updatedProject.id ? updatedProject : p)
     }));
   };
   
   const updateSkills = (skills: SkillCategory[]) => {
-    setPortfolioData(prev => ({ ...prev, skills }));
+    updateAndSave(prev => ({ ...prev, skills }));
   };
 
   const updateAppSettings = (settings: Partial<AppSettings>) => {
-    setPortfolioData(prev => ({
+    updateAndSave(prev => ({
         ...prev,
         settings: {
             ...prev.settings,
@@ -289,7 +291,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   };
 
   const changeAdminPassword = (password: string) => {
-    setPortfolioData(prev => ({
+    updateAndSave(prev => ({
         ...prev,
         settings: {
             ...prev.settings,
@@ -299,7 +301,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   }
 
   const markAllMessagesAsRead = () => {
-    setPortfolioData(prev => ({
+    updateAndSave(prev => ({
       ...prev,
       contactSubmissions: prev.contactSubmissions?.map(s => ({ ...s, isRead: true })) || [],
     }));

@@ -85,7 +85,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAdminAuthenticated, logout, portfolioData } = useAppState();
+  const { isAdminAuthenticated, logout } = useAppState();
 
   if (!isAdminAuthenticated) {
     return <>{children}</>;
@@ -100,7 +100,7 @@ export default function AdminLayout({
               <NavContent />
             </ScrollArea>
             <div className="mt-auto p-4 border-t">
-              <Button disabled={!portfolioData.settings.autoSave} variant="outline" size="sm" asChild className="w-full mb-2">
+              <Button variant="outline" size="sm" asChild className="w-full mb-2">
                 <Link href="/">View Portfolio</Link>
               </Button>
               <Button variant="ghost" size="sm" onClick={logout} className="w-full">
@@ -131,7 +131,7 @@ export default function AdminLayout({
                     <NavContent />
                   </ScrollArea>
                 <div className="mt-auto p-4 border-t">
-                   <Button disabled={!portfolioData.settings.autoSave} variant="outline" size="sm" asChild className="w-full mb-2">
+                   <Button variant="outline" size="sm" asChild className="w-full mb-2">
                      <Link href="/">View Portfolio</Link>
                   </Button>
                   <Button variant="ghost" size="sm" onClick={logout} className="w-full">

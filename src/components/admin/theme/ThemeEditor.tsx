@@ -14,7 +14,6 @@ import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { ColorInput } from '@/components/ui/color-input';
 
 const colorsSchema = z.object({
@@ -29,51 +28,6 @@ const themeSettingsSchema = z.object({
     backgroundImageOpacity: z.number().min(0).max(1).optional(),
     backgroundImageBlur: z.number().min(0).max(50).optional(),
 });
-
-type HSLColor = { h: number, s: number, l: number };
-
-function hslStringToObj(hslStr: string): HSLColor {
-  const [h, s, l] = hslStr.replace(/%/g, '').split(' ').map(parseFloat);
-  return { h, s, l };
-}
-
-function objToHslString(hslObj: HSLColor): string {
-  return `${hslObj.h} ${hslObj.s}% ${hslObj.l}%`;
-}
-
-function hexToHsl(hex: string): HSLColor {
-  hex = hex.replace(/^#/, '');
-  const r = parseInt(hex.substring(0, 2), 16) / 255;
-  const g = parseInt(hex.substring(2, 4), 16) / 255;
-  const b = parseInt(hex.substring(4, 6), 16) / 255;
-  
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h = 0, s = 0, l = (max + min) / 2;
-
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
-  }
-  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
-}
-
-function hslToHex({ h, s, l }: HSLColor): string {
-    s /= 100;
-    l /= 100;
-    const k = (n: number) => (n + h / 30) % 12;
-    const a = s * Math.min(l, 1 - l);
-    const f = (n: number) =>
-      l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
-    return `#${[0, 8, 4].map(n => 
-        Math.round(f(n) * 255).toString(16).padStart(2, '0')).join('')}`;
-}
 
 const fileToDataUrl = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -97,7 +51,7 @@ function ColorForm() {
 
   useEffect(() => {
     form.reset(portfolioData.theme.colors);
-  }, [portfolioData.theme.colors]);
+  }, [portfolioData.theme.colors, form]);
 
   function onSubmit(values: z.infer<typeof colorsSchema>) {
     updateColorTheme(values);
@@ -206,7 +160,7 @@ function BackgroundForm() {
             backgroundImageOpacity: portfolioData.theme.backgroundImageOpacity || 0.1,
             backgroundImageBlur: portfolioData.theme.backgroundImageBlur || 5,
         });
-    }, [portfolioData.theme]);
+    }, [portfolioData.theme, form]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -308,82 +262,18 @@ function BackgroundForm() {
     )
 }
 
-const backgroundPatterns = [
-    { name: 'None', url: '' },
-    { name: 'Subtle Prisms', url: '/patterns/subtle-prisms.svg' },
-    { name: 'Circuit Board', url: '/patterns/circuit-board.svg' },
-    { name: 'Hexagons', url: '/patterns/hexagons.svg' },
-    { name: 'Polka Dots', url: '/patterns/polka-dots.svg' },
-    { name: 'Tic Tac Toe', url: '/patterns/tic-tac-toe.svg' },
-    { name: 'Wiggle', url: '/patterns/wiggle.svg' },
-];
-
-function PatternForm() {
-    const { portfolioData, updateThemeSettings } = useAppState();
-    const { toast } = useToast();
-    const [selectedPattern, setSelectedPattern] = useState(portfolioData.theme.backgroundImage || '');
-
-    const handleSelectPattern = (url: string) => {
-        setSelectedPattern(url);
-    };
-    
-    function onSave() {
-        updateThemeSettings({
-            ...portfolioData.theme,
-            backgroundImage: selectedPattern,
-        });
-        toast({
-            title: 'Pattern Saved!',
-            description: 'Your new background pattern has been saved.',
-        });
-    }
-
-    return (
-        <div className="space-y-4">
-             <p className="text-sm text-muted-foreground">
-                Select a pattern to apply as your portfolio's background. These are optimized for dark themes.
-            </p>
-            <ScrollArea className="h-96">
-            <div className="grid grid-cols-2 gap-4">
-                {backgroundPatterns.map(pattern => (
-                    <div 
-                        key={pattern.name} 
-                        className="border rounded-lg p-2 cursor-pointer transition-all hover:border-primary"
-                        onClick={() => handleSelectPattern(pattern.url)}
-                        data-active={selectedPattern === pattern.url}
-                    >
-                        <div 
-                            className="h-24 rounded-md bg-card flex items-center justify-center"
-                            style={{ backgroundImage: pattern.url ? `url(${pattern.url})` : 'none' }}
-                        >
-                           {!pattern.url && <span className="text-muted-foreground text-sm">Solid Color</span>}
-                        </div>
-                        <p className="text-sm font-medium text-center mt-2">{pattern.name}</p>
-                    </div>
-                ))}
-            </div>
-            </ScrollArea>
-             <Button onClick={onSave} className="w-full mt-4">Save Pattern</Button>
-        </div>
-    )
-}
-
 export default function ThemeEditor() {
   return (
     <Tabs defaultValue="colors" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="colors">Color Palette</TabsTrigger>
             <TabsTrigger value="background">Image</TabsTrigger>
-            <TabsTrigger value="patterns">Patterns</TabsTrigger>
         </TabsList>
         <TabsContent value="colors" className="pt-6">
             <ColorForm />
         </TabsContent>
         <TabsContent value="background" className="pt-6">
             <BackgroundForm />
-        </TabsContent>
-        <TabsContent value="patterns" className="pt-6">
-            <PatternForm />
         </TabsContent>
     </Tabs>
   );

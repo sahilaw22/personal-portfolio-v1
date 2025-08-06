@@ -104,7 +104,6 @@ export type Project = {
 };
 
 export type AppSettings = {
-    autoSave: boolean;
     adminPassword: string;
     themeMode: 'light' | 'dark';
 }
@@ -121,3 +120,4 @@ export type PortfolioData = {
   projects: Project[];
   contactSubmissions?: ContactSubmission[];
 };
+

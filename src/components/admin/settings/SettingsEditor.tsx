@@ -12,7 +12,6 @@ import { Switch } from '../../ui/switch';
 import { useEffect } from 'react';
 
 const formSchema = z.object({
-  autoSave: z.boolean(),
   themeMode: z.enum(['light', 'dark']),
 });
 
@@ -25,8 +24,6 @@ export default function SettingsEditor() {
     defaultValues: portfolioData.settings,
   });
   
-  const autoSaveValue = form.watch('autoSave');
-
   useEffect(() => {
     form.reset(portfolioData.settings);
   }, [portfolioData.settings, form.reset]);
@@ -69,34 +66,6 @@ export default function SettingsEditor() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="autoSave"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
-                      Auto-Save
-                    </FormLabel>
-                    <FormDescription>
-                        Automatically save changes as you make them across the admin panel.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-             {!autoSaveValue && (
-                <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive">
-                    <h4 className="font-semibold">Auto-save is disabled.</h4>
-                    <p className="text-sm">You must manually save your changes on each editor page. Don't forget to click "Save All Changes" to prevent losing your work.</p>
-                </div>
-            )}
           </form>
         </Form>
       </CardContent>
