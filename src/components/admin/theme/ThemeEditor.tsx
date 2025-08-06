@@ -331,25 +331,17 @@ function BackgroundForm() {
 
 export default function ThemeEditor() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Theme Customizer</CardTitle>
-        <CardDescription>Customize the colors and background of your portfolio. Changes are reflected live.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="colors" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="colors">Color Palette</TabsTrigger>
-                <TabsTrigger value="background">Background Image</TabsTrigger>
-            </TabsList>
-            <TabsContent value="colors" className="pt-6">
-                <ColorForm />
-            </TabsContent>
-            <TabsContent value="background" className="pt-6">
-                <BackgroundForm />
-            </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+    <Tabs defaultValue="colors" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="colors">Color Palette</TabsTrigger>
+            <TabsTrigger value="background">Background Image</TabsTrigger>
+        </TabsList>
+        <TabsContent value="colors" className="pt-6">
+            <ColorForm />
+        </TabsContent>
+        <TabsContent value="background" className="pt-6">
+            <BackgroundForm />
+        </TabsContent>
+    </Tabs>
   );
 }

@@ -37,9 +37,9 @@ const GlowPreview = ({ background }: { background: HeroBackground }) => {
     }
   
     return (
-      <div className="relative w-full aspect-square flex items-center justify-center rounded-lg bg-card overflow-hidden">
+      <div className="relative w-full aspect-video flex items-center justify-center rounded-lg bg-card overflow-hidden">
         <div 
-          className="w-full h-full rounded-full blur-2xl"
+          className="w-full h-full blur-2xl"
           style={glowStyle}
         />
         <p className="absolute text-center text-sm text-muted-foreground p-4">
@@ -99,90 +99,85 @@ export default function HeroBackgroundEditor() {
   }
 
   return (
-    <Card>
-    <CardHeader>
-        <CardTitle>Hero Background Editor</CardTitle>
-        <CardDescription>Customize the background glow of your profile picture. Changes are reflected live.</CardDescription>
-    </CardHeader>
-    <CardContent>
-        <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-                <FormItem className="space-y-3">
-                <FormLabel>Background Type</FormLabel>
-                <FormControl>
-                    <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex space-x-4"
-                    >
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                        <FormControl><RadioGroupItem value="solid" /></FormControl>
-                        <FormLabel className="font-normal">Solid</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                        <FormControl><RadioGroupItem value="gradient" /></FormControl>
-                        <FormLabel className="font-normal">Gradient</FormLabel>
-                    </FormItem>
-                    </RadioGroup>
-                </FormControl>
-                <FormMessage />
+    <>
+    <GlowPreview background={watchFields as HeroBackground} />
+    <Form {...form}>
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-6">
+        <FormField
+        control={form.control}
+        name="type"
+        render={({ field }) => (
+            <FormItem className="space-y-3">
+            <FormLabel>Background Type</FormLabel>
+            <FormControl>
+                <RadioGroup
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                className="flex space-x-4"
+                >
+                <FormItem className="flex items-center space-x-2 space-y-0">
+                    <FormControl><RadioGroupItem value="solid" /></FormControl>
+                    <FormLabel className="font-normal">Solid</FormLabel>
                 </FormItem>
-            )}
-            />
-            
-            <div className="space-y-4">
-                <FormField control={form.control} name="from" render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>{watchFields.type === 'gradient' ? 'Gradient Color 1' : 'Color'}</FormLabel>
-                        <FormControl><Input type="color" {...field} /></FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )} />
-                 <FormField control={form.control} name="fromSize" render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Size / Density ({field.value}%)</FormLabel>
-                        <FormControl><Slider min={10} max={100} step={1} defaultValue={[field.value]} onValueChange={(vals) => field.onChange(vals[0])} /></FormControl>
-                    </FormItem>
-                )} />
-                 <FormField control={form.control} name="fromOpacity" render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Opacity ({Math.round(field.value * 100)}%)</FormLabel>
-                        <FormControl><Slider min={0} max={1} step={0.1} defaultValue={[field.value]} onValueChange={(vals) => field.onChange(vals[0])} /></FormControl>
-                    </FormItem>
-                 )} />
-            </div>
-            
+                <FormItem className="flex items-center space-x-2 space-y-0">
+                    <FormControl><RadioGroupItem value="gradient" /></FormControl>
+                    <FormLabel className="font-normal">Gradient</FormLabel>
+                </FormItem>
+                </RadioGroup>
+            </FormControl>
+            <FormMessage />
+            </FormItem>
+        )}
+        />
+        
+        <div className="space-y-4">
+            <FormField control={form.control} name="from" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>{watchFields.type === 'gradient' ? 'Gradient Color 1' : 'Color'}</FormLabel>
+                    <FormControl><Input type="color" {...field} /></FormControl>
+                    <FormMessage />
+                </FormItem>
+            )} />
+             <FormField control={form.control} name="fromSize" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Size / Density ({field.value}%)</FormLabel>
+                    <FormControl><Slider min={10} max={100} step={1} defaultValue={[field.value]} onValueChange={(vals) => field.onChange(vals[0])} /></FormControl>
+                </FormItem>
+            )} />
+             <FormField control={form.control} name="fromOpacity" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Opacity ({Math.round(field.value * 100)}%)</FormLabel>
+                    <FormControl><Slider min={0} max={1} step={0.1} defaultValue={[field.value]} onValueChange={(vals) => field.onChange(vals[0])} /></FormControl>
+                </FormItem>
+             )} />
+        </div>
+        
 
-            <div className={cn("space-y-4", watchFields.type !== 'gradient' && "hidden")}>
-                 <FormField control={form.control} name="to" render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Gradient Color 2</FormLabel>
-                        <FormControl><Input type="color" {...field} /></FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )} />
-                 <FormField control={form.control} name="toSize" render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Size / Density ({field.value}%)</FormLabel>
-                        <FormControl><Slider min={10} max={100} step={1} defaultValue={[field.value]} onValueChange={(vals) => field.onChange(vals[0])} /></FormControl>
-                    </FormItem>
-                )} />
-                <FormField control={form.control} name="toOpacity" render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Opacity ({Math.round(field.value * 100)}%)</FormLabel>
-                        <FormControl><Slider min={0} max={1} step={0.1} defaultValue={[field.value]} onValueChange={(vals) => field.onChange(vals[0])} /></FormControl>
-                    </FormItem>
-                 )} />
-            </div>
+        <div className={cn("space-y-4", watchFields.type !== 'gradient' && "hidden")}>
+             <FormField control={form.control} name="to" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Gradient Color 2</FormLabel>
+                    <FormControl><Input type="color" {...field} /></FormControl>
+                    <FormMessage />
+                </FormItem>
+            )} />
+             <FormField control={form.control} name="toSize" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Size / Density ({field.value}%)</FormLabel>
+                    <FormControl><Slider min={10} max={100} step={1} defaultValue={[field.value]} onValueChange={(vals) => field.onChange(vals[0])} /></FormControl>
+                </FormItem>
+            )} />
+            <FormField control={form.control} name="toOpacity" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Opacity ({Math.round(field.value * 100)}%)</FormLabel>
+                    <FormControl><Slider min={0} max={1} step={0.1} defaultValue={[field.value]} onValueChange={(vals) => field.onChange(vals[0])} /></FormControl>
+                </FormItem>
+             )} />
+        </div>
 
-            <Button type="submit" className="w-full">Save Changes</Button>
-        </form>
-        </Form>
-    </CardContent>
-    </Card>
+        <Button type="submit" className="w-full">Save Changes</Button>
+    </form>
+    </Form>
+    </>
   );
 }
