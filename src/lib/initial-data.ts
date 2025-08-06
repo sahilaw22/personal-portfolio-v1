@@ -13,15 +13,22 @@ export const initialData: PortfolioData = {
   theme: {
     heroBackground: {
       type: 'gradient',
-      from: '#ff0000',
-      to: '#00ff00'
+      from: '#6CFFD9',
+      to: '#D48CFF',
+      fromSize: 40,
+      toSize: 30,
+      fromOpacity: 0.5,
+      toOpacity: 0.5,
     },
     colors: {
-      background: '222 84% 5%',
-      foreground: '210 40% 98%',
-      primary: '3 98% 66%',
-      accent: '24 95% 58%',
-    }
+      background: '224 71.4% 4.1%',
+      foreground: '210 20% 98%',
+      primary: '166 100% 71%',
+      accent: '276 100% 77%',
+    },
+    backgroundImage: '',
+    backgroundImageOpacity: 0.05,
+    backgroundImageBlur: 10,
   },
   about: {
     bio: "As a dedicated Computer Science student, I've embarked on a journey from theoretical concepts to tangible creations. My passion lies in transforming complex problems into elegant software solutions. I thrive on learning new technologies and applying my skills to build meaningful and impactful projects.",

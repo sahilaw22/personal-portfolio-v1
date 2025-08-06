@@ -20,6 +20,10 @@ export type HeroBackground = {
   type: 'solid' | 'gradient';
   from: string;
   to: string;
+  fromSize: number;
+  toSize: number;
+  fromOpacity: number;
+  toOpacity: number;
 };
 
 export type ColorTheme = {
@@ -32,6 +36,9 @@ export type ColorTheme = {
 export type ThemeSettings = {
   heroBackground: HeroBackground;
   colors: ColorTheme;
+  backgroundImage?: string;
+  backgroundImageOpacity?: number;
+  backgroundImageBlur?: number;
 }
 
 export type Service = {

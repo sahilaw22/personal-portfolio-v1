@@ -22,13 +22,13 @@ interface AppState {
   updateAllEducation: (educationItems: Education[]) => void;
   updateAllProjects: (projects: Project[]) => void;
   updateProject: (project: Project) => void;
-  updateSkills: (skills: SkillCategory[]) => void;
+  updateSkills: (skillCategories: SkillCategory[]) => void;
 }
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
 const UNLOCK_PASSWORD = 'IamNerd';
-const DATA_VERSION = 'v7'; // Increment this to force a reset
+const DATA_VERSION = 'v8'; // Increment this to force a reset
 
 export function AppStateSync() {
   const { portfolioData } = useAppState();
@@ -36,13 +36,16 @@ export function AppStateSync() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const root = document.documentElement;
-      const colors = portfolioData.theme.colors;
+      const theme = portfolioData.theme;
+
+      // Set colors
+      const colors = theme.colors;
       root.style.setProperty('--background', colors.background);
       root.style.setProperty('--foreground', colors.foreground);
       root.style.setProperty('--primary', colors.primary);
       root.style.setProperty('--accent', colors.accent);
 
-      // Also update card, border, input, muted as shades of background/foreground
+      // Set derived colors
       const bgHsl = colors.background.split(' ').map(s => parseFloat(s.replace('%','')));
       const fgHsl = colors.foreground.split(' ').map(s => parseFloat(s.replace('%','')));
       
@@ -61,8 +64,22 @@ export function AppStateSync() {
         root.style.setProperty('--accent-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
         root.style.setProperty('--destructive-foreground', `${fgHsl[0]} ${fgHsl[1]}% ${fgHsl[2]}%`);
       }
+
+      // Set body background image
+      const body = document.body;
+      if (theme.backgroundImage) {
+        body.style.setProperty('--background-image', `url(${theme.backgroundImage})`);
+        body.style.setProperty('--background-image-opacity', String(theme.backgroundImageOpacity || 0.1));
+        body.style.setProperty('--background-image-blur', `${theme.backgroundImageBlur || 5}px`);
+        body.classList.add('with-background-image');
+      } else {
+        body.style.removeProperty('--background-image');
+        body.style.removeProperty('--background-image-opacity');
+        body.style.removeProperty('--background-image-blur');
+        body.classList.remove('with-background-image');
+      }
     }
-  }, [portfolioData.theme.colors]);
+  }, [portfolioData.theme]);
 
   return null;
 }
@@ -87,7 +104,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
             const item = window.localStorage.getItem('portfolioData');
             if (item) {
                 const parsedData = JSON.parse(item);
-                // Merge initialData with parsedData to ensure new fields are present
+                // Deep merge to ensure all new fields from initialData are present
                 const mergedData = { 
                     ...initialData, 
                     ...parsedData, 
@@ -97,6 +114,10 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
                         colors: {
                             ...initialData.theme.colors,
                             ...(parsedData.theme?.colors || {})
+                        },
+                        heroBackground: {
+                           ...initialData.theme.heroBackground,
+                           ...(parsedData.theme?.heroBackground || {})
                         }
                     } 
                 };

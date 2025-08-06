@@ -9,18 +9,35 @@ import type { HeroContent, HeroBackground } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { Badge } from '../ui/badge';
 
+const hexToRgba = (hex: string, opacity: number) => {
+    let c: any;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+        c= hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+opacity+')';
+    }
+    // Fallback for invalid hex
+    return `rgba(255, 255, 255, ${opacity})`;
+}
+
 const GlowBackground = ({ background }: { background: HeroBackground }) => {
+  const fromColorWithOpacity = hexToRgba(background.from, background.fromOpacity);
+  const toColorWithOpacity = hexToRgba(background.to, background.toOpacity);
+
   const glowStyle: React.CSSProperties = {};
   if (background.type === 'solid') {
-    glowStyle.background = background.from;
+    glowStyle.background = fromColorWithOpacity;
   } else {
-    glowStyle.background = `radial-gradient(ellipse 40% 40% at 50% 50%, ${background.from}, transparent 70%), radial-gradient(ellipse 30% 30% at 40% 60%, ${background.to}, transparent 70%)`;
+     glowStyle.background = `radial-gradient(ellipse ${background.fromSize}% ${background.fromSize}% at 50% 50%, ${fromColorWithOpacity}, transparent 70%), radial-gradient(ellipse ${background.toSize}% ${background.toSize}% at 40% 60%, ${toColorWithOpacity}, transparent 70%)`;
   }
 
   return (
     <div className="absolute inset-0 flex items-center justify-center -z-10">
       <div 
-        className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] rounded-full blur-3xl opacity-30" 
+        className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] rounded-full blur-3xl" 
         style={glowStyle}
       />
     </div>
