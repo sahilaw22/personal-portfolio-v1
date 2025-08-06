@@ -136,7 +136,7 @@ export default function HeroSection({ content, background }: { content: HeroCont
 
         <div className="relative flex justify-center items-center order-1 md:order-2">
            <GlowBackground background={background} />
-            <div className="relative w-[300px] h-[300px] md:w-[380px] md:h-[380px] lg:w-[450px] lg:h-[450px] z-10 p-2 rounded-full bg-card/10 backdrop-blur-sm shadow-2xl shadow-primary/10 border border-foreground/10">
+            <div className="relative w-full max-w-[300px] md:max-w-[380px] lg:max-w-[450px] aspect-square z-10 p-2 rounded-full bg-card/10 backdrop-blur-sm shadow-2xl shadow-primary/10 border border-foreground/10">
              <div className="relative w-full h-full rounded-full overflow-hidden">
                 <Image
                   src={content.image}
@@ -154,3 +154,4 @@ export default function HeroSection({ content, background }: { content: HeroCont
     </section>
   );
 }
+
