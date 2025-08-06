@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export default function EducationEditor() {
-  const { portfolioData, updateAllEducation } = useAppState();
+  const { portfolioData, updateAllEducation, saveData } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,6 +48,7 @@ export default function EducationEditor() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateAllEducation(values.education);
+    saveData();
     toast({
       title: 'Education Updated!',
       description: 'Your education section has been successfully updated and saved.',

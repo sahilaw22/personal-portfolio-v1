@@ -21,7 +21,7 @@ const formSchema = z.object({
 });
 
 export default function ContentEditor() {
-  const { portfolioData, updateHeroContent } = useAppState();
+  const { portfolioData, updateHeroContent, saveData } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -31,6 +31,7 @@ export default function ContentEditor() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateHeroContent(values);
+    saveData();
     toast({
       title: 'Content Updated!',
       description: 'Your hero section has been successfully updated.',

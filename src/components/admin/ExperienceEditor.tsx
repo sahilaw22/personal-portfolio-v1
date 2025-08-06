@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export default function ExperienceEditor() {
-  const { portfolioData, updateAllExperience } = useAppState();
+  const { portfolioData, updateAllExperience, saveData } = useAppState();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,6 +49,7 @@ export default function ExperienceEditor() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateAllExperience(values.experience);
+    saveData();
     toast({
       title: 'Experience Updated!',
       description: 'Your experience section has been successfully updated and saved.',
