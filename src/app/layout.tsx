@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import AppStateProvider from '@/components/AppStateProvider';
+import AppStateProvider, { AppStateSync } from '@/components/AppStateProvider';
 
 
 export const metadata: Metadata = {
@@ -23,6 +23,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <AppStateProvider>
+          <AppStateSync />
             {children}
           <Toaster />
         </AppStateProvider>

@@ -1,4 +1,5 @@
 
+
 export type ContactSubmission = {
   name: string;
   email: string;
@@ -21,8 +22,16 @@ export type HeroBackground = {
   to: string;
 };
 
+export type ColorTheme = {
+  background: string;
+  foreground: string;
+  primary: string;
+  accent: string;
+}
+
 export type ThemeSettings = {
   heroBackground: HeroBackground;
+  colors: ColorTheme;
 }
 
 export type Service = {

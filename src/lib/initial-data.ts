@@ -13,8 +13,14 @@ export const initialData: PortfolioData = {
   theme: {
     heroBackground: {
       type: 'gradient',
-      from: 'hsl(var(--primary))',
-      to: 'hsl(var(--accent))'
+      from: '#ff0000',
+      to: '#00ff00'
+    },
+    colors: {
+      background: '222 84% 5%',
+      foreground: '210 40% 98%',
+      primary: '3 98% 66%',
+      accent: '24 95% 58%',
     }
   },
   about: {
