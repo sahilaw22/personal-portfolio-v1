@@ -3,7 +3,6 @@
 
 import { useAppState } from '@/components/AppStateProvider';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
   Briefcase,
   Download,
@@ -17,12 +16,15 @@ import {
   Wrench,
   User,
   LogOut,
-  Palette
+  Palette,
+  PanelLeft,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { SidebarProvider, Sidebar, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 const navLinks = [
   { href: '/admin', label: 'General', icon: Home },
@@ -41,30 +43,30 @@ const navLinks = [
 function NavContent() {
   const pathname = usePathname();
   return (
-    <nav className="grid gap-2 text-lg font-medium p-4 md:p-0">
-      <Link
-        href="/admin"
-        prefetch={true}
-        className="flex items-center gap-2 text-lg font-semibold mb-4"
-      >
-        <Sparkles className="h-6 w-6" />
-        <span>Admin Panel</span>
-      </Link>
-      {navLinks.map(({ href, label, icon: Icon }) => (
+    <>
+      <div className="p-4">
         <Link
-          key={href}
-          href={href}
+          href="/admin"
           prefetch={true}
-          className={cn(
-            'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-            pathname === href && 'bg-muted text-primary'
-          )}
+          className="flex items-center gap-2 text-lg font-semibold"
         >
-          <Icon className="h-4 w-4" />
-          {label}
+          <Sparkles className="h-6 w-6" />
+          <span>Admin Panel</span>
         </Link>
-      ))}
-    </nav>
+      </div>
+      <SidebarMenu>
+        {navLinks.map(({ href, label, icon: Icon }) => (
+           <SidebarMenuItem key={href}>
+            <SidebarMenuButton asChild isActive={pathname === href}>
+              <Link href={href} prefetch={true}>
+                <Icon className="h-4 w-4" />
+                <span>{label}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </>
   );
 }
 
@@ -80,85 +82,63 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className="hidden border-r bg-muted/40 md:block">
-        <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex-1 overflow-auto py-4">
-             <ScrollArea className="h-full">
-                <NavContent />
-             </ScrollArea>
-          </div>
-           <div className="mt-auto p-4">
-             <Button variant="outline" size="sm" asChild className="w-full mb-2">
+    <SidebarProvider>
+      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+        <div className="hidden border-r bg-muted/40 md:block">
+          <div className="flex h-full max-h-screen flex-col gap-2">
+            <ScrollArea className="flex-1 overflow-auto py-2">
+              <NavContent />
+            </ScrollArea>
+            <div className="mt-auto p-4 border-t">
+              <Button variant="outline" size="sm" asChild className="w-full mb-2">
                 <Link href="/">View Portfolio</Link>
               </Button>
               <Button variant="ghost" size="sm" onClick={logout} className="w-full">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Logout</span>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
               </Button>
             </div>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col overflow-hidden">
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="shrink-0 md:hidden"
-              >
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col p-0">
-              <SheetHeader className="p-6 pb-4">
-                <SheetTitle className="text-left">
-                  <Link
-                    href="/admin"
-                    className="flex items-center gap-2 text-lg font-semibold"
-                  >
-                    <Sparkles className="h-6 w-6" />
-                    <span>Admin Panel</span>
-                  </Link>
-                </SheetTitle>
-                <SheetDescription className="text-left">
-                   Navigate through the different sections to customize your portfolio.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="flex-1 overflow-auto">
-                 <ScrollArea className="h-full">
-                    <NavContent />
-                 </ScrollArea>
-              </div>
-              <div className="mt-auto p-6 border-t">
-                <Button variant="outline" size="sm" asChild className="w-full mb-2">
-                    <Link href="/">View Portfolio</Link>
+        <div className="flex flex-col">
+          <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="shrink-0 md:hidden"
+                >
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle navigation menu</span>
                 </Button>
-                <Button variant="ghost" size="sm" onClick={logout} className="w-full">
+              </SheetTrigger>
+              <SheetContent side="left" className="flex flex-col p-0">
+                  <ScrollArea className="flex-1 py-2">
+                    <NavContent />
+                  </ScrollArea>
+                <div className="mt-auto p-4 border-t">
+                  <Button variant="outline" size="sm" asChild className="w-full mb-2">
+                    <Link href="/">View Portfolio</Link>
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={logout} className="w-full">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Logout</span>
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
-           <div className="w-full flex-1">
-            <h1 className="text-xl font-semibold">Portfolio Customization</h1>
-           </div>
-           <Button variant="outline" size="sm" asChild className="hidden md:inline-flex">
-              <Link href="/">View Portfolio</Link>
-            </Button>
-            <Button variant="ghost" size="icon" onClick={logout} className="hidden md:inline-flex">
-                <LogOut className="h-4 w-4" />
-            </Button>
-        </header>
-        <main className="flex-1 overflow-auto p-4 lg:p-6">
-          <div className="flex flex-col gap-4 lg:gap-6">
-            {children}
-          </div>
-        </main>
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
+            <div className="w-full flex-1">
+              <h1 className="text-xl font-semibold">Portfolio Customization</h1>
+            </div>
+          </header>
+          <main className="flex-1 overflow-auto p-4 lg:p-6">
+            <div className="flex flex-col gap-4 lg:gap-6">
+              {children}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
