@@ -41,7 +41,7 @@ const navLinks = [
 function NavContent() {
   const pathname = usePathname();
   return (
-    <nav className="grid gap-2 text-lg font-medium">
+    <nav className="grid gap-2 text-lg font-medium p-4 md:p-0">
       <Link
         href="/admin"
         prefetch={true}
@@ -83,9 +83,11 @@ export default function AdminLayout({
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
-          <ScrollArea className="flex-1 py-4">
-             <NavContent />
-          </ScrollArea>
+          <div className="flex-1 overflow-auto py-4">
+             <ScrollArea className="h-full">
+                <NavContent />
+             </ScrollArea>
+          </div>
            <div className="mt-auto p-4">
              <Button variant="outline" size="sm" asChild className="w-full mb-2">
                 <Link href="/">View Portfolio</Link>
@@ -125,9 +127,11 @@ export default function AdminLayout({
                    Navigate through the different sections to customize your portfolio.
                 </SheetDescription>
               </SheetHeader>
-              <ScrollArea className="flex-1 px-6 py-4">
-                <NavContent />
-              </ScrollArea>
+              <div className="flex-1 overflow-auto">
+                 <ScrollArea className="h-full">
+                    <NavContent />
+                 </ScrollArea>
+              </div>
               <div className="mt-auto p-6 border-t">
                 <Button variant="outline" size="sm" asChild className="w-full mb-2">
                     <Link href="/">View Portfolio</Link>
