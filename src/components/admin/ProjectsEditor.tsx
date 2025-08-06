@@ -1,6 +1,5 @@
 
 'use client';
-import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -45,11 +44,6 @@ export default function ProjectsEditor() {
     control: form.control,
     name: "projects",
   });
-
-  useEffect(() => {
-    form.reset({ projects: portfolioData.projects });
-  }, [portfolioData.projects, form.reset]);
-
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateAllProjects(values.projects);
