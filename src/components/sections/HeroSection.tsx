@@ -37,7 +37,7 @@ const GlowBackground = ({ background }: { background: HeroBackground }) => {
   return (
     <div className="absolute inset-0 flex items-center justify-center -z-10">
       <div 
-        className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] rounded-full blur-3xl" 
+        className="w-[300px] h-[300px] md:w-[380px] md:h-[380px] lg:w-[450px] lg:h-[450px] rounded-full blur-3xl" 
         style={glowStyle}
       />
     </div>
@@ -111,8 +111,8 @@ export default function HeroSection({ content, background }: { content: HeroCont
           </p>
           <Badge variant="outline" className="mt-4 text-sm font-medium border-green-500/50 text-green-700 bg-green-500/10 py-2 px-4 dark:border-chart-3/50 dark:text-chart-3 dark:bg-chart-3/10">
              <span className="relative flex h-3 w-3 mr-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 dark:bg-destructive opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 dark:bg-destructive"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 dark:bg-destructive opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 dark:bg-destructive"></span>
             </span>
             {content.availability}
           </Badge>
@@ -136,7 +136,7 @@ export default function HeroSection({ content, background }: { content: HeroCont
 
         <div className="relative flex justify-center items-center order-1 md:order-2">
            <GlowBackground background={background} />
-            <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] z-10 p-2 rounded-full bg-card/10 backdrop-blur-sm shadow-2xl shadow-primary/10 border border-white/10">
+            <div className="relative w-[300px] h-[300px] md:w-[380px] md:h-[380px] lg:w-[450px] lg:h-[450px] z-10 p-2 rounded-full bg-card/10 backdrop-blur-sm shadow-2xl shadow-primary/10 border border-foreground/10">
              <div className="relative w-full h-full rounded-full overflow-hidden">
                 <Image
                   src={content.image}
