@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { HeroBackground } from '@/lib/types';
 import { Input } from '@/components/ui/input';
@@ -73,14 +72,6 @@ export default function HeroBackgroundEditor() {
   });
 
   const watchFields = form.watch();
-
-  useEffect(() => {
-    const subscription = form.watch((value) => {
-        updateHeroBackground(value as HeroBackground);
-    });
-    return () => subscription.unsubscribe();
-  }, [form.watch, updateHeroBackground]);
-  
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateHeroBackground(values);
