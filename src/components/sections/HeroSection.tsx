@@ -127,7 +127,7 @@ export default function HeroSection({ content, background }: { content: HeroCont
                 </a>
               </Button>
             <Button variant="outline" size="lg" asChild>
-              <a href={resumeUrl} download="Sahil_Ahmed_Wani_Resume.pdf">
+              <a href={resumeUrl} download="resume.pdf">
                 My Resume
               </a>
             </Button>

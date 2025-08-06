@@ -120,7 +120,7 @@ export default function ResumeUploader() {
                     </a>
                 </Button>
                 <Button variant="outline" asChild className="flex-1">
-                    <a href={currentResumeUrl} download="Sahil_Ahmed_Wani_Resume.pdf">
+                    <a href={currentResumeUrl} download="resume.pdf">
                         <Download className="mr-2 h-4 w-4" />
                         Download
                     </a>
