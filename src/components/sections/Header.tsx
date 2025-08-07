@@ -57,7 +57,7 @@ export default function Header() {
           <Terminal className="h-8 w-8 text-primary" />
           <span className="font-bold text-xl">Portfolio</span>
         </a>
-        <nav className="hidden md:flex items-center gap-6 text-base">
+        <nav className="hidden md:flex items-center gap-1 text-base">
           {navItems.map((item) => (
             <a
               key={item.href}
@@ -67,8 +67,8 @@ export default function Header() {
                 handleLinkClick(item.href);
               }}
               className={cn(
-                'transition-colors hover:text-primary font-medium',
-                activeLink === item.href ? 'text-primary' : 'text-muted-foreground'
+                'transition-colors hover:text-primary font-medium px-4 py-2 rounded-md',
+                activeLink === item.href ? 'text-primary bg-accent/10' : 'text-muted-foreground'
               )}
             >
               {item.name}
@@ -86,7 +86,7 @@ export default function Header() {
         </Button>
       </div>
       {isMenuOpen && (
-        <nav className="md:hidden flex flex-col items-center gap-6 text-lg py-4 border-t border-border/40">
+        <nav className="md:hidden flex flex-col items-center gap-2 text-lg py-4 border-t border-border/40">
           {navItems.map((item) => (
             <a
               key={item.href}

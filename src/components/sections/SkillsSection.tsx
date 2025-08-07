@@ -1,3 +1,4 @@
+
 import { Badge } from "@/components/ui/badge";
 import {
   FileCode,
@@ -52,8 +53,8 @@ export default function SkillsSection({ skillsData }: { skillsData: SkillCategor
                 {category.skills.map((skill, index) => {
                   const Icon = iconMap[skill.icon as keyof typeof iconMap] || FileCode;
                   return (
-                    <Badge key={skill.name} variant="secondary" className="flex items-center gap-2 text-sm">
-                       <Icon className={`h-4 w-4 ${iconColors[index % iconColors.length]}`} />
+                    <Badge key={skill.name} variant="secondary" className="group/badge flex items-center gap-2 text-sm">
+                       <Icon className={`h-4 w-4 ${iconColors[index % iconColors.length]} transition-transform duration-300 group-hover/badge:rotate-12`} />
                       <span>{skill.name}</span>
                     </Badge>
                   )

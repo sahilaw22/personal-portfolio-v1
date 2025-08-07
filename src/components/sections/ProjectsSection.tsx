@@ -68,12 +68,12 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                       <Card 
                         className="group/card overflow-hidden transition-all hover:-translate-y-1 relative focus-within:ring-0 focus-within:ring-offset-0 bg-card border-transparent h-full flex flex-col"
                       >
-                        <CardHeader className="p-0 relative h-60">
+                        <CardHeader className="p-0 relative h-60 overflow-hidden">
                           <Image
                             src={project.image}
                             alt={project.title}
                             fill
-                            className="object-cover"
+                            className="object-cover transition-transform duration-500 ease-in-out group-hover/card:scale-105"
                             data-ai-hint={project.aiHint}
                           />
                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>

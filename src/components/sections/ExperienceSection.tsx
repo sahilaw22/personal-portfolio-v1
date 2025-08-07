@@ -30,7 +30,7 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
                   
                   {/* Content Card */}
                   <div className={cn(
-                    'w-full md:max-w-md',
+                    'w-full md:max-w-md transition-transform duration-300 ease-out group-hover/card:transform md:group-hover/card:-translate-y-1',
                     index % 2 === 0 
                       ? 'md:col-start-1 md:text-right md:justify-self-end' 
                       : 'md:col-start-2 md:text-left'
