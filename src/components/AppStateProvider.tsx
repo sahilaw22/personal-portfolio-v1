@@ -33,7 +33,7 @@ interface AppState {
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
-const DATA_VERSION = 'v13'; // Increment this to force a reset
+const DATA_VERSION = 'v14'; // Increment this to force a reset
 
 export function AppStateSync() {
   const { portfolioData } = useAppState();
@@ -347,3 +347,5 @@ export const useAppState = (): AppState => {
   }
   return context;
 };
+
+    
