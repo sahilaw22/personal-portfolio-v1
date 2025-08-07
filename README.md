@@ -28,7 +28,7 @@ This project was built using a modern, scalable, and efficient technology stack.
 - **Forms**: [React Hook Form](https://react-hook-form.com/) with [Zod](https://zod.dev/) for validation
 - **Icons**: [Lucide React](https://lucide.dev/guide/packages/lucide-react)
 - **Deployment**: Configured for [Firebase App Hosting](https://firebase.google.com/docs/app-hosting)
-
+  Check it out https://personal-portfolio-v1-u2eh.vercel.app/
 ## Getting Started
 
 To get a local copy up and running, follow these simple steps.
