@@ -45,7 +45,7 @@ export default function SkillsSection({ skillsData }: { skillsData: SkillCategor
             </p>
           </div>
         </div>
-        <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
+        <div className="mx-auto grid items-start gap-8 py-12 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
           {skillsData.map((category) => (
             <div key={category.title} className="grid gap-4 rounded-lg p-6 transition-all hover:shadow-lg hover:shadow-primary/10 border border-border bg-card">
               <SectionTitle className="text-foreground/80 dark:text-portfolio-silver">{category.title}</SectionTitle>

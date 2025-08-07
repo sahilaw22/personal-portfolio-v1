@@ -52,7 +52,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
         </div>
         <div className="py-12">
           <ScrollArea className={cn(needsScroll && 'h-[1000px] w-full')}>
-            <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-1 md:grid-cols-2 lg:gap-12">
+            <div className="mx-auto grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:gap-12">
               {projects.map((project) => {
                 const { from, to, shadow } = getProjectColors(project.tags);
                 

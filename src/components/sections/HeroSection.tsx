@@ -90,7 +90,7 @@ export default function HeroSection({ content, background }: { content: HeroCont
 
   return (
     <section id="hero" className="container min-h-[calc(100vh-4rem)] flex items-center justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 items-center w-full max-w-6xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 items-center w-full">
         
         <div className="text-center md:text-left order-2 md:order-1">
           <p className="mb-2 text-primary font-semibold text-lg">

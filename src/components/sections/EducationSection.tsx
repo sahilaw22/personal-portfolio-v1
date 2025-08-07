@@ -14,7 +14,7 @@ export default function EducationSection({ education }: { education: Education[]
             </p>
           </div>
         </div>
-        <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 sm:grid-cols-1 md:grid-cols-2">
+        <div className="mx-auto grid items-start gap-8 py-12 sm:grid-cols-1 md:grid-cols-2">
           {education.map((edu) => (
             <Card key={edu.id} className="h-full bg-background/80 dark:bg-background/50 hover:shadow-lg hover:shadow-primary/10 transition-shadow duration-300">
               <CardHeader className="grid grid-cols-[auto,1fr] items-start gap-4 space-y-0">
