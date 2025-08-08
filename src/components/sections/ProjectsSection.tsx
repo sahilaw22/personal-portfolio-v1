@@ -44,11 +44,11 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Featured Projects</h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+ <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter">Featured Projects</h2>
+ <p className="max-w-[900px] text-base md:text-lg text-muted-foreground">
               A selection of my work. See what I've been building.
             </p>
-          </div>
+ </div>
         </div>
         <div className="py-12">
           <ScrollArea className={cn(needsScroll && 'h-[1000px] w-full')}>
@@ -79,12 +79,12 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                            <div className="absolute bottom-0 p-6">
                              <CardTitle className="text-2xl text-white">{project.title}</CardTitle>
-                           </div>
+ </div>
                         </CardHeader>
                         <div className="flex-1 p-6 flex flex-col justify-between">
                             <div>
                                 <CardDescription>{project.description}</CardDescription>
-                            </div>
+ </div>
                             <div className="mt-4 flex flex-wrap gap-2">
                                 {project.tags.map((tag) => (
                                 <Badge key={tag} variant="secondary">{tag}</Badge>

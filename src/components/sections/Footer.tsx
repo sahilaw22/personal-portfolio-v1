@@ -26,11 +26,11 @@ export default function Footer() {
   }, [router]);
 
   return (
-    <footer 
+    <footer
       className="w-full border-t border-border/40 bg-background/95 py-6"
     >
       <div className="container flex flex-col items-center justify-between gap-4 sm:flex-row">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           © {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
         </p>
       </div>

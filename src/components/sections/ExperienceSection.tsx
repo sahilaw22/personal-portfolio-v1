@@ -12,7 +12,7 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Professional Experience</h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            <p className="max-w-[900px] text-muted-foreground text-lg md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               My journey in the world of software development.
             </p>
           </div>
@@ -40,9 +40,9 @@ export default function ExperienceSection({ experiences }: { experiences: Experi
                       style={{ '--project-color-from': 'hsl(var(--primary))', '--project-color-to': 'hsl(var(--accent))' } as React.CSSProperties}
                     >
                       <div className="rounded-md bg-card p-6 shadow-lg h-full">
-                        <p className="text-sm text-muted-foreground">{exp.period}</p>
-                        <h3 className="text-xl font-bold text-primary">{exp.role}</h3>
-                        <p className="mb-2 text-lg font-semibold">{exp.company}</p>
+                        <p className="text-sm text-muted-foreground text-base">{exp.period}</p>
+                        <h3 className="text-xl font-bold text-primary text-2xl">{exp.role}</h3>
+                        <p className="mb-2 text-lg font-semibold text-xl">{exp.company}</p>
                         <p className="text-muted-foreground">{exp.description}</p>
                       </div>
                     </div>

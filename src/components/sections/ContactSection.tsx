@@ -51,10 +51,10 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
   }
 
   return (
-    <section id="contact" className="w-full py-12 md:py-24 lg:py-32 border-t">
-      <div className="container grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-        <div className="space-y-4">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-primary">
+    <section id="contact" className="w-full py-8 md:py-16 lg:py-24 border-t">
+      <div className="container grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        <div className="space-y-3 md:space-y-4">
+          <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl text-primary">
             Let's Collaborate
           </h2>
           <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -78,7 +78,7 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel className="text-base">Name</FormLabel>
                     <FormControl>
                       <Input placeholder="What should I call you?" {...field} className="text-base" />
                     </FormControl>
@@ -91,7 +91,7 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-base">Email</FormLabel>
                     <FormControl>
                       <Input placeholder="Where can I reach you?" type="email" {...field} className="text-base" />
                     </FormControl>
@@ -104,7 +104,7 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
                 name="message"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Message</FormLabel>
+                    <FormLabel className="text-base">Message</FormLabel>
                     <FormControl>
                       <Textarea placeholder="What's on your mind?" {...field} className="text-base" rows={5} />
                     </FormControl>
@@ -112,15 +112,15 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full group" size="lg" disabled={form.formState.isSubmitting}>
-                <span className="relative z-10 flex items-center">
+              <Button type="submit" className="w-full group text-base" size="lg" disabled={form.formState.isSubmitting}>
+                <span className="relative z-10 flex items-center justify-center">
                   {form.formState.isSubmitting ? 'Sending...' : 'Send Message'}
                    <ChevronRight className="ml-2 h-5 w-5" />
                 </span>
               </Button>
             </form>
           </Form>
-           <div className="mt-6 flex flex-col items-center gap-4">
+           <div className="mt-4 flex flex-col items-center gap-3">
               <p className="text-sm text-muted-foreground">Or connect with me on:</p>
               <div className="flex gap-4">
                 <Button variant="ghost" size="icon" asChild>

@@ -89,28 +89,28 @@ export default function HeroSection({ content, background }: { content: HeroCont
   const resumeUrl = portfolioData.theme?.resumeUrl || '/resume.pdf';
 
   return (
-    <section id="hero" className="container min-h-[calc(100vh-4rem)] flex items-center justify-center">
+    <section id="hero" className="container min-h-[calc(100vh-4rem)] flex items-center justify-center py-16 md:py-24">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 items-center w-full">
         
         <div className="text-center md:text-left order-2 md:order-1">
-          <p className="mb-2 text-primary font-semibold text-lg">
+          <p className="mb-2 text-primary font-semibold text-base md:text-lg">
             {content.greeting}
           </p>
           <div
             onClick={handleTap}
             role="button"
             tabIndex={0}
-            aria-label="Tap five times to open admin panel"
+            aria-label="Tap five times to access admin panel"
             className="inline-block cursor-pointer"
           >
             <h1 className={cn(
-                "text-4xl md:text-6xl font-bold tracking-tight",
+                "text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight",
                 content.nameFont || 'font-headline'
             )}>
               {content.name}
             </h1>
           </div>
-          <p className="mt-4 text-2xl md:text-3xl font-medium">
+          <p className="mt-4 text-xl md:text-2xl lg:text-3xl font-medium">
             <span className="text-gradient-primary-accent">{content.title}</span>
           </p>
           <Badge variant="outline" className="mt-4 text-sm font-medium border-green-500/50 text-green-700 bg-green-500/10 py-2 px-4 dark:border-chart-3/50 dark:text-chart-3 dark:bg-chart-3/10 animate-pulse">
@@ -120,11 +120,11 @@ export default function HeroSection({ content, background }: { content: HeroCont
             </span>
             {content.availability}
           </Badge>
-          <p className="mt-4 text-lg text-muted-foreground max-w-xl">
+          <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-xl mx-auto md:mx-0">
             {content.bio}
           </p>
           <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
-            <Button size="lg" asChild>
+            <Button size="lg" className="w-full sm:w-auto" asChild>
                 <a href="#contact">
                   Contact Me
                   <ChevronRight className="h-5 w-5" />
@@ -133,7 +133,7 @@ export default function HeroSection({ content, background }: { content: HeroCont
             <Button variant="outline" size="lg" asChild>
               <a href={resumeUrl} download="resume.pdf">
                 My Resume
-              </a>
+             </a>
             </Button>
           </div>
         </div>

@@ -55,7 +55,7 @@ export default function Header() {
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
         <a href="#hero" className="flex items-center gap-2" onClick={(e) => { e.preventDefault(); handleLinkClick('#hero'); }}>
           <Terminal className="h-8 w-8 text-primary" />
-          <span className="font-bold text-xl">Portfolio</span>
+          <span className="font-bold text-xl sm:text-2xl">Portfolio</span>
         </a>
         <nav className="hidden md:flex items-center gap-1 text-base">
           {navItems.map((item) => (
@@ -67,7 +67,7 @@ export default function Header() {
                 handleLinkClick(item.href);
               }}
               className={cn(
-                'transition-colors hover:text-primary font-medium px-4 py-2 rounded-md',
+                'transition-colors hover:text-primary font-medium px-3 py-2 rounded-md text-sm lg:text-base',
                 activeLink === item.href ? 'text-primary bg-accent/10' : 'text-muted-foreground'
               )}
             >
@@ -86,7 +86,7 @@ export default function Header() {
         </Button>
       </div>
       {isMenuOpen && (
-        <nav className="md:hidden flex flex-col items-center gap-2 text-lg py-4 border-t border-border/40">
+        <nav className="md:hidden flex flex-col items-center gap-2 text-base py-4 border-t border-border/40">
           {navItems.map((item) => (
             <a
               key={item.href}

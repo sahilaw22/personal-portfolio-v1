@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default function AboutSection({ content }: { content: AboutContent }) {
   return (
-    <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-muted/50 dark:bg-card/50">
+    <section id="about" className="w-full py-12 md:py-20 lg:py-28 bg-muted/50 dark:bg-card/50">
       <div className="container grid md:grid-cols-2 gap-10 md:gap-16 items-center">
         <div className="space-y-8 relative">
           <div className="absolute left-0 h-full w-px bg-border -translate-x-4 md:-translate-x-8"></div>
@@ -22,24 +22,25 @@ export default function AboutSection({ content }: { content: AboutContent }) {
           </div>
         </div>
         <div className="space-y-6">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">About me</h2>
-          <p className="text-muted-foreground md:text-lg/relaxed">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tighter">About me</h2>
+          <p className="text-muted-foreground text-base md:text-lg/relaxed">
             {content.bio}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
             {content.services.map((service, index) => {
                 const Icon = iconMap[service.icon] || iconMap['FileCode'];
                 return (
                 <div key={service.id} className="flex items-center gap-4">
                     <div className="bg-background p-3 rounded-full border">
                     <Icon className={`h-6 w-6 ${service.color}`} />
-                    </div>
-                    <h3 className="text-lg font-semibold">{service.title}</h3>
+
+                  </div>
+                  <h3 className="text-base md:text-lg font-semibold">{service.title}</h3>
                 </div>
                 );
             })}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t">
             {content.stats.map((stat) => (
               <div key={stat.id} className="text-center">
                 <p className="text-4xl font-bold text-foreground/80 dark:text-portfolio-silver">{stat.value}</p>

@@ -6,15 +6,15 @@ export default function EducationSection({ education }: { education: Education[]
   return (
     <section id="education" className="w-full py-12 md:py-24 lg:py-32 bg-muted/50 dark:bg-card/50">
       <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+        <div className="flex flex-col items-center justify-center space-y-3 text-center">
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Education</h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Education</h2>
+            <p className="max-w-[900px] text-muted-foreground text-base md:text-lg">
               My academic background and qualifications.
             </p>
           </div>
         </div>
-        <div className="mx-auto grid items-start gap-8 py-12 sm:grid-cols-1 md:grid-cols-2">
+        <div className="mx-auto grid items-start gap-6 py-12 grid-cols-1 md:grid-cols-2">
           {education.map((edu) => (
             <Card key={edu.id} className="h-full bg-background/80 dark:bg-background/50 hover:shadow-lg hover:shadow-primary/10 transition-shadow duration-300">
               <CardHeader className="grid grid-cols-[auto,1fr] items-start gap-4 space-y-0">
@@ -22,11 +22,11 @@ export default function EducationSection({ education }: { education: Education[]
                   <GraduationCap className="h-8 w-8 text-primary" />
                 </div>
                 <div className="space-y-1">
-                  <CardTitle className="text-xl">{edu.institution}</CardTitle>
-                  <p className="font-semibold text-primary">{edu.degree}</p>
+                  <CardTitle className="text-lg font-semibold">{edu.institution}</CardTitle>
+                  <p className="font-medium text-primary text-base">{edu.degree}</p>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="text-sm">
                  <p className="text-sm text-muted-foreground mb-2">{edu.period}</p>
                 <p className="text-muted-foreground">{edu.description}</p>
               </CardContent>
