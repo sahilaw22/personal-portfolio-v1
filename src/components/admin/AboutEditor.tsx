@@ -14,7 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { iconMap } from '@/lib/icon-map';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 
 const serviceSchema = z.object({
   id: z.string(),
@@ -36,7 +36,7 @@ const formSchema = z.object({
   image: z.string(),
 });
 
-export default function AboutEditor() {
+function AboutEditor() {
   const { portfolioData, updateAboutContent } = useAppState();
   const { toast } = useToast();
 
@@ -47,7 +47,7 @@ export default function AboutEditor() {
 
   useEffect(() => {
     form.reset(portfolioData.about);
-  }, [portfolioData.about, form.reset]);
+  }, [portfolioData.about, form]);
 
   const { fields: serviceFields, append: appendService, remove: removeService } = useFieldArray({
     control: form.control,
@@ -63,7 +63,7 @@ export default function AboutEditor() {
     updateAboutContent(values);
     toast({
       title: 'About Section Updated!',
-      description: 'Your "About Me" section has been successfully updated.',
+      description: 'Your &quot;About Me&quot; section has been successfully updated.',
     });
   }
   
@@ -74,7 +74,7 @@ export default function AboutEditor() {
     <Card>
       <CardHeader>
         <CardTitle>About Section Editor</CardTitle>
-        <CardDescription>Update the content of your "About Me" section.</CardDescription>
+  <CardDescription>Update the content of your &quot;About Me&quot; section.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -145,3 +145,5 @@ export default function AboutEditor() {
     </Card>
   );
 }
+
+export default memo(AboutEditor);

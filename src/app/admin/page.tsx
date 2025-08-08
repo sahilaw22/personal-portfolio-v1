@@ -9,9 +9,9 @@ export default function AdminPage() {
         <Card>
             <CardHeader>
                 <CardTitle>Welcome to the Admin Panel</CardTitle>
-                <CardDescription>
-                    Select a category from the sidebar to start customizing your portfolio. This page handles the "General" content of your portfolio, like the hero section.
-                </CardDescription>
+        <CardDescription>
+          Select a category from the sidebar to start customizing your portfolio. This page handles the &quot;General&quot; content of your portfolio, like the hero section.
+        </CardDescription>
             </CardHeader>
         </Card>
       <div className="mt-6">

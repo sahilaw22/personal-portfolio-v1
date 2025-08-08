@@ -232,12 +232,21 @@ export const initialData: PortfolioData = {
   theme: {
     heroBackground: {
       type: 'solid',
-      from: '',
-      to: '',
-      fromSize: 0,
-      toSize: 0,
-      fromOpacity: 0,
-      toOpacity: 0
+      from: '#0EA5E9',
+      to: '#06B6D4', 
+      via: '#10B981',
+      fromSize: 60,
+      toSize: 40,
+      viaSize: 50,
+      fromOpacity: 0.4,
+      toOpacity: 0.2,
+      viaOpacity: 0.3,
+      rotation: 0,
+      animationType: 'none',
+      animationSpeed: 2,
+      blendMode: 'normal',
+      shape: 'circle',
+      intensity: 50
     },
     colors: {
       background: '',
@@ -251,8 +260,10 @@ export const initialData: PortfolioData = {
     resumeUrl: undefined
   },
   settings: {
-    adminPassword: '',
-    themeMode: 'light'
+    adminPassword: 'admin',
+    themeMode: 'light',
+    securityQuestion: 'What is your roll number?',
+    securityAnswer: '241103040'
   },
   pageViews: []
 };

@@ -21,7 +21,7 @@ export default function VisitorAnalytics() {
         <CardHeader>
           <CardTitle>Portfolio Analytics</CardTitle>
           <CardDescription>
-            An overview of your portfolio's visitor traffic.
+            An overview of your portfolio&apos;s visitor traffic.
           </CardDescription>
         </CardHeader>
       </Card>

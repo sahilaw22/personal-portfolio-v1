@@ -1,7 +1,9 @@
 
 'use client';
 
+import { Suspense } from 'react';
 import { useAppState } from '@/components/AppStateProvider';
+import AdminComponentPreloader from '@/components/admin/ComponentPreloader';
 import { Button } from '@/components/ui/button';
 import {
   Briefcase,
@@ -19,9 +21,10 @@ import {
   Palette,
   Settings,
   LineChart,
+  Grid,
 } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SidebarProvider, Sidebar, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
@@ -35,6 +38,8 @@ const navLinks = [
   { href: '/admin/experience', label: 'Experience', icon: Briefcase },
   { href: '/admin/education', label: 'Education', icon: GraduationCap },
   { href: '/admin/projects', label: 'Projects', icon: LayoutGrid },
+  { href: '/admin/portfolio-designs', label: 'Designs', icon: Grid },
+  { href: '/admin/layouts', label: 'Layouts', icon: LayoutGrid },
   { href: '/admin/skills', label: 'Skills', icon: Wrench },
   { href: '/admin/theme', label: 'Theme', icon: Palette },
   { href: '/admin/ai-tools', label: 'AI Tools', icon: Sparkles },
@@ -87,7 +92,8 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAdminAuthenticated, logout } = useAppState();
+  const { isAdminAuthenticated, logout, commitAllChanges, discardAllChanges, draftDirty, startPreview } = useAppState();
+  const router = useRouter();
 
   if (!isAdminAuthenticated) {
     return <>{children}</>;
@@ -95,6 +101,7 @@ export default function AdminLayout({
 
   return (
     <SidebarProvider>
+      <AdminComponentPreloader />
       <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <div className="hidden border-r bg-muted/40 md:block">
           <div className="flex h-full max-h-screen flex-col gap-2">
@@ -102,8 +109,13 @@ export default function AdminLayout({
               <NavContent />
             </ScrollArea>
             <div className="mt-auto p-4 border-t">
-              <Button variant="outline" size="sm" asChild className="w-full mb-2">
-                <Link href="/">View Portfolio</Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full mb-2"
+                onClick={() => { startPreview(); router.push('/'); }}
+              >
+                View Portfolio
               </Button>
               <Button variant="ghost" size="sm" onClick={logout} className="w-full">
                 <LogOut className="mr-2 h-4 w-4" />
@@ -133,9 +145,14 @@ export default function AdminLayout({
                     <NavContent />
                   </ScrollArea>
                 <div className="mt-auto p-4 border-t">
-                   <Button variant="outline" size="sm" asChild className="w-full mb-2">
-                     <Link href="/">View Portfolio</Link>
-                  </Button>
+                   <Button
+                     variant="outline"
+                     size="sm"
+                     className="w-full mb-2"
+                     onClick={() => { startPreview(); router.push('/'); }}
+                   >
+                     View Portfolio
+                   </Button>
                   <Button variant="ghost" size="sm" onClick={logout} className="w-full">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Logout</span>
@@ -149,8 +166,30 @@ export default function AdminLayout({
           </header>
           <main className="flex-1 overflow-auto p-4 lg:p-6">
             <div className="flex flex-col gap-4 lg:gap-6">
-              {children}
+              <Suspense fallback={
+                <div className="animate-pulse space-y-4">
+                  <div className="h-8 bg-muted/30 rounded w-1/3" />
+                  <div className="h-4 bg-muted/20 rounded w-full" />
+                  <div className="h-4 bg-muted/20 rounded w-3/4" />
+                  <div className="h-32 bg-muted/20 rounded" />
+                </div>
+              }>
+                {children}
+              </Suspense>
             </div>
+            {draftDirty && (
+              <div className="fixed inset-x-0 bottom-0 z-50">
+                <div className="mx-auto max-w-7xl px-4 pb-4">
+                  <div className="rounded-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg p-3 flex flex-wrap items-center justify-between gap-3">
+                    <div className="text-sm text-muted-foreground">You have unsaved changes.</div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" onClick={discardAllChanges}>Discard</Button>
+                      <Button onClick={commitAllChanges}>All Done</Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </main>
         </div>
       </div>
