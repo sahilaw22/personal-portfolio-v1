@@ -28,19 +28,24 @@ const nextConfig: NextConfig = {
   },
   // Enable compression
   compress: true,
-  // Enable SWC minification
-  swcMinify: true,
   // Optimize bundle splitting
   experimental: {
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+  },
+  // Turbopack configuration (moved out of experimental)
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
   },
   // Enable static optimization
   trailingSlash: false,
   // Enable build-time optimizations
   poweredByHeader: false,
   generateEtags: false,
-  // Output configuration for deployment
-  output: 'standalone',
 };
 
 export default nextConfig;

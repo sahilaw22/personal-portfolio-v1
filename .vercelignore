@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+
+# Development files
+.vscode
+*.log
+.DS_Store
+
+# Build artifacts (Vercel will handle these)
+.next/cache
+tsconfig.tsbuildinfo
+
+# Environment files (use Vercel dashboard for env vars)
+.env*
+!.env.example
+
+# Documentation
+docs/
+README.md
+*.md
+!ENHANCED-PORTFOLIO-2025.md
+
+# Development scripts and configs
+.eslintrc*

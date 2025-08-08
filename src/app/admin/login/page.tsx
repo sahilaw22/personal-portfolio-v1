@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useAppState } from '@/components/AppStateProvider';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [recoveryAnswer, setRecoveryAnswer] = useState('');
   const [recoveredPassword, setRecoveredPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     const success = login(password);
     if (!success) {
       setError('Incorrect password. Access denied.');
@@ -25,9 +25,9 @@ export default function LoginPage() {
       setError('');
       setShowRecovery(false);
     }
-  };
+  }, [password, login]);
 
-  const handleRecovery = () => {
+  const handleRecovery = useCallback(() => {
     const result = recoverPassword(recoveryAnswer);
     if (result.success && result.password) {
       setRecoveredPassword(result.password);
@@ -38,7 +38,42 @@ export default function LoginPage() {
     } else {
       setError('Incorrect answer. Please try again.');
     }
-  };
+  }, [recoveryAnswer, recoverPassword, login]);
+
+  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }, []);
+
+  const handleRecoveryAnswerChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setRecoveryAnswer(e.target.value);
+  }, []);
+
+  const handlePasswordKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  }, [handleLogin]);
+
+  const handleRecoveryKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleRecovery();
+    }
+  }, [handleRecovery]);
+
+  const showRecoveryHandler = useCallback(() => {
+    setShowRecovery(true);
+  }, []);
+
+  const handleBackToLogin = useCallback(() => {
+    setShowRecovery(false);
+    setRecoveryAnswer('');
+    setRecoveredPassword('');
+    setError('');
+  }, []);
+
+  const navigateToHome = useCallback(() => {
+    router.push('/');
+  }, [router]);
   
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
@@ -57,14 +92,14 @@ export default function LoginPage() {
                   id="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                   placeholder="Password"
-                  onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                  onKeyDown={handlePasswordKeyDown}
                 />
                 {error && <p className="text-sm text-destructive">{error}</p>}
                 <Button type="button" onClick={handleLogin}>Unlock</Button>
                 {error && (
-                  <Button variant="link" size="sm" onClick={() => setShowRecovery(true)}>
+                  <Button variant="link" size="sm" onClick={showRecoveryHandler}>
                     Forgot Password?
                   </Button>
                 )}
@@ -78,9 +113,9 @@ export default function LoginPage() {
                 <Input
                   type="text"
                   value={recoveryAnswer}
-                  onChange={(e) => setRecoveryAnswer(e.target.value)}
+                  onChange={handleRecoveryAnswerChange}
                   placeholder="Enter your roll number"
-                  onKeyDown={(e) => e.key === 'Enter' && handleRecovery()}
+                  onKeyDown={handleRecoveryKeyDown}
                 />
                 {error && <p className="text-sm text-destructive">{error}</p>}
                 {recoveredPassword && (
@@ -93,18 +128,13 @@ export default function LoginPage() {
                   <Button type="button" onClick={handleRecovery} className="flex-1">
                     Reset Password
                   </Button>
-                  <Button variant="outline" onClick={() => {
-                    setShowRecovery(false);
-                    setRecoveryAnswer('');
-                    setRecoveredPassword('');
-                    setError('');
-                  }}>
+                  <Button variant="outline" onClick={handleBackToLogin}>
                     Back
                   </Button>
                 </div>
               </>
             )}
-             <Button variant="link" size="sm" onClick={() => router.push('/')}>
+             <Button variant="link" size="sm" onClick={navigateToHome}>
                 Back to Portfolio
              </Button>
           </div>

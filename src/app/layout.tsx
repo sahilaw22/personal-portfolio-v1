@@ -74,19 +74,36 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" 
           rel="stylesheet"
           media="print" 
-          onLoad={(e) => { (e.target as HTMLLinkElement).media = 'all' }}
+          className="font-loader"
         />
         {/* Load additional fonts asynchronously */}
         <link 
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@400;700&family=Playfair+Display:wght@400;700&family=Lexend:wght@400;700&family=Source+Code+Pro:wght@400;700&family=JetBrains+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;700&family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Oswald:wght@400;700&family=Raleway:wght@400;700&family=Merriweather:wght@400;700&family=PT+Sans:wght@400;700&family=Open+Sans:wght@400;700&family=Nunito:wght@400;700&family=Ubuntu:wght@400;700&family=Roboto:wght@400;700&family=Zilla+Slab:wght@400;700&family=Domine:wght@400;700&family=Cormorant+Garamond:wght@400;700&family=EB+Garamond:wght@400;700&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;700&family=Pacifico&family=Anton&display=swap" 
           rel="preload" 
           as="style"
-          onLoad={(e) => { 
-            const link = e.target as HTMLLinkElement;
-            link.onload = null;
-            link.rel = 'stylesheet';
-          }}
+          className="font-preloader"
         />
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Handle font loading for better performance
+            document.addEventListener('DOMContentLoaded', function() {
+              // Set primary font to load immediately
+              const fontLoader = document.querySelector('.font-loader');
+              if (fontLoader) {
+                fontLoader.media = 'all';
+              }
+              
+              // Convert preloaded font to stylesheet after load
+              const fontPreloader = document.querySelector('.font-preloader');
+              if (fontPreloader) {
+                fontPreloader.onload = function() {
+                  this.onload = null;
+                  this.rel = 'stylesheet';
+                };
+              }
+            });
+          `
+        }} />
         {/* Preload critical resources */}
         <link rel="preload" href="/profile.jpg" as="image" type="image/jpeg" />
         {/* Performance optimizations */}
