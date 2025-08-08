@@ -25,7 +25,7 @@ interface AppState {
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
-const UNLOCK_PASSWORD = 'IamNerd';
+const UNLOCK_PASSWORD = 'portfoliologin';
 const DATA_VERSION = 'v4'; // Increment this to force a reset
 
 export default function AppStateProvider({ children }: { children: ReactNode }) {
