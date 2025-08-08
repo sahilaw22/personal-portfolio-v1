@@ -2,6 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Critical CSS - Inlined for faster loading */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Prevent layout shift during font loading */
+  .font-body {
+    font-display: swap;
+  }
+
+  /* Optimize images */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
 @layer base {
   :root {
     --background: 210 40% 98%;

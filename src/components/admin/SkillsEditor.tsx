@@ -13,7 +13,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { PlusCircle, Trash2, GripVertical } from 'lucide-react';
 import { iconMap } from '@/lib/icon-map';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 
 const skillSchema = z.object({
   name: z.string().min(1, 'Skill name is required'),
@@ -29,7 +29,7 @@ const formSchema = z.object({
   categories: z.array(categorySchema),
 });
 
-export default function SkillsEditor() {
+function SkillsEditor() {
   const { portfolioData, updateSkills } = useAppState();
   const { toast } = useToast();
 
@@ -111,7 +111,13 @@ export default function SkillsEditor() {
   );
 }
 
-function SkillList({ control, categoryIndex, iconNames }: { control: any, categoryIndex: number, iconNames: string[] }) {
+export default memo(SkillsEditor);
+
+function SkillList({ control, categoryIndex, iconNames }: { 
+  control: ReturnType<typeof useForm<z.infer<typeof formSchema>>>['control'], 
+  categoryIndex: number, 
+  iconNames: string[] 
+}) {
     const { fields, append, remove } = useFieldArray({
         control,
         name: `categories.${categoryIndex}.skills`

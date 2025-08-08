@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, memo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { useAppState } from '@/components/AppStateProvider';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
-import { Crop, Loader2, Trash2, Upload, X } from 'lucide-react';
+import { Crop, Loader2, Trash2, Upload, Video as VideoIcon } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '../ui/dialog';
 import ReactCrop, { type Crop as CropType, centerCrop, makeAspectCrop } from 'react-image-crop';
@@ -54,11 +54,13 @@ function getCroppedImg(image: HTMLImageElement, crop: CropType, fileName: string
 }
 
 
-export default function ImageUploader() {
-  const { portfolioData, updateHeroContent, updateAboutContent, updateProject, updateContactContent } = useAppState();
+function ImageUploader() {
+    const { portfolioData, updateHeroContent, updateAboutContent, updateProject, updateContactContent } = useAppState();
   const [target, setTarget] = useState<string>('');
   const [lastUploadedImage, setLastUploadedImage] = useState<string | null>(null);
+    const [lastUploadedVideo, setLastUploadedVideo] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+    const [storageMB, setStorageMB] = useState<number>(0);
   
   // Cropping state
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
@@ -70,7 +72,16 @@ export default function ImageUploader() {
 
   const { toast } = useToast();
   
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        try {
+            const json = JSON.stringify(portfolioData);
+            setStorageMB(json.length / (1024 * 1024));
+        } catch {
+            // ignore
+        }
+    }, [portfolioData]);
+  
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       if (!target) {
         toast({ variant: 'destructive', title: 'Please select a target section first.' });
@@ -86,7 +97,7 @@ export default function ImageUploader() {
     }
   };
 
-  const handleSave = async (croppedDataUrl: string) => {
+    const handleSave = async (croppedDataUrl: string) => {
     if (!target) {
       toast({ variant: 'destructive', title: 'No target selected.' });
       return;
@@ -97,19 +108,20 @@ export default function ImageUploader() {
     try {
       setLastUploadedImage(croppedDataUrl);
 
-      if (target === 'hero' || target === 'about' || target === 'contact') {
-          const content = portfolioData[target];
-          const updateFunction = {
-              'hero': updateHeroContent,
-              'about': updateAboutContent,
-              'contact': updateContactContent,
-          }[target];
-          updateFunction({...content, image: croppedDataUrl});
-      } else if (target.startsWith('project-')) {
+      if (target === 'hero') {
+          const content = portfolioData.hero;
+          updateHeroContent({...content, image: croppedDataUrl});
+      } else if (target === 'about') {
+          const content = portfolioData.about;
+          updateAboutContent({...content, image: croppedDataUrl});
+      } else if (target === 'contact') {
+          const content = portfolioData.contact;
+          updateContactContent({...content, image: croppedDataUrl});
+    } else if (target.startsWith('project-')) {
           const projectId = target.replace('project-', '');
           const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
           if (projectToUpdate) {
-              updateProject({ ...projectToUpdate, image: croppedDataUrl });
+          updateProject({ ...projectToUpdate, image: croppedDataUrl, coverVideoPoster: projectToUpdate.coverVideoPoster || croppedDataUrl });
           }
       }
 
@@ -130,7 +142,7 @@ export default function ImageUploader() {
     }
   };
 
-  const handleTargetChange = (value: string) => {
+    const handleTargetChange = (value: string) => {
     setTarget(value);
     if (value === 'hero' || value === 'about') {
         setAspect(1 / 1); // Square for profile pics
@@ -166,7 +178,7 @@ export default function ImageUploader() {
     handleCropComplete(newCrop);
   };
   
-  const handleRemoveImage = () => {
+    const handleRemoveImage = () => {
     if (!target) {
         toast({ variant: 'destructive', title: 'Please select a target section first.'});
         return;
@@ -174,14 +186,15 @@ export default function ImageUploader() {
     
     const placeholderUrl = 'https://placehold.co/600x400.png';
 
-    if (target === 'hero' || target === 'about' || target === 'contact') {
-          const content = portfolioData[target];
-          const updateFunction = {
-              'hero': updateHeroContent,
-              'about': updateAboutContent,
-              'contact': updateContactContent,
-          }[target];
-          updateFunction({...content, image: placeholderUrl});
+    if (target === 'hero') {
+          const content = portfolioData.hero;
+          updateHeroContent({...content, image: placeholderUrl});
+    } else if (target === 'about') {
+          const content = portfolioData.about;
+          updateAboutContent({...content, image: placeholderUrl});
+    } else if (target === 'contact') {
+          const content = portfolioData.contact;
+          updateContactContent({...content, image: placeholderUrl});
     } else if (target.startsWith('project-')) {
         const projectId = target.replace('project-', '');
         const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
@@ -200,11 +213,11 @@ export default function ImageUploader() {
     <>
     <Card>
       <CardHeader>
-        <CardTitle>Portfolio Image Manager</CardTitle>
-        <CardDescription>Upload, crop, and assign images to different sections of your portfolio.</CardDescription>
+    <CardTitle>Portfolio Media Manager</CardTitle>
+    <CardDescription>Upload, crop, and assign images or videos to different sections of your portfolio.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='grid grid-cols-1 gap-6'>
+    <div className='grid grid-cols-1 gap-6'>
             <div className='space-y-2'>
                 <label className="text-sm font-medium">1. Select Target Section</label>
                 <Select onValueChange={handleTargetChange} value={target}>
@@ -219,7 +232,7 @@ export default function ImageUploader() {
                         <SelectItem value="contact">Contact Section Image (16:9)</SelectItem>
                     </SelectGroup>
                     <SelectGroup>
-                        <SelectLabel>Projects (16:9)</SelectLabel>
+                                                <SelectLabel>Projects (16:9)</SelectLabel>
                         {portfolioData.projects.map(project => (
                             <SelectItem key={project.id} value={`project-${project.id}`}>{project.title}</SelectItem>
                         ))}
@@ -228,7 +241,7 @@ export default function ImageUploader() {
                 </Select>
             </div>
             <div className='space-y-2'>
-                <label className="text-sm font-medium">2. Choose New Image</label>
+                                <label className="text-sm font-medium">2. Choose New Image</label>
                  <div className="flex items-center gap-2">
                     <Input 
                         id="file-upload"
@@ -240,6 +253,62 @@ export default function ImageUploader() {
                         value=""
                     />
                 </div>
+                                                {/* Optional video upload for project covers (looped) */}
+                                                {target.startsWith('project-') && (
+                                                    <div className="flex flex-col gap-2 mt-2">
+                                        <Input
+                                            id="video-upload"
+                                            type="file"
+                                            name="video"
+                                            accept="video/*"
+                                            onChange={async (e) => {
+                                                if (e.target.files && e.target.files.length > 0) {
+                                                    const file = e.target.files[0];
+                                                                    // Guard overly large videos (localStorage limit ~5-10MB total)
+                                                                    const maxBytes = 50 * 1024 * 1024; // 50MB
+                                                                    if (file.size > maxBytes) {
+                                                                        toast({ variant: 'destructive', title: 'Video too large', description: 'Please choose a short, small video (under 50MB) for reliable saving.' });
+                                                                        return;
+                                                                    }
+                                                                    // Read as data URL so it can persist in localStorage
+                                                                    const reader = new FileReader();
+                                                                    reader.onloadend = () => {
+                                                                        const dataUrl = reader.result as string;
+                                                                        setLastUploadedVideo(dataUrl);
+                                                                        const projectId = target.replace('project-', '');
+                                                                        const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
+                                                                        if (projectToUpdate) {
+                                                                            updateProject({ ...projectToUpdate, coverVideoUrl: dataUrl, coverVideoPoster: projectToUpdate.image });
+                                                                        }
+                                                                        toast({ title: 'Video Added', description: 'Looped cover video set for this project. Click All Done to persist.' });
+                                                                    };
+                                                                    reader.onerror = () => {
+                                                                        toast({ variant: 'destructive', title: 'Read failed', description: 'Could not read the selected video file.' });
+                                                                    };
+                                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
+                                            disabled={!target || isLoading}
+                                                            />
+                                                            <div>
+                                                                <Button type="button" variant="outline" onClick={() => {
+                                                                    const projectId = target.replace('project-', '');
+                                                                    const projectToUpdate = portfolioData.projects.find(p => p.id === projectId);
+                                                                    if (projectToUpdate) {
+                                                                        updateProject({ ...projectToUpdate, coverVideoUrl: undefined, coverVideoPoster: undefined });
+                                                                        setLastUploadedVideo(null);
+                                                                        toast({ title: 'Cover video removed', description: 'Project will now use its image.' });
+                                                                    }
+                                                                }}>Remove Cover Video</Button>
+                                                            </div>
+                                    </div>
+                                )}
+                                                    <p className="text-xs text-muted-foreground mt-2">
+                                                        Storage used: {storageMB.toFixed(2)} MB. Keep under ~45-50 MB for reliable persistence.
+                                                    </p>
+                                                    {storageMB > 45 && (
+                                                        <p className="text-xs text-destructive mt-1">You&apos;re near the storage limit. Consider using external hosting for large videos/images.</p>
+                                                    )}
             </div>
           </div>
 
@@ -265,7 +334,7 @@ export default function ImageUploader() {
             </AlertDialog>
         </div>
         
-        {lastUploadedImage && (
+                {lastUploadedImage && (
           <div className='mt-6'>
             <h3 className="text-lg font-medium">Last Saved Image Preview:</h3>
             <div className="relative mt-2 w-full max-w-md aspect-video">
@@ -273,6 +342,14 @@ export default function ImageUploader() {
             </div>
           </div>
         )}
+                {lastUploadedVideo && (
+                    <div className='mt-6'>
+                        <h3 className="text-lg font-medium flex items-center gap-2"><VideoIcon className="h-4 w-4" /> Last Selected Video Preview:</h3>
+                        <div className="relative mt-2 w-full max-w-md aspect-video">
+                            <video src={lastUploadedVideo} className="w-full h-full rounded-md border object-contain" autoPlay muted loop playsInline />
+                        </div>
+                    </div>
+                )}
       </CardContent>
     </Card>
 
@@ -320,3 +397,5 @@ export default function ImageUploader() {
     </>
   );
 }
+
+export default memo(ImageUploader);

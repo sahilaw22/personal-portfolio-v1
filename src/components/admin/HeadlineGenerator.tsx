@@ -56,7 +56,7 @@ export default function HeadlineGenerator() {
       <CardHeader>
         <CardTitle>AI Headline Generator</CardTitle>
         <CardDescription>
-          Generate a catchy tagline for your "About Me" section.
+          Generate a catchy tagline for your &quot;About Me&quot; section.
         </CardDescription>
       </CardHeader>
       <CardContent>

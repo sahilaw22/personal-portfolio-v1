@@ -87,7 +87,7 @@ export default function ContentEditor() {
     <Card>
       <CardHeader>
         <CardTitle>Hero Section Content</CardTitle>
-        <CardDescription>Update the main text content of your portfolio's hero section.</CardDescription>
+        <CardDescription>Update the main text content of your portfolio&apos;s hero section.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

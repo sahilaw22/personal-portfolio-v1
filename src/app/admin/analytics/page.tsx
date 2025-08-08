@@ -1,8 +1,13 @@
 
 'use client';
+import { lazy, Suspense } from 'react';
 
-import VisitorAnalytics from '@/components/admin/analytics/VisitorAnalytics';
+const VisitorAnalytics = lazy(() => import('@/components/admin/analytics/VisitorAnalytics'));
 
 export default function AnalyticsAdminPage() {
-    return <VisitorAnalytics />;
+        return (
+            <Suspense fallback={<div className="h-64 rounded-md border animate-pulse" />}> 
+                <VisitorAnalytics />
+            </Suspense>
+        );
 }

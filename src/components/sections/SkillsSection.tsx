@@ -2,20 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import {
   FileCode,
-  Server,
-  Database,
-  GitMerge,
-  Unplug,
-  Component,
-  Wind,
-  Globe,
-  Bot,
-  TerminalSquare,
-  Cloud,
-  Layers,
-  MousePointer,
 } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import React from 'react';
 import type { SkillCategory } from "@/lib/types";
 import { iconMap } from "@/lib/icon-map";
@@ -45,8 +32,8 @@ export default function SkillsSection({ skillsData }: { skillsData: SkillCategor
             </p>
           </div>
         </div>
-        <div className="mx-auto grid items-start gap-8 py-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {skillsData.map((category, categoryIndex) => (
+  <div className="mx-auto grid items-start gap-6 sm:gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {skillsData.map((category) => (
             <div key={category.title} className="grid gap-4 rounded-lg p-6 transition-all hover:shadow-lg hover:shadow-primary/10 border border-border bg-card">
               <SectionTitle className="text-foreground/80 dark:text-portfolio-silver">{category.title}</SectionTitle>
               <div className="flex flex-wrap gap-2">

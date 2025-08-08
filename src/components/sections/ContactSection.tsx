@@ -42,7 +42,7 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    onFormSubmit(values);
+    onFormSubmit({ ...values, isRead: false });
     toast({
       title: 'Message Sent!',
       description: 'Thanks for reaching out. I will get back to you soon.',
@@ -52,13 +52,13 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
 
   return (
     <section id="contact" className="w-full py-8 md:py-16 lg:py-24 border-t">
-      <div className="container grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+      <div className="container px-4 md:px-6 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div className="space-y-3 md:space-y-4">
           <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl text-primary">
-            Let's Collaborate
+            Let&apos;s Collaborate
           </h2>
           <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            Have a project in mind, a question, or just want to connect? My inbox is always open. I'm excited to hear about your ideas and see how we can work together to create something amazing.
+            Have a project in mind, a question, or just want to connect? My inbox is always open. I&apos;m excited to hear about your ideas and see how we can work together to create something amazing.
           </p>
            <div className="w-full aspect-video relative">
              <Image
@@ -106,7 +106,7 @@ export default function ContactSection({ onFormSubmit }: ContactFormProps) {
                   <FormItem>
                     <FormLabel className="text-base">Message</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="What's on your mind?" {...field} className="text-base" rows={5} />
+                      <Textarea placeholder="What\'s on your mind?" {...field} className="text-base" rows={5} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
